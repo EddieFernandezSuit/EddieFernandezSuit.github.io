@@ -48,7 +48,7 @@
 
 		<script type="module">
 
-			import * as THREE from 'three';
+			import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.module.js';
 
 			import Stats from './jsm/libs/stats.module.js';
 			import { GUI } from './jsm/libs/lil-gui.module.min.js';
@@ -102,7 +102,7 @@
 				// model
 
 				const loader = new GLTFLoader();
-				loader.load( 'models/gltf/RobotExpressive/RobotExpressive.glb', function ( gltf ) {
+				loader.load( 'models/RobotExpressive.glb', function ( gltf ) {
 
 					model = gltf.scene;
 					scene.add( model );
@@ -205,21 +205,21 @@
 
 				// expressions
 
-				face = model.getObjectByName( 'Head_4' );
+				// face = model.getObjectByName( 'Head_4' );
 
-				const expressions = Object.keys( face.morphTargetDictionary );
-				const expressionFolder = gui.addFolder( 'Expressions' );
+				// const expressions = Object.keys( face.morphTargetDictionary );
+				// const expressionFolder = gui.addFolder( 'Expressions' );
 
-				for ( let i = 0; i < expressions.length; i ++ ) {
+				// for ( let i = 0; i < expressions.length; i ++ ) {
 
-					expressionFolder.add( face.morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
+				// 	expressionFolder.add( face.morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
 
-				}
+				// }
 
-				activeAction = actions[ 'Walking' ];
-				activeAction.play();
+				// activeAction = actions[ 'Walking' ];
+				// activeAction.play();
 
-				expressionFolder.open();
+				// expressionFolder.open();
 
 			}
 
