@@ -4,7 +4,7 @@
 		<title>three.js webgl - skinning and morphing</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="main.css">
+		<link type="text/css" rel="stylesheet" href="../main.css">
 		<style>
 			body {
 				color: #222;
@@ -48,12 +48,12 @@
 
 		<script type="module">
 
-			import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.module.js';
+			import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.139.0/build/three.module.js';
 
-			import Stats from './jsm/libs/stats.module.js';
-			import { GUI } from './jsm/libs/lil-gui.module.min.js';
+			import Stats from '../jsm/libs/stats.module.js';
+			import { GUI } from '../jsm/libs/lil-gui.module.min.js';
 
-			import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+			import { GLTFLoader } from '../jsm/loaders/GLTFLoader.js';
 
 			let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
 			let camera, scene, renderer, model, face;
@@ -102,7 +102,7 @@
 				// model
 
 				const loader = new GLTFLoader();
-				loader.load( 'models/RobotExpressive.glb', function ( gltf ) {
+				loader.load( '../models/RobotExpressive.glb', function ( gltf ) {
 
 					model = gltf.scene;
 					scene.add( model );

@@ -12,15 +12,11 @@
 </head>
 
 <body>
-<model-viewer src='https://modelviewer.dev/shared-assets/models/Astronaut.glb' poster="../../assets/ShopifyModels/Chair.png" shadow-intensity="1" ar ar-modes="webxr scene-viewer quick-look" camera-controls alt="A 3D model carousel">
+<model-viewer src='../models/astronaut.glb' shadow-intensity="1" ar ar-modes="webxr scene-viewer quick-look" camera-controls alt="A 3D model carousel">
   
     <button slot="ar-button" id="ar-button">
       View in your space
     </button>
-  
-    <div id="ar-prompt">
-      <img src="astronaut2d.png">
-    </div>
   
     <button id="ar-failure">
       AR is not tracking!
@@ -28,9 +24,9 @@
   
     <div class="slider">
       <div class="slides">
-        <button class="slide selected" onclick="switchSrc(this, 'https://modelviewer.dev/shared-assets/models/Astronaut.glb')" style="background-image: url('astronaut2d.png');">
+        <button class="slide selected" onclick="switchSrc(this, '../modesls/astronaut.glb')" style="background-image: url('../images/astronaut2d.png');">
   
-        </button><button class="slide" onclick="switchSrc(this, 'dancingAlien.glb')" style="background-image: url('plant.png');">
+        </button><button class="slide" onclick="switchSrc(this, '../models/dancingAlien.glb')" style="background-image: url('');">
       </button></div>
     </div>
   </model-viewer>
