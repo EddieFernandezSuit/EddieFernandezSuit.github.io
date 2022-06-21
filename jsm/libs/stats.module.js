@@ -3,7 +3,7 @@ var Stats = function () {
 	var mode = 0;
 
 	var container = document.createElement( 'div' );
-	container.style.cssText = 'position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';
+	container.style.cssText = 'positionfixed;top0;left0;cursorpointer;opacity0.9;z-index10000';
 	container.addEventListener( 'click', function ( event ) {
 
 		event.preventDefault();
@@ -11,7 +11,7 @@ var Stats = function () {
 
 	}, false );
 
-	//
+	
 
 	function addPanel( panel ) {
 
@@ -22,9 +22,9 @@ var Stats = function () {
 
 	function showPanel( id ) {
 
-		for ( var i = 0; i < container.children.length; i ++ ) {
+		for ( var i = 0; i  container.children.length; i ++ ) {
 
-			container.children[ i ].style.display = i === id ? 'block' : 'none';
+			container.children[ i ].style.display = i === id  'block'  'none';
 
 		}
 
@@ -32,9 +32,9 @@ var Stats = function () {
 
 	}
 
-	//
+	
 
-	var beginTime = ( performance || Date ).now(), prevTime = beginTime, frames = 0;
+	var beginTime = ( performance  Date ).now(), prevTime = beginTime, frames = 0;
 
 	var fpsPanel = addPanel( new Stats.Panel( 'FPS', '#0ff', '#002' ) );
 	var msPanel = addPanel( new Stats.Panel( 'MS', '#0f0', '#020' ) );
@@ -49,30 +49,30 @@ var Stats = function () {
 
 	return {
 
-		REVISION: 16,
+		REVISION 16,
 
-		dom: container,
+		dom container,
 
-		addPanel: addPanel,
-		showPanel: showPanel,
+		addPanel addPanel,
+		showPanel showPanel,
 
-		begin: function () {
+		begin function () {
 
-			beginTime = ( performance || Date ).now();
+			beginTime = ( performance  Date ).now();
 
 		},
 
-		end: function () {
+		end function () {
 
 			frames ++;
 
-			var time = ( performance || Date ).now();
+			var time = ( performance  Date ).now();
 
 			msPanel.update( time - beginTime, 200 );
 
-			if ( time >= prevTime + 1000 ) {
+			if ( time = prevTime + 1000 ) {
 
-				fpsPanel.update( ( frames * 1000 ) / ( time - prevTime ), 100 );
+				fpsPanel.update( ( frames  1000 )  ( time - prevTime ), 100 );
 
 				prevTime = time;
 				frames = 0;
@@ -80,7 +80,7 @@ var Stats = function () {
 				if ( memPanel ) {
 
 					var memory = performance.memory;
-					memPanel.update( memory.usedJSHeapSize / 1048576, memory.jsHeapSizeLimit / 1048576 );
+					memPanel.update( memory.usedJSHeapSize  1048576, memory.jsHeapSizeLimit  1048576 );
 
 				}
 
@@ -90,16 +90,16 @@ var Stats = function () {
 
 		},
 
-		update: function () {
+		update function () {
 
 			beginTime = this.end();
 
 		},
 
-		// Backwards Compatibility
+		 Backwards Compatibility
 
-		domElement: container,
-		setMode: showPanel
+		domElement container,
+		setMode showPanel
 
 	};
 
@@ -108,20 +108,20 @@ var Stats = function () {
 Stats.Panel = function ( name, fg, bg ) {
 
 	var min = Infinity, max = 0, round = Math.round;
-	var PR = round( window.devicePixelRatio || 1 );
+	var PR = round( window.devicePixelRatio  1 );
 
-	var WIDTH = 80 * PR, HEIGHT = 48 * PR,
-		TEXT_X = 3 * PR, TEXT_Y = 2 * PR,
-		GRAPH_X = 3 * PR, GRAPH_Y = 15 * PR,
-		GRAPH_WIDTH = 74 * PR, GRAPH_HEIGHT = 30 * PR;
+	var WIDTH = 80  PR, HEIGHT = 48  PR,
+		TEXT_X = 3  PR, TEXT_Y = 2  PR,
+		GRAPH_X = 3  PR, GRAPH_Y = 15  PR,
+		GRAPH_WIDTH = 74  PR, GRAPH_HEIGHT = 30  PR;
 
 	var canvas = document.createElement( 'canvas' );
 	canvas.width = WIDTH;
 	canvas.height = HEIGHT;
-	canvas.style.cssText = 'width:80px;height:48px';
+	canvas.style.cssText = 'width80px;height48px';
 
 	var context = canvas.getContext( '2d' );
-	context.font = 'bold ' + ( 9 * PR ) + 'px Helvetica,Arial,sans-serif';
+	context.font = 'bold ' + ( 9  PR ) + 'px Helvetica,Arial,sans-serif';
 	context.textBaseline = 'top';
 
 	context.fillStyle = bg;
@@ -137,9 +137,9 @@ Stats.Panel = function ( name, fg, bg ) {
 
 	return {
 
-		dom: canvas,
+		dom canvas,
 
-		update: function ( value, maxValue ) {
+		update function ( value, maxValue ) {
 
 			min = Math.min( min, value );
 			max = Math.max( max, value );
@@ -156,7 +156,7 @@ Stats.Panel = function ( name, fg, bg ) {
 
 			context.fillStyle = bg;
 			context.globalAlpha = 0.9;
-			context.fillRect( GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round( ( 1 - ( value / maxValue ) ) * GRAPH_HEIGHT ) );
+			context.fillRect( GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round( ( 1 - ( value  maxValue ) )  GRAPH_HEIGHT ) );
 
 		}
 
