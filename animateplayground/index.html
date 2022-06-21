@@ -546,7 +546,7 @@
                 'models/vanguard_t_choonyung.fbx',
                 (object) => {
                     object.scale.set(0.01, 0.01, 0.01)
-			object.position = 10
+		object.position.z = 10
                     mixer = new THREE.AnimationMixer(object)
                     let animationAction = mixer.clipAction(object.animations[0])
                     animationActions.push(animationAction)
