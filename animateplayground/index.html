@@ -647,15 +647,11 @@
                 }
             }
 		
-		const ncontrols = new OrbitControls(camera, renderer.domElement)
-            ncontrols.screenSpacePanning = true
-            ncontrols.target.set(0, 1, 0)
             const gui = new GUI()
             const animationsFolder = gui.addFolder('Animations')
             animationsFolder.open()
             var animate = function () {
                 requestAnimationFrame(animate)
-                ncontrols.update()
                 if (modelReady) mixer.update(clock.getDelta())
                 render()
                 stats.update()
