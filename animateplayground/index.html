@@ -15,11 +15,19 @@
             margin: 0px;
             overflow: hidden;
         }
+	#progressBar {
+                width: 500px;
+                height: 24px;
+                position: absolute;
+                left: 50%;
+                top: 25px;
+                margin-left: -250px;
+            }
     </style>
 </head>
 
 <body>
-
+<progress value="0" max="100" id="progressBar"></progress>
     <script id="fragment_ShaderDepth" type="x-shader/x-fragment">
 			#include <packing>
 			uniform sampler2D texture;
@@ -96,7 +104,9 @@
 
         import * as THREE from './three/build/three.module.js';
         import { OrbitControls } from './three/jsm/controls/OrbitControls.js';
-
+        import { FBXLoader } from './three/jsm/loaders/FBXLoader.js'
+        import Stats from './three/jsm/libs/stats.module.js'
+        import { GUI } from 'https://cdn.skypack.dev/dat.gui'
 
         var sceneName = "{FROM}RobotLab{END}";
         sceneName = sceneName.replace("{FROM}", "").replace("{END}", "");
@@ -526,6 +536,138 @@
 
         window.onload = start;
         window.addEventListener("resize", onResize, false);
+
+            let modelReady = false
+            let animationActions = []
+            let activeAction
+            let lastAction
+		const fbxLoader = new FBXLoader()
+            fbxLoader.load(
+                'models/vanguard_t_choonyung.fbx',
+                (object) => {
+                    object.scale.set(0.01, 0.01, 0.01)
+		object.position.z = 10
+                    mixer = new THREE.AnimationMixer(object)
+                    let animationAction = mixer.clipAction(object.animations[0])
+                    animationActions.push(animationAction)
+                    animationsFolder.add(animations, 'default')
+                    activeAction = animationActions[0]
+                    scene.add(object)
+                    //add an animation from another file
+                    fbxLoader.load(
+                        'models/vanguard@samba.fbx',
+                        (object) => {
+                            console.log('loaded samba')
+                            let animationAction = mixer.clipAction(object.animations[0])
+                            animationActions.push(animationAction)
+                            animationsFolder.add(animations, 'samba')
+                            //add an animation from another file
+                            fbxLoader.load(
+                                'models/vanguard@bellydance.fbx',
+                                (object) => {
+                                    console.log('loaded bellydance')
+                                    let animationAction = mixer.clipAction(object.animations[0])
+                                    animationActions.push(animationAction)
+                                    animationsFolder.add(animations, 'bellydance')
+                                    //add an animation from another file
+                                    fbxLoader.load(
+                                        'models/vanguard@goofyrunning.fbx',
+                                        (object) => {
+                                            console.log('loaded goofyrunning')
+                                            object.animations[0].tracks.shift()
+                                            let animationAction = mixer.clipAction(object.animations[0])
+                                            animationActions.push(animationAction)
+                                            animationsFolder.add(animations, 'goofyrunning')
+                                            progressBar.style.display = 'none'
+                                            modelReady = true
+                                        },
+                                        (xhr) => {
+                                            if (xhr.lengthComputable) {
+                                                var percentComplete = (xhr.loaded / xhr.total) * 100
+                                                progressBar.value = percentComplete
+                                                progressBar.style.display = 'block'
+                                            }
+                                        },
+                                        (error) => {
+                                            console.log(error)
+                                        }
+                                    )
+                                },
+                                (xhr) => {
+                                    if (xhr.lengthComputable) {
+                                        var percentComplete = (xhr.loaded / xhr.total) * 100
+                                        progressBar.value = percentComplete
+                                        progressBar.style.display = 'block'
+                                    }
+                                },
+                                (error) => {
+                                    console.log(error)
+                                }
+                            )
+                        },
+                        (xhr) => {
+                            if (xhr.lengthComputable) {
+                                var percentComplete = (xhr.loaded / xhr.total) * 100
+                                progressBar.value = percentComplete
+                                progressBar.style.display = 'block'
+                            }
+                        },
+                        (error) => {
+                            console.log(error)
+                        }
+                    )
+                },
+                (xhr) => {
+                    if (xhr.lengthComputable) {
+                        var percentComplete = (xhr.loaded / xhr.total) * 100
+                        progressBar.value = percentComplete
+                        progressBar.style.display = 'block'
+                    }
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+            const stats = Stats()
+            document.body.appendChild(stats.dom)
+            var animations = {
+                default: function () {
+                    setAction(animationActions[0])
+                },
+                samba: function () {
+                    setAction(animationActions[1])
+                },
+                bellydance: function () {
+                    setAction(animationActions[2])
+                },
+                goofyrunning: function () {
+                    setAction(animationActions[3])
+                },
+            }
+            const setAction = (toAction) => {
+                if (toAction != activeAction) {
+                    lastAction = activeAction
+                    activeAction = toAction
+                    lastAction.fadeOut(1)
+                    activeAction.reset()
+                    activeAction.fadeIn(1)
+                    activeAction.play()
+                }
+            }
+		
+            const gui = new GUI()
+            const animationsFolder = gui.addFolder('Animations')
+            animationsFolder.open()
+            var animate = function () {
+                requestAnimationFrame(animate)
+                //if (modelReady) mixer.update(clock.getDelta())
+                //render()
+                stats.update()
+            }
+            //function render() {
+            //    renderer.render(scene, camera)
+            //}
+            animate()
 
 
     </script>
