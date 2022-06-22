@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			
+			.info { color: blue; }
+		</style>
+	</head>
+	<body>
+		<div id="info">This application is for experimenting and playing with Threejs</div>
+		
+		<script type="module">
+			import * as THREE from 'https://cdn.skypack.dev/three@0.132.0/build/three.module.js';
+			import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.132.0/examples/jsm/loaders/GLTFLoader.js';
+			import { VRButton } from 'https://cdn.skypack.dev/three@0.132.0/examples/jsm/webxr/VRButton.js';
+
+			const scene = new THREE.Scene();
+			scene.background = new THREE.Color( 0xffffff );
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			
+
+			function create_cube(){
+				const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+				const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+				const cube = new THREE.Mesh( geometry, material );
+				scene.add( cube );
+				return cube
+			}
+			
+			const cube = create_cube();
+			cube.position.y = 3
+			
+			camera.position.z = 4;
+			camera.position.y = 2;
+			
+			function create_line(){
+				const lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+				const points = [];
+				points.push( new THREE.Vector3( - 5, 0, 0 ) );
+				points.push( new THREE.Vector3( 0, 5, 0 ) );
+				points.push( new THREE.Vector3( 5, 0, 0 ) );
+				const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
+				const line = new THREE.Line( lineGeometry, lineMaterial);
+				scene.add( line );
+				return line
+			}
+			
+			const line = create_line();
+			
+			var model = new THREE.Object3D();
+			function loadModel(){
+				const loader = new GLTFLoader();
+
+				loader.load( 'https://modelviewer.dev/shared-assets/models/Astronaut.glb', function ( gltf ) {
+					scene.add( gltf.scene );
+					model = gltf.scene
+				}, undefined, function ( error ) {
+					console.error( error );
+				} );
+			}
+			
+			loadModel();
+			
+
+			function animate() {
+				requestAnimationFrame( animate );
+				renderer.render( scene, camera );
+
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01
+				model.rotation.y += .01
+			}
+			
+			
+			animate();
+		</script>
+	</body>
+</html>
