@@ -28,12 +28,15 @@
 
 		<script type="module">
 
-			import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.139.0/build/three.module.js';
+			import * as THREE from './node_modules/three/build/three.module.js';
+			import Stats from './node_modules/three/examples/jsm/libs/stats.module.js';
+			import { FlyControls } from './node_modules/three/examples/jsm/controls/FlyControls.js';
+			import { Lensflare, LensflareElement } from './node_modules/three/examples/jsm/objects/Lensflare.js';
 
-			import Stats from 'https://cdn.jsdelivr.net/npm/three@0.139.0/jsm/libs/stats.module.js';
-
-			import { FlyControls } from 'https://cdn.jsdelivr.net/npm/three@0.139.0/jsm/controls/FlyControls.js';
-			import { Lensflare, LensflareElement } from 'https://cdn.jsdelivr.net/npm/three@0.139.0/jsm/objects/Lensflare.js';
+			// import * as THREE from './experiment/three/build/three.module.js';
+			// import Stats from './experiment/three/jsm/libs/stats.module.js';
+			// import { FlyControls } from './experiment/three/jsm/controls/FlyControls.js';
+			// import { Lensflare, LensflareElement } from './experiment/three/jsm/objects/Lensflare.js';
 
 			let container, stats;
 
