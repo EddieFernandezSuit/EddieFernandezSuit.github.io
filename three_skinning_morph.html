@@ -202,23 +202,23 @@
 
 				emoteFolder.open();
 
-				// expressions
+				expressions
 
-				// face = model.getObjectByName( 'Head_4' );
+				face = model.getObjectByName( 'Head_4' );
 
-				// const expressions = Object.keys( face.morphTargetDictionary );
-				// const expressionFolder = gui.addFolder( 'Expressions' );
+				const expressions = Object.keys( face.morphTargetDictionary );
+				const expressionFolder = gui.addFolder( 'Expressions' );
 
-				// for ( let i = 0; i < expressions.length; i ++ ) {
+				for ( let i = 0; i < expressions.length; i ++ ) {
 
-				// 	expressionFolder.add( face.morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
+					expressionFolder.add( face.morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
 
-				// }
+				}
 
-				// activeAction = actions[ 'Walking' ];
-				// activeAction.play();
+				activeAction = actions[ 'Walking' ];
+				activeAction.play();
 
-				// expressionFolder.open();
+				expressionFolder.open();
 
 			}
 
