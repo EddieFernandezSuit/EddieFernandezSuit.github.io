@@ -4,114 +4,301 @@
 <head>
     <meta charset="UTF-8">
     <title>Export to Three.js</title>
-    <!-- <script type="text/javascript" src="../node_modules/three/plugins/jquery-1.9.0.js"></script> -->
+    <script type="text/javascript" src="./plugins/jquery-1.9.0.js"></script>
     <!-- <script type="text/javascript" src="js/libs/jszip.js"></script>
     <script type="text/javascript" src="js/libs/jszip-utils.js"></script>
     <script type="text/javascript" src="js/libs/lzma.js"></script> -->
-    <!-- <script type="text/javascript" src="../node_modules/three/plugins/gzip/pako.js"></script> -->
+    <script type="text/javascript" src="./plugins/gzip/pako.js"></script>
 
     <style>
         body {
             margin: 0px;
             overflow: hidden;
         }
-	#progressBar {
-                width: 500px;
-                height: 24px;
-                position: absolute;
-                left: 50%;
-                top: 25px;
-                margin-left: -250px;
-            }
+	    #progressBar {
+            width: 500px;
+            height: 24px;
+            position: absolute;
+            left: 50%;
+            top: 25px;
+            margin-left: -250px;
+        }
+        #mobileInterface {
+            position: fixed;
+            width: calc(100% - 20px);
+            height: 50vh;
+            /* // background-color: rgba($color: #000000, $alpha: 0.2); */
+            pointer-events: none;
+            z-index: 11;
+            top: auto;
+            bottom: 120px;
+            left: 10px;
+            touch-action: manipulation;
+        }
+        #joystickWrapper1 {
+            pointer-events: auto;
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: transparent;
+            width: 120px;
+            height: 120px;
+            z-index: 12;
+            touch-action: manipulation;
+            background-color: rgba(red, 0.2);
+        }
+
+        #joystickWrapper2 {
+            pointer-events: auto;
+            display: block;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: auto;
+            background-color: transparent;
+            width: 50vw;
+            height: 140px;
+            z-index: 12;
+            touch-action: manipulation;
+            display: none;
+        }
+
+        #jumpButton {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            /* background-color: rgba($color: white, $alpha: 0.2); */
+            opacity: 1;
+            touch-action: manipulation;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        p {
+            position: relative;
+            display: inline-block;
+            color: white;
+            opacity: 1;
+            margin: 0;
+            padding: 0;
+            letter-spacing: 4px;
+            margin-left: 4px;
+        }
+
+        .noSelect {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        }
     </style>
 </head>
 
 <body>
-<progress value="0" max="100" id="progressBar"></progress>
+    <div id="mobileInterface" class="noSelect">
+    <div id="joystickWrapper1"></div>
+    <div id="joystickWrapper2">
+    <div id="jumpButton">
+    <p>JUMP</p>
+    </div>
+    </div>
+    </div>
+
+    <progress value="0" max="100" id="progressBar"></progress>
     <script id="fragment_ShaderDepth" type="x-shader/x-fragment">
-			#include <packing>
-			uniform sampler2D texture;
-			varying vec2 vUV;
-			void main() {
-				vec4 pixel = texture2D( texture, vUV );
-				if ( pixel.a < 0.5 ) discard;
-				gl_FragData[ 0 ] = packDepthToRGBA( gl_FragCoord.z );
-			}
-
-
-
-</script>
+        #include <packing>
+        uniform sampler2D texture;
+        varying vec2 vUV;
+        void main() {
+            vec4 pixel = texture2D( texture, vUV );
+            if ( pixel.a < 0.5 ) discard;
+            gl_FragData[ 0 ] = packDepthToRGBA( gl_FragCoord.z );
+        }
+    </script>
 
     <script id="vertex_ShaderDepth" type="x-shader/x-vertex">
-			varying vec2 vUV;
-			void main() {
-				vUV = 1.0 * uv;
-				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-				gl_Position = projectionMatrix * mvPosition;
-			}
-
-
-
-</script>
+        varying vec2 vUV;
+        void main() {
+            vUV = 1.0 * uv;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    </script>
 
     <script id="fragment_TerrainShader" type="x-shader/x-fragment">
-            uniform float scale;
-			uniform sampler2D texture1;
-			uniform sampler2D texture2;
-			uniform sampler2D texture3;
-			uniform sampler2D texture4;
-            uniform sampler2D texture5;
-            uniform sampler2D texture6;
-            uniform sampler2D texture7;
+        uniform float scale;
+        uniform sampler2D texture1;
+        uniform sampler2D texture2;
+        uniform sampler2D texture3;
+        uniform sampler2D texture4;
+        uniform sampler2D texture5;
+        uniform sampler2D texture6;
+        uniform sampler2D texture7;
 
-			uniform sampler2D splatAlpha1;
-			uniform sampler2D splatAlpha2;
-			varying vec2 vUv;
-				void main( void ) {
-				vec3 lay1 = texture2D(texture1, scale * vUv).rgb;
-	            vec3 lay2 = texture2D(texture2, scale * vUv).rgb;
-	            vec3 lay3 = texture2D(texture3, scale * vUv).rgb;
-	            vec3 lay4 = texture2D(texture4, scale * vUv).rgb;
-                vec3 lay5 = texture2D(texture5, scale * vUv).rgb;
-                vec3 lay6 = texture2D(texture6, scale * vUv).rgb;
-                vec3 lay7 = texture2D(texture7, scale * vUv).rgb;
+        uniform sampler2D splatAlpha1;
+        uniform sampler2D splatAlpha2;
+        varying vec2 vUv;
+            void main( void ) {
+            vec3 lay1 = texture2D(texture1, scale * vUv).rgb;
+            vec3 lay2 = texture2D(texture2, scale * vUv).rgb;
+            vec3 lay3 = texture2D(texture3, scale * vUv).rgb;
+            vec3 lay4 = texture2D(texture4, scale * vUv).rgb;
+            vec3 lay5 = texture2D(texture5, scale * vUv).rgb;
+            vec3 lay6 = texture2D(texture6, scale * vUv).rgb;
+            vec3 lay7 = texture2D(texture7, scale * vUv).rgb;
 
-				vec3 splat1 = texture2D(splatAlpha1, vUv).rgb;
-				vec3 splat2 = texture2D(splatAlpha2, vUv).rgb;
+            vec3 splat1 = texture2D(splatAlpha1, vUv).rgb;
+            vec3 splat2 = texture2D(splatAlpha2, vUv).rgb;
 
-				vec3 color = lay1 * splat1.r  + lay2 * splat1.g + lay3 * splat1.b + lay4 *(1.0-splat1.r)*(1.0-splat1.g)*(1.0-splat1.b)* (1.0 - splat2.r) + lay5 * splat2.r +  lay6 * splat2.g +  lay7 * splat2.b ;
-				color = color *1.35;
-				gl_FragColor = vec4( color , 0 );
-			}
-
-
-
-</script>
+            vec3 color = lay1 * splat1.r  + lay2 * splat1.g + lay3 * splat1.b + lay4 *(1.0-splat1.r)*(1.0-splat1.g)*(1.0-splat1.b)* (1.0 - splat2.r) + lay5 * splat2.r +  lay6 * splat2.g +  lay7 * splat2.b ;
+            color = color *1.35;
+            gl_FragColor = vec4( color , 0 );
+        }
+    </script>
 
     <script id="vertex_TerrainShader" type="x-shader/x-vertex">
-			varying vec2 vUv;
-			void main()
-			{
-				vUv = uv;
-				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-				gl_Position = projectionMatrix * mvPosition;
-			}
-</script>
+        varying vec2 vUv;
+        void main()
+        {
+            vUv = uv;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    </script>
 
     <div id="WebGL_Output"></div>
-
+    <script src="../node_modules/nipplejs/dist/nipplejs.js"></script>
     <script type="module">
 
-        import * as THREE from 'https://cdn.skypack.dev/three@0.141.0/build/three.module.js';
-        import { OrbitControls } from 'https://cdn.skypack.dev/three@0.141.0/jsm/controls/OrbitControls.js';
-        import { FBXLoader } from 'https://cdn.skypack.dev/three@0.141.0/jsm/loaders/FBXLoader.js'
-        import Stats from 'https://cdn.skypack.dev/three@0.141.0/jsm/libs/stats.module.js'
+        import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
+        import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
+        import Stats from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/libs/stats.module.js'
         import { GUI } from 'https://cdn.skypack.dev/dat.gui'
-        // import { RotationJoystickControls } from '../node_modueles/three-joystick';
+        
+        // import { JoystickControls } from '../node_modules/three-joystick/dist/JoystickControls.d.ts';
+
+        let fwdValue = 0;
+        let bkdValue = 0;
+        let rgtValue = 0;
+        let lftValue = 0;
+        let tempVector = new THREE.Vector3();
+        let upVector = new THREE.Vector3(0, 1, 0);
+        let joyManager;
+        let player;
+
+        addJoystick()
+        function addJoystick(){
+            const options = {
+                    zone: document.getElementById('joystickWrapper1'),
+                    size: 120,
+                    multitouch: true,
+                    maxNumberOfNipples: 2,
+                    mode: 'static',
+                    restJoystick: true,
+                    shape: 'circle',
+                    // position: { top: 20, left: 20 },
+                    position: { top: '60px', left: '60px' },
+                    dynamicPage: true,
+                }
+            
+            joyManager = nipplejs.create(options);
+            
+            joyManager['0'].on('move', function (evt, data) {
+                const forward = data.vector.y
+                const turn = data.vector.x
+
+                if (forward > 0) {
+                    fwdValue = Math.abs(forward)
+                    bkdValue = 0
+                } else if (forward < 0) {
+                    fwdValue = 0
+                    bkdValue = Math.abs(forward)
+                }
+
+                if (turn > 0) {
+                    lftValue = 0
+                    rgtValue = Math.abs(turn)
+                } else if (turn < 0) {
+                    lftValue = Math.abs(turn)
+                    rgtValue = 0
+                }
+            })
+
+            joyManager['0'].on('end', function (evt) {
+                bkdValue = 0
+                fwdValue = 0
+                lftValue = 0
+                rgtValue = 0
+            })
+            
+        }
+        
+        function updatePlayer(){
+            // move the player
+            if (player != null && controls != null){
+                const angle = controls.getAzimuthalAngle()
+                if (fwdValue > 0) {
+                    tempVector
+                    .set(0, 0, -fwdValue)
+                    .applyAxisAngle(upVector, angle)
+                    player.position.addScaledVector(
+                    tempVector,
+                    .01
+                    )
+
+                    setAction(animationActions[3])
+                }
+            
+                if (bkdValue > 0) {
+                    tempVector
+                    .set(0, 0, bkdValue)
+                    .applyAxisAngle(upVector, angle)
+                    player.position.addScaledVector(
+                    tempVector,
+                    .01
+                    )
+                }
+
+                if (lftValue > 0) {
+                    tempVector
+                    .set(-lftValue, 0, 0)
+                    .applyAxisAngle(upVector, angle)
+                    player.position.addScaledVector(
+                    tempVector,
+                    .01
+                    )
+                }
+
+                if (rgtValue > 0) {
+                    tempVector
+                    .set(rgtValue, 0, 0)
+                    .applyAxisAngle(upVector, angle)
+                    player.position.addScaledVector(
+                    tempVector,
+                    .01
+                    )
+                }
+
+                if(fwdValue == 0 && bkdValue == 0 && lftValue == 0 && rgtValue == 0){
+                    setAction(animationActions[0])
+                }
+            }
+        };
 
         var sceneName = "{FROM}RobotLab{END}";
         sceneName = sceneName.replace("{FROM}", "").replace("{END}", "");
-
+        console.log(sceneName)
         //sceneName = "Test";
 
         var scene = new THREE.Scene();
@@ -248,6 +435,12 @@
         //用于记录上帧和当前帧相机的位置
         var cameraThenPos = new THREE.Vector3(), cameraNowPos = new THREE.Vector3();
         function update() {
+            if (modelReady) mixer.update(clock.getDelta())
+            //render()
+            stats.update()
+
+
+            updatePlayer()
             requestAnimationFrame(update);
             //渲染优化,1.间隔渲染; 2.判断相机有无运动,无运动则停止渲染
             //console.log({ delta })
@@ -541,139 +734,128 @@
         window.onload = start;
         window.addEventListener("resize", onResize, false);
 
-            let modelReady = false
-            let animationActions = []
-            let activeAction
-            let lastAction
-		    const fbxLoader = new FBXLoader()
-            fbxLoader.load(
-                'models/vanguard_t_choonyung.fbx',
-                (object) => {
-                    object.scale.set(0.01, 0.01, 0.01)
-		            object.position.z = 5
-                    mixer = new THREE.AnimationMixer(object)
-                    let animationAction = mixer.clipAction(object.animations[0])
-                    animationActions.push(animationAction)
-                    animationsFolder.add(animations, 'default')
-                    activeAction = animationActions[0]
-                    scene.add(object)
-                    //add an animation from another file
-                    fbxLoader.load(
-                        'models/vanguard@samba.fbx',
-                        (object) => {
-                            console.log('loaded samba')
-                            let animationAction = mixer.clipAction(object.animations[0])
-                            animationActions.push(animationAction)
-                            animationsFolder.add(animations, 'samba')
-                            //add an animation from another file
-                            fbxLoader.load(
-                                'models/vanguard@bellydance.fbx',
-                                (object) => {
-                                    console.log('loaded bellydance')
-                                    let animationAction = mixer.clipAction(object.animations[0])
-                                    animationActions.push(animationAction)
-                                    animationsFolder.add(animations, 'bellydance')
-                                    //add an animation from another file
-                                    fbxLoader.load(
-                                        'models/vanguard@goofyrunning.fbx',
-                                        (object) => {
-                                            console.log('loaded goofyrunning')
-                                            object.animations[0].tracks.shift()
-                                            let animationAction = mixer.clipAction(object.animations[0])
-                                            animationActions.push(animationAction)
-                                            animationsFolder.add(animations, 'goofyrunning')
-                                            progressBar.style.display = 'none'
-                                            modelReady = true
-                                        },
-                                        (xhr) => {
-                                            if (xhr.lengthComputable) {
-                                                var percentComplete = (xhr.loaded / xhr.total) * 100
-                                                progressBar.value = percentComplete
-                                                progressBar.style.display = 'block'
-                                            }
-                                        },
-                                        (error) => {
-                                            console.log(error)
+        let modelReady = false
+        let animationActions = []
+        let activeAction
+        let lastAction
+        const fbxLoader = new FBXLoader()
+        fbxLoader.load(
+            'models/vanguard_t_choonyung.fbx',
+            (object) => {
+                player = object;
+                object.scale.set(0.01, 0.01, 0.01)
+                object.position.z = 5
+                mixer = new THREE.AnimationMixer(object)
+                let animationAction = mixer.clipAction(object.animations[0])
+                animationActions.push(animationAction)
+                animationsFolder.add(animations, 'default')
+                activeAction = animationActions[0]
+                scene.add(object)
+                //add an animation from another file
+                fbxLoader.load(
+                    'models/vanguard@samba.fbx',
+                    (object) => {
+                        console.log('loaded samba')
+                        let animationAction = mixer.clipAction(object.animations[0])
+                        animationActions.push(animationAction)
+                        animationsFolder.add(animations, 'samba')
+                        //add an animation from another file
+                        fbxLoader.load(
+                            'models/vanguard@bellydance.fbx',
+                            (object) => {
+                                console.log('loaded bellydance')
+                                let animationAction = mixer.clipAction(object.animations[0])
+                                animationActions.push(animationAction)
+                                animationsFolder.add(animations, 'bellydance')
+                                //add an animation from another file
+                                fbxLoader.load(
+                                    'models/vanguard@goofyrunning.fbx',
+                                    (object) => {
+                                        console.log('loaded goofyrunning')
+                                        object.animations[0].tracks.shift()
+                                        let animationAction = mixer.clipAction(object.animations[0])
+                                        animationActions.push(animationAction)
+                                        animationsFolder.add(animations, 'goofyrunning')
+                                        progressBar.style.display = 'none'
+                                        modelReady = true
+                                    },
+                                    (xhr) => {
+                                        if (xhr.lengthComputable) {
+                                            var percentComplete = (xhr.loaded / xhr.total) * 100
+                                            progressBar.value = percentComplete
+                                            progressBar.style.display = 'block'
                                         }
-                                    )
-                                },
-                                (xhr) => {
-                                    if (xhr.lengthComputable) {
-                                        var percentComplete = (xhr.loaded / xhr.total) * 100
-                                        progressBar.value = percentComplete
-                                        progressBar.style.display = 'block'
+                                    },
+                                    (error) => {
+                                        console.log(error)
                                     }
-                                },
-                                (error) => {
-                                    console.log(error)
+                                )
+                            },
+                            (xhr) => {
+                                if (xhr.lengthComputable) {
+                                    var percentComplete = (xhr.loaded / xhr.total) * 100
+                                    progressBar.value = percentComplete
+                                    progressBar.style.display = 'block'
                                 }
-                            )
-                        },
-                        (xhr) => {
-                            if (xhr.lengthComputable) {
-                                var percentComplete = (xhr.loaded / xhr.total) * 100
-                                progressBar.value = percentComplete
-                                progressBar.style.display = 'block'
+                            },
+                            (error) => {
+                                console.log(error)
                             }
-                        },
-                        (error) => {
-                            console.log(error)
+                        )
+                    },
+                    (xhr) => {
+                        if (xhr.lengthComputable) {
+                            var percentComplete = (xhr.loaded / xhr.total) * 100
+                            progressBar.value = percentComplete
+                            progressBar.style.display = 'block'
                         }
-                    )
-                },
-                (xhr) => {
-                    if (xhr.lengthComputable) {
-                        var percentComplete = (xhr.loaded / xhr.total) * 100
-                        progressBar.value = percentComplete
-                        progressBar.style.display = 'block'
+                    },
+                    (error) => {
+                        console.log(error)
                     }
-                },
-                (error) => {
-                    console.log(error)
+                )
+            },
+            (xhr) => {
+                if (xhr.lengthComputable) {
+                    var percentComplete = (xhr.loaded / xhr.total) * 100
+                    progressBar.value = percentComplete
+                    progressBar.style.display = 'block'
                 }
-            )
-            const stats = Stats()
-            document.body.appendChild(stats.dom)
-            var animations = {
-                default: function () {
-                    setAction(animationActions[0])
-                },
-                samba: function () {
-                    setAction(animationActions[1])
-                },
-                bellydance: function () {
-                    setAction(animationActions[2])
-                },
-                goofyrunning: function () {
-                    setAction(animationActions[3])
-                },
+            },
+            (error) => {
+                console.log(error)
             }
-            const setAction = (toAction) => {
-                if (toAction != activeAction) {
-                    lastAction = activeAction
-                    activeAction = toAction
-                    lastAction.fadeOut(1)
-                    activeAction.reset()
-                    activeAction.fadeIn(1)
-                    activeAction.play()
-                }
+        )
+        const stats = Stats()
+        document.body.appendChild(stats.dom)
+        var animations = {
+            default: function () {
+                setAction(animationActions[0])
+            },
+            samba: function () {
+                setAction(animationActions[1])
+            },
+            bellydance: function () {
+                setAction(animationActions[2])
+            },
+            goofyrunning: function () {
+                setAction(animationActions[3])
+            },
+        }
+        const setAction = (toAction) => {
+            if (toAction != activeAction) {
+                lastAction = activeAction
+                activeAction = toAction
+                lastAction.fadeOut(1)
+                activeAction.reset()
+                activeAction.fadeIn(1)
+                activeAction.play()
             }
-		
-            const gui = new GUI()
-            const animationsFolder = gui.addFolder('Animations')
-            animationsFolder.open()
-            var animate = function () {
-                requestAnimationFrame(animate)
-                if (modelReady) mixer.update(clock.getDelta())
-                //render()
-                stats.update()
-            }
-            //function render() {
-            //    renderer.render(scene, camera)
-            //}
-            animate()
-
-
+        }
+    
+        const gui = new GUI()
+        const animationsFolder = gui.addFolder('Animations')
+        animationsFolder.open()
     </script>
 </body>
 
