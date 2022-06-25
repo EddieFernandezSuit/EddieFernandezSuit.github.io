@@ -194,6 +194,7 @@
         let upVector = new THREE.Vector3(0, 1, 0);
         let joyManager;
         let player;
+        let moveAngle = 0;
 
         addJoystick()
         function addJoystick(){
@@ -215,6 +216,9 @@
             joyManager['0'].on('move', function (evt, data) {
                 const forward = data.vector.y
                 const turn = data.vector.x
+
+                moveAngle = Math.atan2(forward,turn)
+                // console.log(forward)
 
                 if (forward > 0) {
                     fwdValue = Math.abs(forward)
@@ -246,6 +250,8 @@
             // move the player
             if (player != null && controls != null){
                 const angle = controls.getAzimuthalAngle()
+                player.rotation.y = moveAngle + angle + 3.14/2
+                
                 if (fwdValue > 0) {
                     tempVector
                     .set(0, 0, -fwdValue)
@@ -254,14 +260,13 @@
                     tempVector,
                     .01
                     )
-
-                    setAction(animationActions[3])
                 }
             
                 if (bkdValue > 0) {
                     tempVector
                     .set(0, 0, bkdValue)
                     .applyAxisAngle(upVector, angle)
+
                     player.position.addScaledVector(
                     tempVector,
                     .01
@@ -290,6 +295,10 @@
 
                 if(fwdValue == 0 && bkdValue == 0 && lftValue == 0 && rgtValue == 0){
                     setAction(animationActions[0])
+                }
+                else{
+                    
+                    setAction(animationActions[3])
                 }
             }
         };

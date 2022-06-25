@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "nipplejs": "^0.9.1"
+    "nipplejs": "^0.9.1",
+    "three": "^0.141.0"
   }
 }
