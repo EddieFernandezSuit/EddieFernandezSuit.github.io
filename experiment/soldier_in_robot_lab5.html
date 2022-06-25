@@ -177,7 +177,7 @@
     </script>
 
     <div id="WebGL_Output"></div>
-    <script src="/EddieFernandezSuit.github.io/node_modules/nipplejs/dist/nipplejs.js"></script>
+    <script src="/node_modules/nipplejs/dist/nipplejs.js"></script>
     <script type="module">
 
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
@@ -258,26 +258,26 @@
                 else{
                     if (fwdValue > 0) {
                         tempVector.set(0, 0, -fwdValue).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
+                        player.position.addScaledVector(tempVector,.005)
+                        camera.position.addScaledVector(tempVector,.005)
                     }
                 
                     if (bkdValue > 0) {
                         tempVector.set(0, 0, bkdValue).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
+                        player.position.addScaledVector(tempVector,.005)
+                        camera.position.addScaledVector(tempVector,.005)
                     }
 
                     if (lftValue > 0) {
                         tempVector.set(-lftValue, 0, 0).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
+                        player.position.addScaledVector(tempVector,.005)
+                        camera.position.addScaledVector(tempVector,.005)
                     }
 
                     if (rgtValue > 0) {
                         tempVector.set(rgtValue, 0, 0).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
+                        player.position.addScaledVector(tempVector,.005)
+                        camera.position.addScaledVector(tempVector,.005)
                     }
                     if (controls != null){
                         controls.target = new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z)
@@ -762,7 +762,7 @@
                                 animationsFolder.add(animations, 'bellydance')
                                 //add an animation from another file
                                 fbxLoader.load(
-                                    'models/vanguard@goofyrunning.fbx',
+                                    'models/Walking.fbx',
                                     (object) => {
                                         console.log('loaded goofyrunning')
                                         object.animations[0].tracks.shift()
