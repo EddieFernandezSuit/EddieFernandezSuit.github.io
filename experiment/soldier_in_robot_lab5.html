@@ -268,11 +268,14 @@
                 }
                 else{
                     tempVector.set(joystickVector.x, 0, -joystickVector.y)
+                    player.position.addScaledVector(tempVector,.005)
+
+                    
                     var nVector = new THREE.Vector3()
                     nVector.set(-joystickVector.x, 0, joystickVector.y)
-                    player.position.addScaledVector(tempVector,.005)
+                    nVector.add(player.position)
                     // camera.position.set(player.position + nVector * camera.position.distanceTo(player.position))
-                    camera.position.set(player.position + nVector)
+                    camera.position.set(nVector)
 
 
                     // if (fwdValue > 0) {
