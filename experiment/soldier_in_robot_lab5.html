@@ -271,7 +271,7 @@
 
                     
                     var nVector = new THREE.Vector3()
-                    nVector.set(-joystickVector.x*10, 0, joystickVector.y*10)
+                    nVector.set(-joystickVector.x, camera.position.y, joystickVector.y)
                     nVector.add(player.position)
                     console.log(nVector)
                     camera.position.set(nVector)
