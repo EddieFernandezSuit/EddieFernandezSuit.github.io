@@ -271,7 +271,7 @@
                     var nVector = new THREE.Vector3()
                     nVector.set(-joystickVector.x, 0, joystickVector.y)
                     player.position.addScaledVector(tempVector,.005)
-                    camera.position = player.position + nVector * 100
+                    camera.position.set(player.position + nVector * camera.position.distanceTo(player.position))
                     // camera.position.addScaledVector(tempVector,.005)
 
                     // if (fwdValue > 0) {
