@@ -229,7 +229,6 @@
                 const turn = data.vector.x
 
                 moveAngle = Math.atan2(forward,turn)
-                // console.log(forward)
 
                 if (forward > 0) {
                     fwdValue = Math.abs(forward)
@@ -269,7 +268,7 @@
                 }
                 else{
                     // tempVector = joystickVector;
-                    tempVector.set(joystickVector.x, 0, joystickVector.y)
+                    tempVector.set(joystickVector.x, 0, -joystickVector.y)
                     player.position.addScaledVector(tempVector,.005)
                     camera.position.addScaledVector(tempVector,.005)
 
