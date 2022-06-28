@@ -184,7 +184,7 @@
                 scene.add( cubeMesh );
                 cubeMesh.position.set(player.position.x, player.position.y, player.position.z)
 
-                var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, player.position.y, -camera.position.z + player.position.z)
+                var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, player.position.y + 2, -camera.position.z + player.position.z)
                 class Bullet{
                     constructor(directionVector, cubeMesh){
                         this.directionVector = directionVector
