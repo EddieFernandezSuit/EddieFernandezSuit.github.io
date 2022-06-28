@@ -11,19 +11,18 @@
     <script type="text/javascript" src="./plugins/gzip/pako.js"></script>
 
     <style>
-        body {
-            margin: 0px;
-            overflow: hidden;
+        #mobileInterface {
+            position: fixed;
+            width: calc(100% - 20px);
+            height: 50vh;
+            pointer-events: none;
+            z-index: 11;
+            top: auto;
+            bottom: 120px;
+            left: 10px;
+            touch-action: manipulation;
         }
-	    #progressBar {
-            width: 500px;
-            height: 24px;
-            position: absolute;
-            left: 50%;
-            top: 25px;
-            margin-left: -250px;
-        }
-        #joystickWrapper1 {
+        #mobileInterface #joystickWrapper1 {
             pointer-events: auto;
             display: block;
             position: absolute;
@@ -34,27 +33,36 @@
             height: 120px;
             z-index: 12;
             touch-action: manipulation;
-            background-color: rgba(red, 0.2);
+            background-color: rgba(255, 0, 0, 0.2);
         }
-
-        #jumpButton {
+        #mobileInterface #joystickWrapper2 {
+            pointer-events: auto;
+            display: block;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: transparent;
+            width: 120px;
+            height: 120px;
+            z-index: 12;
+            touch-action: manipulation;
+        }
+        #mobileInterface #joystickWrapper2 #jumpButton {
             position: absolute;
             right: 0px;
             top: 0px;
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            /* background-color: rgba($color: white, $alpha: 0.2); */
+            background-color: rgba(255, 255, 255, 0.2);
             opacity: 1;
             touch-action: manipulation;
-
             display: flex;
             justify-content: center;
             align-items: center;
             pointer-events: auto;
         }
-
-        p {
+        #mobileInterface #joystickWrapper2 #jumpButton p {
             position: relative;
             display: inline-block;
             color: white;
@@ -64,30 +72,31 @@
             letter-spacing: 4px;
             margin-left: 4px;
         }
-
         .noSelect {
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
     </style>
 </head>
 
 <body>
     <div id="mobileInterface" class="noSelect">
-    <div id="joystickWrapper1"></div>
-    <div id="joystickWrapper2">
-    <div id="jumpButton">
-        <p>JUMP</p>
-        <button onclick="shoot()" id="jumpButton"></button>
-    </div>
-    </div>
-    </div>
+        <div id="joystickWrapper1"></div>
+        <div id="joystickWrapper2">
+          <div id="jumpButton">
+            <p>JUMP</p>
+                <button onclick="shoot()" id="jumpButton"></button>
+          </div>
+          
+        </div>
+      </div>
     <div id="WebGL_Output"></div>
+    <script>function shoot(){console.log('shoot')}</script>
 
     <progress value="0" max="100" id="progressBar"></progress>
     <script id="fragment_ShaderDepth" type="x-shader/x-fragment">
@@ -178,9 +187,6 @@
         let player;
         let moveAngle = 0;
 
-        function shoot(){
-            console.log('shoot')
-        }
         addJoystick()
         function addJoystick(){
             const options = {
