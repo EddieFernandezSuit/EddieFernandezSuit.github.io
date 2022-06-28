@@ -300,7 +300,7 @@
                         player.position.addScaledVector(tempVector,.01)
                         camera.position.addScaledVector(tempVector,.01)
                     }
-                    controls.target = new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z)
+                    controls.target = new THREE.Vector3(player.position.x+2, player.position.y + 2, player.position.z+2)
                     setAction(animationActions[3])
                 }
             }
@@ -444,6 +444,7 @@
         function update() {
 
             bullets.forEach(bullet => {
+                console.log(bullet)
                 bullet.update()
             });
 
