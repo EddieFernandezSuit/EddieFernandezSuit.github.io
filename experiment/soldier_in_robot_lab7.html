@@ -96,7 +96,7 @@
         </div>
       </div>
     <div id="WebGL_Output"></div>
-    <script>function shoot(){console.log('shoot')}</script>
+    <script></script>
 
     <progress value="0" max="100" id="progressBar"></progress>
     <script id="fragment_ShaderDepth" type="x-shader/x-fragment">
@@ -177,6 +177,7 @@
         import Stats from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/libs/stats.module.js'
         import { GUI } from 'https://cdn.skypack.dev/dat.gui'
 
+        function shoot(){console.log('shoot')}
         let fwdValue = 0;
         let bkdValue = 0;
         let rgtValue = 0;
