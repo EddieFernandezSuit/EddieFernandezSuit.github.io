@@ -259,12 +259,12 @@
             // move the player
             if (player != null && controls != null){
                 const angle = controls.getAzimuthalAngle()
+                player.rotation.y = angle + 3.14
                 
                 if(fwdValue == 0 && bkdValue == 0 && lftValue == 0 && rgtValue == 0){
                     setAction(animationActions[0])
                 }
                 else{
-                    player.rotation.y = moveAngle + angle + 3.14/2
                     // tempVector.applyAxisAngle(upVector, angle)
                     // player.position.addScaledVector(tempVector,.1)
                     // camera.position.addScaledVector(tempVector,.1)
