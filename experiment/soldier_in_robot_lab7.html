@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+<!-- python -m http.server 3000 -->
 <head>
     <meta charset="UTF-8">
     <title>Export to Three.js</title>
@@ -197,7 +199,6 @@
                 }
 
                 var bullet = new Bullet(directionVector, sphereMesh)
-                console.log(bullet)
                 bullets.push(bullet)
             }
         }
@@ -299,7 +300,7 @@
                         player.position.addScaledVector(tempVector,.01)
                         camera.position.addScaledVector(tempVector,.01)
                     }
-                    controls.target = new THREE.Vector3(player.position.x+2, player.position.y + 2, player.position.z+2)
+                    controls.target = new THREE.Vector3(player.position.x+2, player.position.y + 2, player.position.z)
                     setAction(animationActions[3])
                 }
             }
