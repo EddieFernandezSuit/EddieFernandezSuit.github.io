@@ -184,13 +184,15 @@
                 scene.add( cubeMesh );
                 cubeMesh.position.set(player.position.x, player.position.y, player.position.z)
 
-                var directionVector = new THREE.Vector3(0,0,0)
-                console.log(directionVector)
-                directionVector.add(camera.position)
-                console.log(directionVector)
-                directionVector.add(-player.position)
-                console.log(directionVector)
+                // var directionVector = new THREE.Vector3(0,0,0)
+                // console.log(directionVector)
+                // directionVector.add(camera.position)
+                // console.log(directionVector)
+                // directionVector.add(-player.position)
+                // console.log(directionVector)
 
+                var directionVector = new THREE.Vector3(camera.position.x - player.position.x, camera.position.y - player.position.y, camera.position.z - player.position.z)
+                console.log(directionVector)
                 class Bullet{
                     constructor(directionVector, cubeMesh){
                         this.directionVector = directionVector
@@ -198,7 +200,7 @@
                     }
 
                     update(){
-                        this.cubeMesh.position.addScaledVector(directionVector,.01)
+                        this.cubeMesh.position.addScaledVector(this.directionVector,.01)
                         console.log(cubeMesh.position)
                     }
                 }
