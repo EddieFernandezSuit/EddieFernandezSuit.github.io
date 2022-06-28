@@ -178,10 +178,25 @@
         function shoot(){
             if(scene != null){
                 console.log('shoot')
-                var geometry = new THREE.BoxGeometry(5,5,5);
+                var geometry = new THREE.BoxGeometry(1,1,1);
                 var cubeMaterial = new THREE.MeshNormalMaterial(); 
                 var cubeMesh = new THREE.Mesh( geometry, cubeMaterial );
                 scene.add( cubeMesh );
+
+                directionVector = new THREE.Vector3(0,0,0)
+                directionVector.add(camera.position)
+                directionVector.add(-player.position)
+                bullet = new Bullet(directionVector, cubeMesh)
+
+                class Bullet{
+                    constructor(directionVector, cubeMesh){
+                        this.directionVector = directionVector
+                    }
+
+                    update(){
+                        cubeMesh.position.add(directionVector)
+                    }
+                }
             }
         }
         window.shoot = shoot
@@ -194,6 +209,7 @@
         let joyManager;
         let player;
         let moveAngle = 0;
+        let bullets = []
 
         addJoystick()
         function addJoystick(){
@@ -423,6 +439,11 @@
         //用于记录上帧和当前帧相机的位置
         var cameraThenPos = new THREE.Vector3(), cameraNowPos = new THREE.Vector3();
         function update() {
+            
+            bullets.forEach(bullet => {
+                bullet.update()
+            });
+
             if (modelReady) mixer.update(clock.getDelta())
             //render()
             stats.update()
