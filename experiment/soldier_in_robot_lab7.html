@@ -186,7 +186,8 @@
                 var directionVector = new THREE.Vector3(0,0,0)
                 directionVector.add(camera.position)
                 directionVector.add(-player.position)
-                bullet = new Bullet(directionVector, cubeMesh)
+                var bullet = new Bullet(directionVector, cubeMesh)
+                bullets.push(bullet)
 
                 class Bullet{
                     constructor(directionVector, cubeMesh){
