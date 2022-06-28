@@ -178,11 +178,11 @@
         function shoot(){
             if(scene != null){
                 console.log('shoot')
-                var geometry = new THREE.BoxGeometry(1,1,1);
+                var geometry = new THREE.BoxGeometry(2,2,2);
                 var cubeMaterial = new THREE.MeshNormalMaterial(); 
                 var cubeMesh = new THREE.Mesh( geometry, cubeMaterial );
                 scene.add( cubeMesh );
-                cubeMesh.position.set(player.position)
+                cubeMesh.position.set(player.position.x, player.position.y, player.position.z)
 
                 var directionVector = new THREE.Vector3(0,0,0)
                 directionVector.add(camera.position)
