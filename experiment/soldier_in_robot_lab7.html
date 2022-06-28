@@ -182,7 +182,7 @@
                 var sphereMaterial = new THREE.MeshNormalMaterial(); 
                 var sphereMesh = new THREE.Mesh( geometry, sphereMaterial );
                 scene.add( sphereMesh );
-                sphereMesh.position.set(player.position.x, player.position.y, player.position.z)
+                sphereMesh.position.set(player.position.x, player.position.y+2, player.position.z)
 
                 var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, player.position.y + 2, -camera.position.z + player.position.z)
                 class Bullet{
