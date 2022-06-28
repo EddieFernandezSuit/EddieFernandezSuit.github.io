@@ -85,7 +85,15 @@
 </head>
 
 <body>
-    
+    <div id="mobileInterface" class="noSelect">
+        <div id="joystickWrapper1"></div>
+        <div id="joystickWrapper2">
+          <div id="jumpButton">
+            <p>JUMP</p>
+                <button onclick="shoot()" id="jumpButton"></button>
+          </div>
+        </div>
+      </div>
     <div id="WebGL_Output"></div>
 
     <progress value="0" max="100" id="progressBar"></progress>
@@ -167,16 +175,6 @@
         import Stats from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/libs/stats.module.js'
         import { GUI } from 'https://cdn.skypack.dev/dat.gui'
 
-        <div id="mobileInterface" class="noSelect">
-        <div id="joystickWrapper1"></div>
-        <div id="joystickWrapper2">
-          <div id="jumpButton">
-            <p>JUMP</p>
-                <button onclick="shoot()" id="jumpButton"></button>
-          </div>
-          
-        </div>
-        </div>
         function shoot(){
             if(scene != null){
                 console.log('shoot')
@@ -186,6 +184,7 @@
                 scene.add( subeMesh );
             }
         }
+        window.shoot = shoot
         let fwdValue = 0;
         let bkdValue = 0;
         let rgtValue = 0;
