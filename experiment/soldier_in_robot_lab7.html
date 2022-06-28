@@ -199,6 +199,7 @@
                 }
 
                 var bullet = new Bullet(directionVector, cubeMesh)
+                consolel.log(bullet)
                 bullets.push(bullet)
             }
         }
@@ -444,7 +445,6 @@
         function update() {
 
             bullets.forEach(bullet => {
-                console.log(bullet)
                 bullet.update()
             });
 
