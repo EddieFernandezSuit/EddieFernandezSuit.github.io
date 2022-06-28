@@ -178,11 +178,11 @@
         function shoot(){
             if(scene != null){
                 console.log('shoot')
-                var geometry = new THREE.BoxGeometry(.5,.5,.5);
-                var cubeMaterial = new THREE.MeshNormalMaterial(); 
-                var cubeMesh = new THREE.Mesh( geometry, cubeMaterial );
-                scene.add( cubeMesh );
-                cubeMesh.position.set(player.position.x, player.position.y, player.position.z)
+                var geometry = new THREE.SphereGeometry(1);
+                var sphereMaterial = new THREE.MeshNormalMaterial(); 
+                var sphereMesh = new THREE.Mesh( geometry, sphereMaterial );
+                scene.add( sphereMesh );
+                sphereMesh.position.set(player.position.x, player.position.y, player.position.z)
 
                 var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, player.position.y + 2, -camera.position.z + player.position.z)
                 class Bullet{
@@ -196,7 +196,7 @@
                     }
                 }
 
-                var bullet = new Bullet(directionVector, cubeMesh)
+                var bullet = new Bullet(directionVector, sphereMesh)
                 console.log(bullet)
                 bullets.push(bullet)
             }
