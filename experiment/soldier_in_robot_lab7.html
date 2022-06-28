@@ -183,7 +183,7 @@
                 var cubeMesh = new THREE.Mesh( geometry, cubeMaterial );
                 scene.add( cubeMesh );
 
-                directionVector = new THREE.Vector3(0,0,0)
+                var directionVector = new THREE.Vector3(0,0,0)
                 directionVector.add(camera.position)
                 directionVector.add(-player.position)
                 bullet = new Bullet(directionVector, cubeMesh)
@@ -439,7 +439,7 @@
         //用于记录上帧和当前帧相机的位置
         var cameraThenPos = new THREE.Vector3(), cameraNowPos = new THREE.Vector3();
         function update() {
-            
+
             bullets.forEach(bullet => {
                 bullet.update()
             });
