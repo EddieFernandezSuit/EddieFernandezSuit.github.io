@@ -178,7 +178,7 @@
         function shoot(){
             if(scene != null){
                 console.log('shoot')
-                var geometry = new THREE.BoxGeometry(2,2,2);
+                var geometry = new THREE.BoxGeometry(1,1,1);
                 var cubeMaterial = new THREE.MeshNormalMaterial(); 
                 var cubeMesh = new THREE.Mesh( geometry, cubeMaterial );
                 scene.add( cubeMesh );
@@ -206,7 +206,7 @@
                 }
 
                 var bullet = new Bullet(directionVector, cubeMesh)
-                consolel.log(bullet)
+                console.log(bullet)
                 bullets.push(bullet)
             }
         }
