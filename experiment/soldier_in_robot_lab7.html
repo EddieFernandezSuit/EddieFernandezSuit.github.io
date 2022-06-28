@@ -85,18 +85,8 @@
 </head>
 
 <body>
-    <div id="mobileInterface" class="noSelect">
-        <div id="joystickWrapper1"></div>
-        <div id="joystickWrapper2">
-          <div id="jumpButton">
-            <p>JUMP</p>
-                <button onclick="shoot()" id="jumpButton"></button>
-          </div>
-          
-        </div>
-      </div>
+    
     <div id="WebGL_Output"></div>
-    <script></script>
 
     <progress value="0" max="100" id="progressBar"></progress>
     <script id="fragment_ShaderDepth" type="x-shader/x-fragment">
@@ -177,7 +167,25 @@
         import Stats from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/libs/stats.module.js'
         import { GUI } from 'https://cdn.skypack.dev/dat.gui'
 
-        function shoot(){console.log('shoot')}
+        <div id="mobileInterface" class="noSelect">
+        <div id="joystickWrapper1"></div>
+        <div id="joystickWrapper2">
+          <div id="jumpButton">
+            <p>JUMP</p>
+                <button onclick="shoot()" id="jumpButton"></button>
+          </div>
+          
+        </div>
+        </div>
+        function shoot(){
+            if(scene != null){
+                console.log('shoot')
+                var geometry = new THREE.BoxGeometry(5,5,5);
+                var cubeMaterial = new THREE.MeshNormalMaterial(); 
+                var cubeMesh = new THREE.Mesh( geometry, cubeMaterial );
+                scene.add( subeMesh );
+            }
+        }
         let fwdValue = 0;
         let bkdValue = 0;
         let rgtValue = 0;
@@ -282,8 +290,6 @@
 
         var sceneName = "{FROM}RobotLab{END}";
         sceneName = sceneName.replace("{FROM}", "").replace("{END}", "");
-        console.log(sceneName)
-        //sceneName = "Test";
 
         var scene = new THREE.Scene();
         var loader = new THREE.ObjectLoader();
@@ -414,7 +420,6 @@
         var then = Date.now();
         var interval = 1000 / fps;
         var delta;
-
 
         //用于记录上帧和当前帧相机的位置
         var cameraThenPos = new THREE.Vector3(), cameraNowPos = new THREE.Vector3();
