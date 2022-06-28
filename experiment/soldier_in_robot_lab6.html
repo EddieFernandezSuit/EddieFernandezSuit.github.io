@@ -204,6 +204,7 @@
         let joyManager;
         let player;
         let moveAngle = 0;
+        let joystickVector = new THREE.Vector3();
 
         addJoystick()
         function addJoystick(){
@@ -223,11 +224,12 @@
             joyManager = nipplejs.create(options);
             
             joyManager['0'].on('move', function (evt, data) {
+                joystickVector = data.vector
                 const forward = data.vector.y
                 const turn = data.vector.x
-                // tempVector.set(data.vector.x,0,-data.vector.y)
+                tempVector.set(data.vector.x,0,-data.vector.y)
 
-                moveAngle = Math.atan2(forward,turn)
+                // moveAngle = Math.atan2(forward,turn)
 
                 if (forward > 0) {
                     fwdValue = Math.abs(forward)
@@ -259,38 +261,47 @@
             // move the player
             if (player != null && controls != null){
                 const angle = controls.getAzimuthalAngle()
+                // player.rotation.y = moveAngle + angle + 3.14/2
                 
                 if(fwdValue == 0 && bkdValue == 0 && lftValue == 0 && rgtValue == 0){
                     setAction(animationActions[0])
                 }
                 else{
-                    player.rotation.y = moveAngle + angle + 3.14/2
-                    // tempVector.applyAxisAngle(upVector, angle)
-                    // player.position.addScaledVector(tempVector,.1)
-                    // camera.position.addScaledVector(tempVector,.1)
-                    if (fwdValue > 0) {
-                        tempVector.set(0, 0, -fwdValue).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
-                    }
+                    // tempVector.set(joystickVector.x, 0, -joystickVector.y)
+                    player.position.addScaledVector(tempVector,.005)
+                    moveAngle = Math.atan2(tempVector.x,tempVector.z)
+                    player.rotation.y = moveAngle
+
+                    var unitVector = tempVector.normalize()
+                    var cameraxz = new THREE.Vector3(camera.position.x,0,camera.position.z)
+                    var playerxz = new THREE.Vector3(player.position.x,0,player.position.z)
+                    var dist = playerxz.distanceTo(cameraxz)
+                    camera.position.set(player.position.x-unitVector.x * dist, 3, player.position.z-unitVector.z * dist)
+                    camera.position.addScaledVector(tempVector,.005)
+
+                    // if (fwdValue > 0) {
+                    //     tempVector.set(0, 0, -fwdValue).applyAxisAngle(upVector, angle)
+                    //     player.position.addScaledVector(tempVector,.005)
+                    //     camera.position.addScaledVector(tempVector,.005)
+                    // }
                 
-                    if (bkdValue > 0) {
-                        tempVector.set(0, 0, bkdValue).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
-                    }
+                    // if (bkdValue > 0) {
+                    //     tempVector.set(0, 0, bkdValue).applyAxisAngle(upVector, angle)
+                    //     player.position.addScaledVector(tempVector,.005)
+                    //     camera.position.addScaledVector(tempVector,.005)
+                    // }
 
-                    if (lftValue > 0) {
-                        tempVector.set(-lftValue, 0, 0).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
-                    }
+                    // if (lftValue > 0) {
+                    //     tempVector.set(-lftValue, 0, 0).applyAxisAngle(upVector, angle)
+                    //     player.position.addScaledVector(tempVector,.005)
+                    //     camera.position.addScaledVector(tempVector,.005)
+                    // }
 
-                    if (rgtValue > 0) {
-                        tempVector.set(rgtValue, 0, 0).applyAxisAngle(upVector, angle)
-                        player.position.addScaledVector(tempVector,.01)
-                        camera.position.addScaledVector(tempVector,.01)
-                    }
+                    // if (rgtValue > 0) {
+                    //     tempVector.set(rgtValue, 0, 0).applyAxisAngle(upVector, angle)
+                    //     player.position.addScaledVector(tempVector,.005)
+                    //     camera.position.addScaledVector(tempVector,.005)
+                    // }
                     controls.target = new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z)
                     setAction(animationActions[3])
                 }
