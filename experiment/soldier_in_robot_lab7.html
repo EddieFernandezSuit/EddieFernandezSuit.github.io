@@ -13,6 +13,10 @@
     <script type="text/javascript" src="./plugins/gzip/pako.js"></script>
 
     <style>
+        body {
+            margin: 0px;
+            overflow: hidden;
+        }
         #mobileInterface {
             position: fixed;
             width: calc(100% - 20px);
@@ -20,43 +24,43 @@
             pointer-events: none;
             z-index: 11;
             top: auto;
-            bottom: 120px;
-            left: 10px;
+            bottom: 30px;
+            left: 0px;
             touch-action: manipulation;
         }
         #mobileInterface #joystickWrapper1 {
             pointer-events: auto;
             display: block;
             position: absolute;
-            bottom: 0;
-            left: 0;
+            bottom: 0px;
+            left: 30px;
             background-color: transparent;
             width: 120px;
             height: 120px;
             z-index: 12;
             touch-action: manipulation;
-            background-color: rgba(255, 0, 0, 0.2);
+            /* background-color: rgba(255, 255, 255, 0.2); */
         }
         #mobileInterface #joystickWrapper2 {
             pointer-events: auto;
             display: block;
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 0px;
+            right: 10px;
             background-color: transparent;
             width: 120px;
             height: 120px;
             z-index: 12;
             touch-action: manipulation;
         }
-        #mobileInterface #joystickWrapper2 #jumpButton {
+        #mobileInterface #joystickWrapper2 #shootButton {
             position: absolute;
             right: 0px;
             top: 0px;
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.4);
             opacity: 1;
             touch-action: manipulation;
             display: flex;
@@ -64,10 +68,10 @@
             align-items: center;
             pointer-events: auto;
         }
-        #mobileInterface #joystickWrapper2 #jumpButton p {
+        #mobileInterface #joystickWrapper2 #shootButton p {
             position: relative;
             display: inline-block;
-            color: white;
+            color: black;
             opacity: 1;
             margin: 0;
             padding: 0;
@@ -90,9 +94,9 @@
     <div id="mobileInterface" class="noSelect">
         <div id="joystickWrapper1"></div>
         <div id="joystickWrapper2">
-          <div id="jumpButton">
-            <p>JUMP</p>
-                <button onclick="shoot()" id="jumpButton"></button>
+          <div id="shootButton">
+            <p>FIRE</p>
+                <button onclick="shoot()" id="shootButton"></button>
           </div>
         </div>
       </div>
@@ -180,13 +184,13 @@
         function shoot(){
             if(scene != null){
                 console.log('shoot')
-                var geometry = new THREE.SphereGeometry(1);
+                var geometry = new THREE.SphereGeometry(.2,32,16);
                 var sphereMaterial = new THREE.MeshNormalMaterial(); 
                 var sphereMesh = new THREE.Mesh( geometry, sphereMaterial );
                 scene.add( sphereMesh );
-                sphereMesh.position.set(player.position.x, player.position.y+2, player.position.z)
+                sphereMesh.position.set(player.position.x, player.position.y+1, player.position.z)
 
-                var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, player.position.y + 2, -camera.position.z + player.position.z)
+                var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, 0, -camera.position.z + player.position.z)
                 class Bullet{
                     constructor(directionVector, cubeMesh){
                         this.directionVector = directionVector
@@ -223,9 +227,10 @@
                     maxNumberOfNipples: 2,
                     mode: 'static',
                     restJoystick: true,
+                    restOpacity: 10,
                     shape: 'circle',
                     // position: { top: 20, left: 20 },
-                    position: { top: '60px', left: '60px' },
+                    position: { bottom: '60px', left: '60px' },
                     dynamicPage: true,
                 }
             
@@ -274,9 +279,6 @@
                     setAction(animationActions[0])
                 }
                 else{
-                    // tempVector.applyAxisAngle(upVector, angle)
-                    // player.position.addScaledVector(tempVector,.1)
-                    // camera.position.addScaledVector(tempVector,.1)
                     if (fwdValue > 0) {
                         tempVector.set(0, 0, -fwdValue).applyAxisAngle(upVector, angle)
                         player.position.addScaledVector(tempVector,.01)
@@ -300,7 +302,7 @@
                         player.position.addScaledVector(tempVector,.01)
                         camera.position.addScaledVector(tempVector,.01)
                     }
-                    controls.target = new THREE.Vector3(player.position.x+2, player.position.y + 2, player.position.z)
+                    controls.target = new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z)
                     setAction(animationActions[3])
                 }
             }
@@ -574,7 +576,7 @@
             if (node instanceof THREE.PerspectiveCamera) {
                 camera = node;
                 //camera.rotation.order = "YXZ";
-                //camera.position.set(0, 20, 100);
+                camera.position.set(5, 5, 5);
 
                 scene.updateMatrixWorld(true);
 
@@ -583,13 +585,14 @@
 
 
                 //判断相机下是否有CameraTarget子物体,CameraTarget用于设置相机初始化聚焦点
-                var cameraTarget = camera.getObjectByName("CameraTarget");
-                if (cameraTarget != null) {
-                    var cameraTargetPosition = new THREE.Vector3();
-                    cameraTargetPosition.setFromMatrixPosition(cameraTarget.matrixWorld);
-                    camera.lookAt(cameraTargetPosition);
-                    controls.target = cameraTargetPosition;
-                }
+                // var cameraTarget = camera.getObjectByName("CameraTarget");
+                // if (cameraTarget != null) {
+                //     var cameraTargetPosition = new THREE.Vector3();
+                //     cameraTargetPosition.setFromMatrixPosition(cameraTarget.matrixWorld);
+                //     camera.lookAt(cameraTargetPosition);
+                //     controls.target = cameraTargetPosition;
+                // }
+                
 
                 //开启相机阴影渲染
                 // renderer.shadowMap.enabled = true;
@@ -743,8 +746,6 @@
             }
         }
 
-        window.onload = start;
-        window.addEventListener("resize", onResize, false);
 
         let modelReady = false
         let animationActions = []
@@ -755,10 +756,11 @@
             'models/vanguard_t_choonyung.fbx',
             (object) => {
                 player = object;
+                camera.target = player.position
                 object.scale.set(0.01, 0.01, 0.01)
                 object.position.z = 5
                 
-                controls.target = player.position
+                controls.target = new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z)
                 mixer = new THREE.AnimationMixer(object)
                 let animationAction = mixer.clipAction(object.animations[0])
                 animationActions.push(animationAction)
@@ -840,6 +842,10 @@
                 console.log(error)
             }
         )
+
+        
+        window.onload = start;
+        window.addEventListener("resize", onResize, false);
         const stats = Stats()
         document.body.appendChild(stats.dom)
         var animations = {
