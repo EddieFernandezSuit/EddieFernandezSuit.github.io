@@ -5,13 +5,12 @@
 		<title>My first three.js app</title>
 		<style>
 			body { margin: 0; }
-			
 			.info { color: blue; }
 		</style>
 	</head>
 	<body>
 		<div id="info">This application is for experimenting and playing with Threejs</div>
-		
+
 		<script type="module">
 			import * as THREE from 'https://cdn.skypack.dev/three@0.132.0/build/three.module.js';
 			import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.132.0/examples/jsm/loaders/GLTFLoader.js';
@@ -25,7 +24,6 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 			
-
 			function create_cube(){
 				const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 				const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -36,7 +34,6 @@
 			
 			const cube = create_cube();
 			cube.position.y = 3
-			
 			camera.position.z = 4;
 			camera.position.y = 2;
 			
@@ -68,7 +65,6 @@
 			
 			loadModel();
 			
-
 			function animate() {
 				requestAnimationFrame( animate );
 				renderer.render( scene, camera );
@@ -77,7 +73,6 @@
 				cube.rotation.y += 0.01
 				model.rotation.y += .01
 			}
-			
 			
 			animate();
 		</script>

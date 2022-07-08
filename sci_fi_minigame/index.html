@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- This is how I open this project
+    Make sure python is installed. If its not then install python.
+    Use the command [python -m http.server 3000] in command prompt inside the 'threeJS-sci-fi-miniGame-V1' directory
+    Then go to the URL localhost:3000 -->
+
+<!-- python -m http.server 3000 -->
+<head>
+    <meta charset="UTF-8">
+    <title>Export to Three.js</title>
+    <script type="text/javascript" src="./plugins/jquery-1.9.0.js"></script>
+    <!-- <script type="text/javascript" src="js/libs/jszip.js"></script>
+    <script type="text/javascript" src="js/libs/jszip-utils.js"></script>
+    <script type="text/javascript" src="js/libs/lzma.js"></script> -->
+    <script type="text/javascript" src="./plugins/gzip/pako.js"></script>
+
+    <style>
+        body {
+            margin: 0px;
+            overflow: hidden;
+        }
+        #mobileInterface {
+            position: fixed;
+            width: calc(100% - 20px);
+            height: 50vh;
+            pointer-events: none;
+            z-index: 11;
+            top: auto;
+            bottom: 30px;
+            left: 0px;
+            touch-action: manipulation;
+        }
+        #mobileInterface #joystickWrapper1 {
+            pointer-events: auto;
+            display: block;
+            position: absolute;
+            bottom: 0px;
+            left: 30px;
+            background-color: transparent;
+            width: 120px;
+            height: 120px;
+            z-index: 12;
+            touch-action: manipulation;
+            /* background-color: rgba(255, 255, 255, 0.2); */
+        }
+        #mobileInterface #joystickWrapper2 {
+            pointer-events: auto;
+            display: block;
+            position: absolute;
+            bottom: 0px;
+            right: 10px;
+            background-color: transparent;
+            width: 120px;
+            height: 120px;
+            z-index: 12;
+            touch-action: manipulation;
+        }
+        #mobileInterface #joystickWrapper2 #shootButton {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+            opacity: 1;
+            touch-action: manipulation;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+        }
+        #mobileInterface #joystickWrapper2 #shootButton p {
+            position: relative;
+            display: inline-block;
+            color: black;
+            opacity: 1;
+            margin: 0;
+            padding: 0;
+            letter-spacing: 4px;
+            margin-left: 4px;
+        }
+        .noSelect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mobileInterface" class="noSelect">
+        <div id="joystickWrapper1"></div>
+        <div id="joystickWrapper2">
+          <div id="shootButton">
+            <p>FIRE</p>
+                <button onclick="shoot()" id="shootButton"></button>
+          </div>
+        </div>
+      </div>
+    <div id="WebGL_Output"></div>
+
+    <progress value="0" max="100" id="progressBar"></progress>
+    <script id="fragment_ShaderDepth" type="x-shader/x-fragment">
+        #include <packing>
+        uniform sampler2D texture;
+        varying vec2 vUV;
+        void main() {
+            vec4 pixel = texture2D( texture, vUV );
+            if ( pixel.a < 0.5 ) discard;
+            gl_FragData[ 0 ] = packDepthToRGBA( gl_FragCoord.z );
+        }
+    </script>
+
+    <script id="vertex_ShaderDepth" type="x-shader/x-vertex">
+        varying vec2 vUV;
+        void main() {
+            vUV = 1.0 * uv;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    </script>
+
+    <script id="fragment_TerrainShader" type="x-shader/x-fragment">
+        uniform float scale;
+        uniform sampler2D texture1;
+        uniform sampler2D texture2;
+        uniform sampler2D texture3;
+        uniform sampler2D texture4;
+        uniform sampler2D texture5;
+        uniform sampler2D texture6;
+        uniform sampler2D texture7;
+
+        uniform sampler2D splatAlpha1;
+        uniform sampler2D splatAlpha2;
+        varying vec2 vUv;
+            void main( void ) {
+            vec3 lay1 = texture2D(texture1, scale * vUv).rgb;
+            vec3 lay2 = texture2D(texture2, scale * vUv).rgb;
+            vec3 lay3 = texture2D(texture3, scale * vUv).rgb;
+            vec3 lay4 = texture2D(texture4, scale * vUv).rgb;
+            vec3 lay5 = texture2D(texture5, scale * vUv).rgb;
+            vec3 lay6 = texture2D(texture6, scale * vUv).rgb;
+            vec3 lay7 = texture2D(texture7, scale * vUv).rgb;
+
+            vec3 splat1 = texture2D(splatAlpha1, vUv).rgb;
+            vec3 splat2 = texture2D(splatAlpha2, vUv).rgb;
+
+            vec3 color = lay1 * splat1.r  + lay2 * splat1.g + lay3 * splat1.b + lay4 *(1.0-splat1.r)*(1.0-splat1.g)*(1.0-splat1.b)* (1.0 - splat2.r) + lay5 * splat2.r +  lay6 * splat2.g +  lay7 * splat2.b ;
+            color = color *1.35;
+            gl_FragColor = vec4( color , 0 );
+        }
+    </script>
+
+    <script id="vertex_TerrainShader" type="x-shader/x-vertex">
+        varying vec2 vUv;
+        void main()
+        {
+            vUv = uv;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    </script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "nipplejs": "../node_modules/nipplejs/dist/nipplejs.js"
+            }
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.1/nipplejs.js"></script>
+    <script type="module">
+
+        import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
+        import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
+        // import { GUI } from 'https://cdn.skypack.dev/dat.gui'
+
+        var scene = new THREE.Scene();
+        var loader = new THREE.ObjectLoader();
+        var camera, renderer, controls;
+        
+        var light = new THREE.PointLight()
+            light.position.set(0, 10, -40)
+            scene.add(light)
+
+        var light = new THREE.PointLight()
+            light.position.set(0, 10, 40)
+            scene.add(light)
+
+        var rootPath = "Scenes/RobotLab";
+
+        var mixer;
+        var clock = new THREE.Clock();
+        var loadComplete = false;
+        var fps = 30;
+        var now;
+        var then = Date.now();
+        var interval = 1000 / fps;
+        var delta;
+
+        //Used to record the position of the camera in the previous frame and the current frame
+        var cameraThenPos = new THREE.Vector3(), cameraNowPos = new THREE.Vector3();
+
+        //Joystick 
+        let fwdValue = 0;
+        let bkdValue = 0;
+        let rgtValue = 0;
+        let lftValue = 0;
+        let tempVector = new THREE.Vector3();
+        let upVector = new THREE.Vector3(0, 1, 0);
+        let joyManager;
+        
+        addJoystick()
+
+        let alien;
+        let alienAngle;
+        let alienDirection;
+        let alienMixer;
+        let player;
+        var playerMixer;
+        let bullets = []
+
+        let alienModelReady = false;
+        let alienAnimationActions = []
+        let alienActiveAction;
+        let alienLastAction;
+
+        let modelReady = false
+        let animationActions = []
+        let activeAction
+        let lastAction
+
+        //player animation paths
+        let forwardAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyForwardAim2Guns.FBX'
+        let backwardAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyBackwardsAim2Guns.FBX'
+        let rightAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyRightAim2Guns.FBX'
+        let leftAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyLeftAim2Guns.FBX'
+
+        const fbxLoader = new FBXLoader()
+        
+        fbxLoader.load('models/SK_Arack.fbx', (object) =>{
+            alien = object
+            object.scale.set(0.01, 0.01, 0.01);
+            object.position.z = -10;
+            alienMixer = new THREE.AnimationMixer(object)
+            let animation = alienMixer.clipAction(object.animations[0])
+            alienAnimationActions.push(animation)
+            alienActiveAction = alienAnimationActions[0]
+            scene.add(object)
+            fbxLoader.load(
+                'models/Arack@Walk.fbx',
+                (object) => {
+                    let animation = alienMixer.clipAction(object.animations[0])
+                    animation.timeScale = 1
+                    alienAnimationActions.push(animation)
+                    alienModelReady = true;
+                    // setAlienAction(alienAnimationActions[1])
+                },
+            )
+        })
+
+        //load the wizard
+        fbxLoader.load('models/PhilWizard_IDLE.fbx', (object) =>{
+            object.scale.set(0.005, 0.005, 0.005);
+            object.position.z = 10;
+            object.rotation.y = Math.PI
+            scene.add(object)
+        })
+
+        fbxLoader.load('models/PhilWizard_idle_Ver3.fbx', (object) =>{
+            object.scale.set(0.005, 0.005, 0.005);
+            object.position.z = 10;
+            object.position.x = -1
+            object.rotation.y = Math.PI
+            scene.add(object)
+        })
+
+        // fbxLoader.load('models/PhiWizard_idle_Ver4.fbx', (object) =>{
+        //     object.scale.set(0.005, 0.005, 0.005);
+        //     object.position.z = 10;
+        //     object.position.x = -2;
+        //     object.rotation.y = Math.PI;
+        //     scene.add(object);
+        // })
+
+        //load the player character
+        fbxLoader.load('models/SciFi_Pirate_Guns_Ver6.fbx',
+            (object) => {
+                player = object;
+                object.scale.set(0.01, 0.01, 0.01)
+                object.position.z = 5
+                centerControls()
+                controls.enableZoom = false
+                playerMixer = new THREE.AnimationMixer(object)
+                let animationAction = playerMixer.clipAction(object.animations[0])
+                animationActions.push(animationAction)
+                activeAction = animationActions[0]
+                scene.add(object)
+                //add an animation from another file
+                fbxLoader.load(
+                    forwardAnimationPath,
+                    (object) => {
+                        let animationAction = playerMixer.clipAction(object.animations[0])
+                        animationActions.push(animationAction)
+                        //add an animation from another file
+                        fbxLoader.load(
+                            rightAnimationPath,
+                            (object) => {
+                                let animationAction = playerMixer.clipAction(object.animations[0])
+                                animationActions.push(animationAction)
+                                //add an animation from another file
+                                fbxLoader.load(
+                                    backwardAnimationPath,
+                                    (object) => {
+                                        object.animations[0].tracks.shift()
+                                        let animationAction = playerMixer.clipAction(object.animations[0])
+                                        animationActions.push(animationAction)
+                                        //add an animation from another file
+                                        fbxLoader.load(
+                                            leftAnimationPath,
+                                            (object) => {
+                                                let animationAction = playerMixer.clipAction(object.animations[0])
+                                                animationActions.push(animationAction)
+                                                progressBar.style.display = 'none'
+                                                modelReady = true                                                
+                                            },
+                                            (xhr) => {
+                                                if (xhr.lengthComputable) {
+                                                    var percentComplete = (xhr.loaded / xhr.total) * 100
+                                                    progressBar.value = percentComplete
+                                                    progressBar.style.display = 'block'
+                                                }
+                                            },
+                                            (error) => {
+                                                console.log(error)
+                                            }
+                                        )
+                                    },
+                                    (xhr) => {
+                                        if (xhr.lengthComputable) {
+                                            var percentComplete = (xhr.loaded / xhr.total) * 100
+                                            progressBar.value = percentComplete
+                                            progressBar.style.display = 'block'
+                                        }
+                                    },
+                                    (error) => {
+                                        console.log(error)
+                                    }
+                                )
+                            },
+                            (xhr) => {
+                                if (xhr.lengthComputable) {
+                                    var percentComplete = (xhr.loaded / xhr.total) * 100
+                                    progressBar.value = percentComplete
+                                    progressBar.style.display = 'block'
+                                }
+                            },
+                            (error) => {
+                                console.log(error)
+                            }
+                        )
+                    },
+                    (xhr) => {
+                        if (xhr.lengthComputable) {
+                            var percentComplete = (xhr.loaded / xhr.total) * 100
+                            progressBar.value = percentComplete
+                            progressBar.style.display = 'block'
+                        }
+                    },
+                    (error) => {
+                        console.log(error)
+                    }
+                )
+            
+            },
+            (xhr) => {
+                if (xhr.lengthComputable) {
+                    var percentComplete = (xhr.loaded / xhr.total) * 100
+                    progressBar.value = percentComplete
+                    progressBar.style.display = 'block'
+                }
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+
+        const setAction = (toAction) => {
+            if (toAction != activeAction) {
+                lastAction = activeAction
+                activeAction = toAction
+                lastAction.fadeOut(.3)
+                activeAction.reset()
+                activeAction.fadeIn(.3)
+                activeAction.play()
+            }
+        }
+        const setAlienAction = (toAction) => {
+            if (toAction != alienActiveAction) {
+                alienLastAction = alienActiveAction
+                alienActiveAction = toAction
+                alienLastAction.fadeOut(.5)
+                alienActiveAction.reset()
+                alienActiveAction.fadeIn(.5)
+                alienActiveAction.play()
+            }
+        }
+
+        window.shoot = shoot
+        window.onload = start;
+        window.addEventListener("resize", onResize, false);
+
+        // creates all the other models in the robot lab
+        function start() {
+            var num = 0;
+            $.getJSON(rootPath + "/ExportPackageInfo.json", function (data) {
+                $.each(data, function (i, v) {
+                    var compressionType = v.compressionType;
+                    var url = rootPath + "/Models/" + v.name;
+                    switch (compressionType) {
+                        case "none":
+                            loader.load(url, function (obj) {
+                                objLoad(obj);
+                            });
+                            break;
+                        case "gzip":
+                            var ajax = new XMLHttpRequest();
+                            ajax.open("GET", url, true);
+                            ajax.responseType = "arraybuffer";
+                            ajax.onload = function () {
+                                var buffer = new Uint8Array(ajax.response);
+                                var b64Data = new TextDecoder("utf-8").decode(buffer);
+                                b64Data = b64Data.slice(3, b64Data.length);
+                                var gzipString = ungzip(b64Data);
+                                loader.setResourcePath(rootPath + "/Textures/");
+                                loader.parse(JSON.parse(gzipString), function (obj) {
+                                    objLoad(obj);
+                                });
+                            };
+                            ajax.send();
+                            break;
+                        case "gzipOptimize":
+                            var ajax = new XMLHttpRequest();
+                            ajax.open("GET", url, true);
+                            ajax.responseType = "arraybuffer";
+                            ajax.onload = function () {
+                                var binData = new Uint8Array(ajax.response);
+                                binData = binData.slice(3, binData.length - 1);
+                                var data = pako.inflate(binData, { to: 'string' });
+                                loader.setResourcePath(rootPath + "/Textures/");
+                                loader.parse(JSON.parse(data), function (obj) {
+                                    objLoad(obj);
+                                });
+                            };
+                            ajax.onprogress = function (value) {
+                                //onSingleProgress(value);
+                            };
+                            ajax.send();
+                            break;
+                        case "zip":
+                            JSZipUtils.getBinaryContent(url, function (err, data) {
+                                if (err) {
+                                    throw err; // or handle err
+                                }
+                                var new_zip = new JSZip();
+                                new_zip.loadAsync(data).then(function (zip) {
+                                    var urlSplit = v.name.split('.');
+                                    var tempFileName = urlSplit[0] + ".json";
+                                    return zip.file(tempFileName).async("string");
+                                }).then(function (text) {
+                                    //loader.texturePath = rootPath + "/Textures/";
+                                    loader.setTexturePath(rootPath + "/Textures/");
+                                    loader.parse(JSON.parse(text), function (obj) {
+                                        objLoad(obj);
+                                    });
+                                });
+                            });
+                            break;
+                        case "lzma":
+                            var ajax = new XMLHttpRequest();
+                            ajax.open("GET", url, true);
+                            ajax.responseType = "arraybuffer";
+                            ajax.onload = function () {
+                                var buffer = new Uint8Array(ajax.response);
+                                var my_lzma = new LZMA("js/libs/lzma_worker.js");
+                                my_lzma.decompress(buffer, function on_finish(text) {
+                                    loader.texturePath = rootPath + "/Textures/";
+                                    loader.parse(JSON.parse(text), function (obj) {
+                                        objLoad(obj);
+                                    });
+                                });
+                            };
+                            ajax.send();
+                            break;
+                    }
+                })
+
+                function ungzip(b64Data) {
+                    var strData = atob(b64Data);
+                    var charData = strData.split('').map(function (x) {
+                        return x.charCodeAt(0);
+                    });
+                    var binData = new Uint8Array(charData);
+                    var data = pako.inflate(binData, { to: 'string' });
+                    //strData = String.fromCharCode.apply(null, new Uint16Array(data));
+                    return data;
+                }
+
+                function objLoad(obj) {
+                    scene.add(obj);
+                    initInfo(obj);
+                    update();
+                    num++;
+                    if (num == data.length) {
+                        //所有资料加载完毕，执行回调函数
+                        //加载完成后强行渲染一次
+                        renderer.render(scene, camera);
+                        loadComplete = true;
+                    }
+                }
+            });
+        }
+
+        function update() {
+            bullets.forEach(bullet => {
+                bullet.update()
+            });
+
+            let delta = clock.getDelta()
+            
+            if (mixer) {
+                mixer.update(delta);
+            }
+
+            if (playerMixer && modelReady) 
+            {playerMixer.update(delta)}
+
+            if (alienMixer && alienModelReady) 
+            {alienMixer.update(delta)}
+
+            controls?.update(delta);
+
+            updatePlayer()
+            updateAlien()
+
+            if (renderer != null) {
+                renderer.render(scene, camera);
+            }
+
+            //LOD更新
+            scene.traverse(function (object) {
+                if (object instanceof THREE.LOD) {
+                    if (camera != null)
+                        object.update(camera);
+                }
+            });
+
+            // now = Date.now();
+            // delta = now - then;
+            // if (delta > interval) {
+            //     then = now - (delta % interval);
+
+                // if (camera != null)
+                //     cameraThenPos = camera.position.clone();
+
+                // if (camera != null) {
+                //     if (cameraNowPos != null || cameraThenPos != null) {
+                //         if (cameraNowPos.x != cameraThenPos.x || cameraNowPos.y != cameraThenPos.y || cameraNowPos.z != cameraThenPos.z || !loadComplete) {
+                //             if (renderer != null) {
+
+                //                 renderer.render(scene, camera);
+                //                 cameraNowPos = camera.position.clone();
+                //             }
+
+                //         }
+                //     }
+                // }
+
+                // //动画更新
+                // var delta = 0.75 * clock.getDelta()
+            // }
+
+            requestAnimationFrame(update);
+        }
+
+        function onResize() {
+        if (camera != null) {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.render(scene, camera);
+        }
+        }
+
+        function initInfo(node) {
+        //雾效
+        if (node.fog != null) {
+            scene.fog = new THREE.FogExp2(node.fog.color, node.fog.density);
+            scene.fog = new THREE.Fog(node.fog.color, node.fog.near, node.fog.far);
+        }
+
+        //获取动画物体并且播放动画
+        if (node.animations) {
+            var sceneAnimationClip = node.animations[0];
+            if (sceneAnimationClip != null) {
+                mixer = new THREE.AnimationMixer(node);
+                mixer.clipAction(sceneAnimationClip).play();
+            }
+        }
+
+        //针对实时阴影透明贴图阴影显示问题
+        if (node.material != null) {
+            var setCustomDepthMaterail = false;
+            var mainTexture = node.material.map;
+            var matType = node.material.type;
+
+            if (matType == "MultiMaterial") {
+                var mats = node.material.materials;
+                for (var i = 0; i < mats.length; i++) {
+                    if (mats[i].transparent == true) {
+                        setCustomDepthMaterail = true;
+                        mainTexture = mats[i].map;
+                    }
+                }
+            }
+            else {
+                if (node.material.transparent == true) {
+                    setCustomDepthMaterail = true;
+                }
+            }
+
+            if (setCustomDepthMaterail == true) {
+                var uniforms = { texture: { value: mainTexture } };
+                var vertexShader = document.getElementById('vertex_ShaderDepth').textContent;
+                var fragmentShader = document.getElementById('fragment_ShaderDepth').textContent;
+
+                node.customDepthMaterial = new THREE.ShaderMaterial({
+                    uniforms: uniforms,
+                    vertexShader: vertexShader,
+                    fragmentShader: fragmentShader,
+                    side: THREE.DoubleSide
+                });
+            }
+        }
+
+        ///相机初始化设置
+        if (node instanceof THREE.PerspectiveCamera) {
+            camera = node;
+            //camera.rotation.order = "YXZ";
+            camera.position.set(7, 2, 7)
+
+            scene.updateMatrixWorld(true);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            controls = new OrbitControls(camera, renderer.domElement);
+
+
+            //相机加载完成后刷新
+            onResize();
+            document.getElementById("WebGL_Output").appendChild(renderer.domElement);
+        }
+
+        ///灯光实时阴影初始化设置
+        if (node instanceof THREE.DirectionalLight) {
+            //设置灯光target物体为子物体
+            var lighTarge = node.getObjectByName("LightTarget");
+            node.target = lighTarge;
+
+            node.castShadow = true;
+            node.shadow.mapSize.width = 1024;
+            node.shadow.mapSize.height = 1024;
+
+            var d = 20;
+
+            node.shadow.camera.left = -d;
+            node.shadow.camera.right = d;
+            node.shadow.camera.top = d;
+            node.shadow.camera.bottom = -d;
+            node.shadow.bias = -0.0005;
+            node.shadow.camera.far = 20;
+        }
+        for (var i = 0; i < node.children.length; i++) {
+            initInfo(node.children[i]);
+        }
+        }
+
+        //creates the left joystick
+        function addJoystick(){
+            const options = {
+                    zone: document.getElementById('joystickWrapper1'),
+                    size: 120,
+                    multitouch: true,
+                    maxNumberOfNipples: 2,
+                    mode: 'static',
+                    restJoystick: true,
+                    restOpacity: 10,
+                    shape: 'circle',
+                    position: { bottom: '60px', left: '60px' },
+                    dynamicPage: true,
+                }
+            
+            joyManager = nipplejs.create(options);
+            
+            joyManager['0'].on('move', function (evt, data) {
+                const forward = data.vector.y
+                const turn = data.vector.x
+
+                if (forward > 0) {
+                    fwdValue = Math.abs(forward)
+                    bkdValue = 0
+                } else if (forward < 0) {
+                    fwdValue = 0
+                    bkdValue = Math.abs(forward)
+                }
+
+                if (turn > 0) {
+                    lftValue = 0
+                    rgtValue = Math.abs(turn)
+                } else if (turn < 0) {
+                    lftValue = Math.abs(turn)
+                    rgtValue = 0
+                }
+            })
+
+            joyManager['0'].on('end', function (evt) {
+                bkdValue = 0
+                fwdValue = 0
+                lftValue = 0
+                rgtValue = 0
+            })
+            
+        }
+        
+        //updates the alien's position to chase the player
+        function updateAlien(){
+            if(alien != null && player != null){
+                alienDirection = new THREE.Vector3(-alien.position.x + player.position.x,0, -alien.position.z + player.position.z)
+                alienDirection.normalize();
+                let angle = Math.atan(alienDirection.x/alienDirection.z)
+                if(alienDirection.z < 0){
+                    angle += Math.PI
+                }
+
+                alien.rotation.y = angle
+                // console.log(alien.rotation.y)
+                alien.position.addScaledVector(alienDirection, .005)
+
+                setAlienAction(alienAnimationActions[1])
+            }
+        }
+        
+        //updates the players position based on the players joystick movements
+        function updatePlayer(){
+            // move the player
+            if (player != null && controls != null){
+                const angle = controls.getAzimuthalAngle()
+                player.rotation.y = angle + Math.PI
+                
+                if(fwdValue == 0 && bkdValue == 0 && lftValue == 0 && rgtValue == 0){
+                    setAction(animationActions[0])
+                }
+                else{
+                    let directionValues = [fwdValue, rgtValue, bkdValue, lftValue]
+                    let largestIndex = directionValues.indexOf(Math.max(...directionValues))
+                    setAction(animationActions[largestIndex+1])
+                    console.log(animationActions)
+                    console.log(alienAnimationActions)
+                    
+
+                    tempVector.set(rgtValue-lftValue, 0, bkdValue-fwdValue).applyAxisAngle(upVector, angle)
+                    player.position.addScaledVector(tempVector,.02)
+                    camera.position.addScaledVector(tempVector,.02)
+
+                    
+                    centerControls()
+                }
+            }
+        };
+
+        //centers the camera on a point slightly above the character
+        function centerControls(){
+            controls.target = new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z)
+        }
+
+        //creates a projectile starting a the players location and flying in the direction the player is facing
+        function shoot(){
+            if(scene != null){
+                console.log('shoot')
+                var geometry = new THREE.SphereGeometry(.1,32,16);
+                var sphereMaterial = new THREE.MeshNormalMaterial(); 
+                var sphereMesh = new THREE.Mesh( geometry, sphereMaterial );
+                scene.add( sphereMesh );
+                sphereMesh.position.set(player.position.x, player.position.y+1, player.position.z)
+
+                var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, 0, -camera.position.z + player.position.z)
+                class Bullet{
+                    constructor(directionVector, cubeMesh){
+                        this.directionVector = directionVector
+                        this.cubeMesh = cubeMesh
+                    }
+
+                    update(){
+                        this.cubeMesh.position.addScaledVector(this.directionVector,.005)
+                    }
+                }
+
+                var bullet = new Bullet(directionVector, sphereMesh)
+                bullets.push(bullet)
+            }
+        }
+        
+    </script>
+</body>
+
+</html>
