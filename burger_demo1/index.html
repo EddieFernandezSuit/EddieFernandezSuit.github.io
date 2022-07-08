@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- python -m http.server 3000 -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+    <title>Burger</title>
+
+    <style>
+        body {
+            margin: 0px;
+            overflow: hidden;
+        }
+
+        /* #iPhone11ProX-346{
+            position:absolute;
+            width:812px;
+            height:375px;
+            background: #000B48;
+            z-index: -1;
+        } */
+
+        #Rectangle673{
+            box-sizing: border-box;
+            position: absolute;
+            width: 207px;
+            height: 42px;
+            left: 26.5px;
+            top: 93.5px;
+            border-radius: 15px;
+            border: 1px solid #46EBCC;
+        }
+        
+        #Bottom-Bun{
+            position: absolute;
+            height: 14px;
+            width: 40px;
+            left: 182.5px;
+            top: 108.5px;
+            border-radius: 0px;
+
+
+            background: linear-gradient(180deg, #FFC044 26.22%, #CA4300 86.56%);
+        }
+
+        #bottom-bun-text{
+            position: absolute;
+
+            width: 85px;
+            height: 16px;
+            left: 46.5px;
+            top: 106.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+
+            color: #FFFFFF;
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+        #cheese-image{
+            position: absolute;
+            height: 23px;
+            width: 23px;
+            left: 641.5px;
+            top: 103.5px;
+            border-radius: 0px;
+
+        }
+
+        #swipe-text{
+            position: absolute;
+            width: 60px;
+            height: 23px;
+            left: 722.5px;
+            top: 314.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 23px;
+            text-align: right;
+
+            background: linear-gradient(139.36deg, #46EBCC 10.85%, #68E5F5 86.28%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #bacon-image{
+            position: absolute;
+            height: 27px;
+            width: 27px;
+            left: 641.5px;
+            top: 214.5px;
+            border-radius: 0px;
+        }
+        #mushroom-image{
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            left: 638.5px;
+            top: 273.5px;
+
+        }
+        #bottom-bun-image{
+            position: absolute;
+            height: 14px;
+            width: 40px;
+            left: 182.5px;
+            top: 108.5px;
+            border-radius: 0px;
+        }
+        #top-bun-image{
+            position: absolute;
+            height: 40.478004455566406px;
+            width: 18.7467041015625px;
+            left: 182.5px;
+            top: 163.2467041015625px;
+            border-radius: 0px;
+        }
+        #fried-egg-image{
+            position: absolute;
+            height: 19.65488052368164px;
+            width: 36.113834381103516px;
+            left: 190.5px;
+            top: 333.5px;
+            border-radius: 0px;
+        }
+        #ketchup-image{
+            position: absolute;
+            width: 29px;
+            height: 29px;
+            left: 190.5px;
+            top: 213.5px;
+        }
+        #lettuce-image{
+            position: absolute;
+            width: 39px;
+            height: 35px;
+            left: 188.5px;
+            top: 268.5px;
+        }
+        #patty-image{
+            position: absolute;
+            height: 12px;
+            width: 34px;
+            left: 638.5px;
+            top: 168.5px;
+            border-radius: 0px;
+        }
+        .dot {
+            position: relative;
+            left: 699px;
+            top: 52px;
+            border-radius: 0px;
+
+            height: 10px;
+            width: 10px;
+            background-color: white;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        #instructions-text{
+            position: absolute;
+
+            height: 23.000000000000036px;
+            width: 109.00000000000017px;
+            left: 114px;
+            top: 34px;
+            border-radius: nullpx;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 800;
+            font-size: 20px;
+            line-height: 23px;
+
+            color: #FFFFFF;
+        }
+        #menu-image{
+            position: absolute;
+            height: 21px;
+            width: 32px;
+            left: 49px;
+            top: 35px;
+            border-radius: 0px;
+        }
+        #Rectangle692{
+            position: absolute;
+            height: 5px;
+            width: 863px;
+            left: -26px;
+            top: 73px;
+            border-radius: 5px;
+            background: linear-gradient(139.36deg, #46EDC8 10.85%, #46D9ED 86.28%);
+            border-radius: 5px;
+        }
+        #fried-egg-text{
+            position: absolute;
+            width: 85px;
+            height: 16px;
+            left: 46.5px;
+            top: 335.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+
+            color: #FFFFFF;
+        }
+        #mushroom-text{
+            position: absolute;
+            width: 93px;
+            height: 16px;
+            left: 675.5px;
+            top: 276.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+            text-align: right;
+
+            color: #FFFFFF;
+
+        }
+        #lettuce-text{
+            position: absolute;
+            width: 133px;
+            height: 16px;
+            left: 46.5px;
+            top: 277.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+
+            color: #FFFFFF;
+
+        }
+
+        #bacon-text{
+            position: absolute;
+            width: 85px;
+            height: 16px;
+            left: 675.5px;
+            top: 219.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+            text-align: right;
+
+            color: #FFFFFF;
+        }
+        #BBQ-sauce-text{
+            position: absolute;
+            width: 85px;
+            height: 16px;
+            left: 46.5px;
+            top: 220.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+
+            color: #FFFFFF;
+        }
+        #patty-text{
+            position: absolute;
+            width: 85px;
+            height: 16px;
+            left: 675.5px;
+            top: 162.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+            text-align: right;
+
+            color: #FFFFFF;
+        }
+        #top-bun-text{
+            position: absolute;
+            width: 85px;
+            height: 16px;
+            left: 46.5px;
+            top: 163.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+
+            color: #FFFFFF;
+        }
+        #cheese-text{
+            position: absolute;
+            width: 85px;
+            height: 16px;
+            left: 675.5px;
+            top: 105.5px;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+            text-align: right;
+
+            color: #FFFFFF;
+        }
+
+        #Rectangle682{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 207px;
+            height: 42px;
+            left: 26.5px;
+            top: 321.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+        #Rectangle686{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 160px;
+            height: 42px;
+            left: 625.5px;
+            top: 264.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+        }
+        #Rectangle681{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 207px;
+            height: 42px;
+            left: 26.5px;
+            top: 264.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+        #Rectangle685{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 160px;
+            height: 42px;
+            left: 625.5px;
+            top: 207.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+        #Rectangle680{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 207px;
+            height: 42px;
+            left: 26.5px;
+            top: 207.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+
+        #Rectangle684{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 160px;
+            height: 42px;
+            left: 625.5px;
+            top: 150.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+        #Rectangle679{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 207px;
+            height: 42px;
+            left: 26.5px;
+            top: 150.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+        #Rectangle683{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 160px;
+            height: 42px;
+            left: 625.5px;
+            top: 93.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+        #Rectangle673{
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 207px;
+            height: 42px;
+            left: 26.5px;
+            top: 93.5px;
+
+            border-radius: 10px;
+            border: 1px solid #46EBCC;
+
+        }
+        #WebGL_Output{
+            position: absolute;
+            /* width:100px; */
+            /* left:100px;  */
+            /* top:100px; */
+            z-index: -1;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="WebGL_Output"></div>
+
+    <div id="iPhone11ProX-346">
+        <div id="instructions-text"> Instructions</div>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+
+    </div>
+    <div id="bottom-bun"></div>
+    <div id="bottom-bun-text">Bottom Bun</div>
+    <div id="Rectangle673"></div>
+    <div id="cheese-image"><img src="cheese-wedge 2.png"></div>
+    <div id="swipe-text">SWIPE</div>
+    <div id="bacon-image"><img src="bacon 1.png"></div>
+    <div id="mushroom-image"><img src="mushroom.png"></div>
+    <div id="bottom-bun-image"><img src="bottom-bun.png"></div>
+    <div id="top-bun-image"><img src="top-bun.png"></div>
+    <div id="fried-egg-image"><img src="fried-egg.png"></div>
+    <div id="ketchup-image"><img src="ketchup.png"></div>
+    <div id="lettuce-image"><img src="lettuce.png"></div>
+    <div id="patty-image"><img src="patty.png"></div>
+    <div id="menu-image"><img src="menu.png"></div>
+    <div id="Rectangle692"></div>
+    <div id="fried-egg-text">Fried Egg</div>
+    <div id="mushroom-text">Musrooms</div>
+    <div id="lettuce-text">Lettuce/Tomatoes</div>
+    <div id="bacon-text">Bacon</div>
+    <div id="BBQ-sauce-text">BBQ Sauce</div>
+    <div id="patty-text">Patty</div>
+    <div id="top-bun-text">Top Bun</div>
+    <div id="cheese-text">Cheese</div>
+    <div id="Rectangle682"></div>
+    <div id="Rectangle686"></div>
+    <div id="Rectangle681"></div>
+    <div id="Rectangle685"></div>
+    <div id="Rectangle680"></div>
+    <div id="Rectangle684"></div>
+    <div id="Rectangle679"></div>
+    <div id="Rectangle683"></div>
+    <div id="Rectangle673"></div>
+    <div id="Rectangle618"></div>
+
+    <script type="module">
+
+        import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
+        import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
+        import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
+
+        const clock = new THREE.Clock();
+
+        // width:812px;
+        // height:375px;
+        const rendererWidth = 812
+        const rendererHeight = 375
+        const renderer = new THREE.WebGLRenderer()
+        renderer.setSize(rendererWidth, rendererHeight)
+        document.getElementById('WebGL_Output').appendChild(renderer.domElement)
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000B48)
+
+        var light = new THREE.PointLight()
+        light.position.set(2.5, 7.5, 15)
+        scene.add(light)
+
+        const camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.1, 1000)
+        camera.position.set(1.5, 0, 1.5)
+
+        const controls = new OrbitControls(camera, renderer.domElement)
+        controls.screenSpacePanning = true
+        controls.target.set(0, 1, 0)
+
+        const fbxLoader = new FBXLoader()
+        fbxLoader.load('vanguard_t_choonyung.fbx', (object) =>{
+            object.scale.set(0.01, 0.01, 0.01);
+            scene.add(object)
+            camera.lookAt(object.position.x,object.position.y+1, object.position.z)
+        })
+
+        animate()
+
+        window.addEventListener('resize', onWindowResize, false)
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight
+            camera.updateProjectionMatrix()
+            renderer.setSize(window.innerWidth, window.innerHeight)
+            renderer.render(scene, camera)
+
+        }
+
+        function animate(){
+            requestAnimationFrame(animate)
+            controls.update()
+            renderer.render(scene, camera)
+        }
+
+    </script>
+</body>
+
+</html>
