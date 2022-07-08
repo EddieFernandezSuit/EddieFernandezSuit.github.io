@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		
     <title>Burger</title>
-
     <style>
         body {
             margin: 0px;
@@ -465,6 +463,7 @@
         <span class="dot"></span>
         <span class="dot"></span>
     </div>
+
     <div id="bottom-bun"></div>
     <div id="bottom-bun-text">Bottom Bun</div>
     <div id="Rectangle673"></div>
@@ -483,13 +482,12 @@
     <div id="fried-egg-text">Fried Egg</div>
     <div id="mushroom-text">Musrooms</div>
     <div id="lettuce-text">Lettuce/Tomatoes</div>
-    <div id="bacon-text">Bacon</div>
+    <button type="button" onclick=holding()><div id="bacon-text">Bacon</div></button>
     <div id="BBQ-sauce-text">BBQ Sauce</div>
     <div id="patty-text">Patty</div>
     <div id="top-bun-text">Top Bun</div>
     <div id="cheese-text">Cheese</div>
-    <button type="button" onclick=holdingEgg()>    <div id="Rectangle682"></div>
-    </button>
+    <button type="button" onclick=holding()><div id="Rectangle682"></div></button>
 
     <div id="Rectangle686"></div>
     <div id="Rectangle681"></div>
@@ -532,16 +530,26 @@
         controls.target.set(0, 1, 0)
 
         var egg;
+        var bacon;
         var holding = false
         const fbxLoader = new FBXLoader()
 
         fbxLoader.load('Egg_Text.fbx', (object) =>{
             object.scale.set(.5, .5, 0.5);
             object.position.y = 1
-            object.position.z = -3
+            object.position.z = -5
             object.rotation.x = Math.PI/2
             scene.add(object)
             egg = object
+        })
+
+        fbxLoader.load('Bacon_Text.fbx', (object) =>{
+            object.scale.set(.5, .5, 0.5);
+            object.position.y = 2
+            object.position.z = -5
+            object.rotation.x = Math.PI/2
+            scene.add(object)
+            bacon = object
         })
 
         animate()
@@ -551,7 +559,7 @@
         onmousemove = function(e){
             if (egg && holding){egg.position.z = -event.clientX/rendererWidth  * 7 + 3.5;}
         }
-        window.addEventListener('click', release)
+        window.addEventListener('mouseup', release)
 
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight
@@ -566,14 +574,12 @@
             renderer.render(scene, camera)
         }
 
-        function holdingEgg(){
+        function holding(){
             holding = true;
         }
 
         function release(){
-            if(holding == true){
-                holding = false;
-            }
+            holding = false;
         }
 
     </script>
