@@ -464,7 +464,6 @@
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
-
     </div>
     <div id="bottom-bun"></div>
     <div id="bottom-bun-text">Bottom Bun</div>
@@ -489,7 +488,9 @@
     <div id="patty-text">Patty</div>
     <div id="top-bun-text">Top Bun</div>
     <div id="cheese-text">Cheese</div>
-    <div id="Rectangle682"></div>
+    <button type="button" onclick=holdingEgg()>    <div id="Rectangle682"></div>
+    </button>
+
     <div id="Rectangle686"></div>
     <div id="Rectangle681"></div>
     <div id="Rectangle685"></div>
@@ -530,31 +531,49 @@
         controls.screenSpacePanning = true
         controls.target.set(0, 1, 0)
 
+        var egg;
+        var holding = false
         const fbxLoader = new FBXLoader()
-        fbxLoader.load('Burger_Text.fbx', (object) =>{
-            object.scale.set(.5, 0.5, 0.5);
-            object.rotation.x = -Math.PI/2
-            scene.add(object)
-            controls.target.set(object.position.x,object.position.y+.75, object.position.z+.25)
 
-            // camera.lookAt(object.position.x,object.position.y, object.position.z)
+        fbxLoader.load('Egg_Text.fbx', (object) =>{
+            object.scale.set(.5, .5, 0.5);
+            object.position.y = 1
+            object.position.z = -3
+            object.rotation.x = Math.PI/2
+            scene.add(object)
+            egg = object
         })
 
         animate()
 
+        window.holdingEgg = holdingEgg
         window.addEventListener('resize', onWindowResize, false)
+        onmousemove = function(e){
+            if (egg && holding){egg.position.z = -event.clientX/rendererWidth  * 7 + 3.5;}
+        }
+        window.addEventListener('click', release)
+
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight
             camera.updateProjectionMatrix()
             renderer.setSize(window.innerWidth, window.innerHeight)
             renderer.render(scene, camera)
-
         }
 
         function animate(){
             requestAnimationFrame(animate)
             controls.update()
             renderer.render(scene, camera)
+        }
+
+        function holdingEgg(){
+            holding = true;
+        }
+
+        function release(){
+            if(holding == true){
+                holding = false;
+            }
         }
 
     </script>
