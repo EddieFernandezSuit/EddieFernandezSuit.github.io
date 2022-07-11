@@ -482,27 +482,28 @@
     <div id="fried-egg-text">Fried Egg</div>
     <div id="mushroom-text">Musrooms</div>
     <div id="lettuce-text">Lettuce/Tomatoes</div>
-    <button type="button" onclick=holding()><div id="bacon-text">Bacon</div></button>
+    <div id="bacon-text">Bacon</div>
     <div id="BBQ-sauce-text">BBQ Sauce</div>
     <div id="patty-text">Patty</div>
     <div id="top-bun-text">Top Bun</div>
     <div id="cheese-text">Cheese</div>
-    <button type="button" onclick=holding()><div id="Rectangle682"></div></button>
 
-    <div id="Rectangle686"></div>
-    <div id="Rectangle681"></div>
-    <div id="Rectangle685"></div>
-    <div id="Rectangle680"></div>
-    <div id="Rectangle684"></div>
-    <div id="Rectangle679"></div>
-    <div id="Rectangle683"></div>
-    <div id="Rectangle673"></div>
+    <button type="button" onclick=holdingEgg()><div id="Rectangle682"></div></button>
+    <button type="button" onclick=holdingMushroom()><div id="Rectangle686"></div></button>
+    <button type="button" onclick=holdingLettuce()><div id="Rectangle681"></div></button>
+    <button type="button" onclick=holdingBacon()><div id="Rectangle685"></div></button>
+    <button type="button" onclick=holdingBBQsauce()><div id="Rectangle680"></div></button>
+    <button type="button" onclick=holdingMeat()><div id="Rectangle684"></div></button>
+    <button type="button" onclick=holdingTopBun()><div id="Rectangle679"></div></button>
+    <button type="button" onclick=holdingCheese()><div id="Rectangle683"></div></button>
+    <button type="button" onclick=holdingBottomBun()><div id="Rectangle673"></div></button>
     <div id="Rectangle618"></div>
 
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
         import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
         import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
+        import FoodItem from './FoodItem.js'
 
         const clock = new THREE.Clock();
 
@@ -518,48 +519,75 @@
         scene.background = new THREE.Color(0x000B48)
 
         var light = new THREE.PointLight()
-        light.position.set(5, 7.5, 0)
-        light.position.set(-5, 7.5, 0)
+        light.position.set(1, 2, 0)
         scene.add(light)
 
         const camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.1, 1000)
-        camera.position.set(2,1,0)
+        camera.position.set(2,1.5,0)
 
         const controls = new OrbitControls(camera, renderer.domElement)
         controls.screenSpacePanning = true
         controls.target.set(0, 1, 0)
 
-        var egg;
-        var bacon;
-        var holding = false
+        var itemHolding = '';
+        var mouseX;
+
         const fbxLoader = new FBXLoader()
 
-        fbxLoader.load('Egg_Text.fbx', (object) =>{
-            object.scale.set(.5, .5, 0.5);
-            object.position.y = 1
-            object.position.z = -5
-            object.rotation.x = Math.PI/2
-            scene.add(object)
-            egg = object
-        })
+        // fbxLoader.load('Egg_Text.fbx', (object) =>{
+        //     object.scale.set(.5, .5, 0.5);
+        //     object.position.y = 0
+        //     object.position.z = -5
+        //     object.rotation.x = -Math.PI/2
+        //     scene.add(object)
+        //     egg = object
+        //     console.log('egg')
+        // })
 
-        fbxLoader.load('Bacon_Text.fbx', (object) =>{
-            object.scale.set(.5, .5, 0.5);
-            object.position.y = 2
-            object.position.z = -5
-            object.rotation.x = Math.PI/2
-            scene.add(object)
-            bacon = object
-        })
+        var egg = new FoodItem('Egg_Text.fbx',1,'egg',fbxLoader,scene);
+        function holdingEgg(){itemHolding = 'egg'}
+        window.holdingEgg = holdingEgg
+
+        var bacon = new FoodItem('Bacon_Text.fbx',1,'Bacon',fbxLoader,scene);
+        function holdingBacon(){itemHolding = bacon.name;}
+        window.holdingBacon = holdingBacon
+
+        var BBQsauce = new FoodItem('BBQsauce_Text.fbx', 1, 'BBQsauce', fbxLoader, scene)
+        function holdingBBQsauce(){itemHolding = BBQsauce.name}
+        window.holdingBBQsauce = holdingBBQsauce
+
+        var bottomBun = new FoodItem('BottomBun_Text.fbx',1,'bottomBun', fbxLoader, scene)        
+        bottomBun.holding = function holding(){itemHolding = bottomBun.name}
+        window.holdingBottomBun = bottomBun.holding
+
+        var cheese = new FoodItem('Cheese_Text.fbx',1, 'cheese', fbxLoader, scene)
+        function holdingCheese(){itemHolding = cheese.name;}
+        window.holdingCheese = holdingCheese
+
+        var lettuce = new FoodItem('Lettuce_Text.fbx',1, 'lettuce', fbxLoader, scene)
+        function holdingLettuce(){itemHolding = lettuce.name;}
+        window.holdingLettuce = holdingLettuce
+        
+        var meat = new FoodItem('Meat_Text.fbx',1, 'meat', fbxLoader, scene)
+        function holdingMeat(){itemHolding = meat.name;}
+        window.holdingMeat = holdingMeat
+
+        var mushroom = new FoodItem('Mushroom_Text.fbx',1, 'mushroom', fbxLoader, scene)
+        function holdingMushroom(){itemHolding = mushroom.name;}
+        window.holdingMushroom = holdingMushroom
+
+        var topBun = new FoodItem('TopBun_Text.fbx',1, 'topBun', fbxLoader, scene)
+        function holdingTopBun(){itemHolding = topBun.name;}
+        window.holdingTopBun = holdingTopBun
+
+        window.addEventListener('resize', onWindowResize, false)
+        window.addEventListener('mouseup', release)
+        
+        onmousemove = function(event){
+            mouseX = event.clientX
+        }   
 
         animate()
-
-        window.holdingEgg = holdingEgg
-        window.addEventListener('resize', onWindowResize, false)
-        onmousemove = function(e){
-            if (egg && holding){egg.position.z = -event.clientX/rendererWidth  * 7 + 3.5;}
-        }
-        window.addEventListener('mouseup', release)
 
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight
@@ -569,17 +597,25 @@
         }
 
         function animate(){
+            // if (egg && itemHolding == 'egg'){egg.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
+            egg.update(mouseX, rendererWidth, itemHolding)
+            bacon.update(mouseX, rendererWidth, itemHolding)
+            BBQsauce.update(mouseX, rendererWidth, itemHolding)
+            bottomBun.update(mouseX, rendererWidth, itemHolding)
+            cheese.update(mouseX, rendererWidth, itemHolding)
+            lettuce.update(mouseX, rendererWidth, itemHolding)
+            meat.update(mouseX, rendererWidth, itemHolding)
+            mushroom.update(mouseX, rendererWidth, itemHolding)
+            topBun.update(mouseX, rendererWidth, itemHolding)
+
             requestAnimationFrame(animate)
             controls.update()
             renderer.render(scene, camera)
         }
 
-        function holding(){
-            holding = true;
-        }
 
         function release(){
-            holding = false;
+            itemHolding = ''
         }
 
     </script>
