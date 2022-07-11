@@ -1,15 +1,13 @@
 export default class FoodItem{
-    constructor(fbxFilePath, y, foodName, fbxLoader, scene){
+    constructor(fbxFilePath, foodName, fbxLoader, scene){
         this.name = foodName
         this.object = null;
 
         fbxLoader.load(fbxFilePath, (object) =>{
             object.scale.set(.5, .5, 0.5);
             object.position.y = .5
-            object.position.z = -3.5
+            object.position.z = -4
             object.rotation.x = -Math.PI/2
-            // object.rotation.z += Math.PI
-
             scene.add(object)
             this.object = object
         })
