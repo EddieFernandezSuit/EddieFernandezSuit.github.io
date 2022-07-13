@@ -544,7 +544,8 @@
             }
 
             update(mouseX, rendererWidth, itemHolding){
-                if (this.object && itemHolding == this.name){this.object.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
+                // if (this.object && itemHolding == this.name){this.object.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
+                if (this.object && itemHolding == this.name){this.object.position.z = 0;}
             }
         }
 
