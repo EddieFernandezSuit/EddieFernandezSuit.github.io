@@ -529,16 +529,17 @@
 
                 this.holding = this.holding.bind(this)
                 // document.getElementById(elementId).onclick = this.holding
-                document.getElementById(elementId).addEventListener('touchmove', this.holding)
+                document.getElementById(elementId).addEventListener('touchstart', this.holding)
             }
 
             holding(){
                 this.isHolding = true;
+                if (this.isHolding){this.object.position.z = 0;}
             }
 
             update(mouseX, rendererWidth, itemHolding){
                 // if (this.object && itemHolding == this.name){this.object.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
-                if (this.isHolding){this.object.position.z = 0;}
+                // if (this.isHolding){this.object.position.z = 0;}
             }
         }
          
