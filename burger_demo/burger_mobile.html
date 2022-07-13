@@ -316,7 +316,7 @@
 
             color: #FFFFFF;
         }
-        #long-bar{
+        #Rectangle692{
             position: absolute;
             height: 5px;
             width: 100%;
@@ -326,7 +326,7 @@
             background: linear-gradient(139.36deg, #46EDC8 10.85%, #46D9ED 86.28%);
             border-radius: 5px;
         }
-        #egg-rectangle{
+        #Rectangle682{
             box-sizing: border-box;
 
             position: absolute;
@@ -340,7 +340,7 @@
             border: 1px solid #46EBCC;
 
         }
-        #mushroom-rectangle{
+        #Rectangle686{
             box-sizing: border-box;
 
             position: absolute;
@@ -354,7 +354,7 @@
             border-radius: 10px;
             border: 1px solid #46EBCC;
         }
-        #lettuce-rectangle{
+        #Rectangle681{
             box-sizing: border-box;
 
             position: absolute;
@@ -368,7 +368,7 @@
             border: 1px solid #46EBCC;
 
         }
-        #bacon-rectangle{
+        #Rectangle685{
             box-sizing: border-box;
 
             position: absolute;
@@ -383,7 +383,7 @@
             border: 1px solid #46EBCC;
 
         }
-        #BBQsauce-rectangle{
+        #Rectangle680{
             box-sizing: border-box;
 
             position: absolute;
@@ -398,7 +398,7 @@
 
         }
 
-        #meat-rectangle{
+        #Rectangle684{
             box-sizing: border-box;
 
             position: absolute;
@@ -412,7 +412,7 @@
             border-radius: 10px;
             border: 1px solid #46EBCC;
         }
-        #top-bun-rectangle{
+        #Rectangle679{
             box-sizing: border-box;
 
             position: absolute;
@@ -426,7 +426,7 @@
             border: 1px solid #46EBCC;
 
         }
-        #cheese-rectangle{
+        #Rectangle683{
             box-sizing: border-box;
 
             position: absolute;
@@ -441,7 +441,7 @@
             border: 1px solid #46EBCC;
 
         }
-        #bottom-bun-rectangle{
+        #Rectangle673{
             box-sizing: border-box;
 
             position: absolute;
@@ -495,50 +495,42 @@
     <div id="cheese-text">Cheese</div>
     <div id="swipe-text">SWIPE</div>
 
-    <div id="long-bar"></div>
-    <div id="egg-rectangle"></div>
-    <!-- <div id="egg-rectangle"></div> -->
-    <div id="mushroom-rectangle"></div>
-    <div id="lettuce-rectangle"></div>
-    <div id="bacon-rectangle"></div>
-    <div id="BBQsauce-rectangle"></div>
-    <div id="meat-rectangle"></div>
-    <div id="top-bun-rectangle"></div>
-    <div id="cheese-rectangle"></div>
-    <div id="bottom-bun-rectangle"></div> -->
+    <div id="Rectangle692"></div>
+    <!-- <div id="Rectangle682" onclick=holdingEgg()></div> -->
+    <div id="Rectangle682"></div>
+    <div id="Rectangle686" onclick=holdingMushroom()></div>
+    <div id="Rectangle681" onclick=holdingLettuce()></div>
+    <div id="Rectangle685" onclick=holdingBacon()> </div>
+    <div id="Rectangle680" onclick=holdingBBQsauce()></div>
+    <div id="Rectangle684" onclick=holdingMeat()></div>
+    <div id="Rectangle679" onclick=holdingTopBun()></div>
+    <div id="Rectangle683" onclick=holdingCheese()></div>
+    <div id="Rectangle673" onclick=holdingBottomBun()></div> -->
 
+    <div id="Rectangle673" onclick=holdingBottomBun()></div>
 
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
         import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
 
         class FoodItem{
-            constructor(fbxFilePath, foodName, fbxLoader, scene, elementId){
+            constructor(fbxFilePath, foodName, fbxLoader, scene){
                 this.name = foodName
                 this.object = null;
-                this.isHolding = false;
 
                 fbxLoader.load(fbxFilePath, (object) =>{
                     object.scale.set(.5, .5, 0.5);
                     object.position.y = .5
-                    object.position.z = -2
+                    object.position.z = -3
                     object.rotation.x = -Math.PI/2
                     scene.add(object)
                     this.object = object
                 })
-
-                this.holding = this.holding.bind(this)
-                // document.getElementById(elementId).onclick = this.holding
-                document.getElementById(elementId).addEventListener('touchmove', this.holding)
-            }
-
-            holding(){
-                this.isHolding = true;
             }
 
             update(mouseX, rendererWidth, itemHolding){
                 // if (this.object && itemHolding == this.name){this.object.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
-                if (this.isHolding){this.object.position.z = 0;}
+                if (itemHolding == this.name){this.object.position.z = 0;}
             }
         }
          
@@ -565,36 +557,46 @@
 
         const fbxLoader = new FBXLoader()
 
-        var egg = new FoodItem('models/Egg_Text.fbx','egg',fbxLoader,scene, 'egg-rectangle');
-        // window.holdingEgg = egg.holding
+        var egg = new FoodItem('models/Egg_Text.fbx','egg',fbxLoader,scene);
+        function holdingEgg(){itemHolding = egg.name}
+        window.holdingEgg = holdingEgg
 
-        var bacon = new FoodItem('models/Bacon_Text.fbx','Bacon',fbxLoader,scene, 'bacon-rectangle');
-        // window.holdingBacon = bacon.holding
+        var bacon = new FoodItem('models/Bacon_Text.fbx','Bacon',fbxLoader,scene);
+        function holdingBacon(){itemHolding = bacon.name;}
+        window.holdingBacon = holdingBacon
 
-        var BBQsauce = new FoodItem('models/BBQsauce_Text.fbx', 'BBQsauce', fbxLoader, scene, 'BBQsauce-rectangle')
-        // window.holdingBBQsauce = BBQsauce.holding
+        var BBQsauce = new FoodItem('models/BBQsauce_Text.fbx', 'BBQsauce', fbxLoader, scene)
+        function holdingBBQsauce(){itemHolding = BBQsauce.name}
+        window.holdingBBQsauce = holdingBBQsauce
 
-        var bottomBun = new FoodItem('models/BottomBun_Text.fbx','bottomBun', fbxLoader, scene, 'bottom-bun-rectangle')        
-        // window.holdingBottomBun = bottomBun.holding
+        var bottomBun = new FoodItem('models/BottomBun_Text.fbx','bottomBun', fbxLoader, scene)        
+        bottomBun.holding = function holding(){itemHolding = bottomBun.name}
+        window.holdingBottomBun = bottomBun.holding
 
-        var cheese = new FoodItem('models/Cheese_Text.fbx', 'cheese', fbxLoader, scene, 'cheese-rectangle')
-        // window.holdingCheese = cheese.holding
+        var cheese = new FoodItem('models/Cheese_Text.fbx', 'cheese', fbxLoader, scene)
+        function holdingCheese(){itemHolding = cheese.name;}
+        window.holdingCheese = holdingCheese
 
-        var lettuce = new FoodItem('models/Lettuce_Text.fbx', 'lettuce', fbxLoader, scene , 'lettuce-rectangle')
-        // window.holdingLettuce = lettuce.holding
+        var lettuce = new FoodItem('models/Lettuce_Text.fbx', 'lettuce', fbxLoader, scene)
+        function holdingLettuce(){itemHolding = lettuce.name;}
+        window.holdingLettuce = holdingLettuce
         
-        var meat = new FoodItem('models/Meat_Text.fbx', 'meat', fbxLoader, scene, 'meat-rectangle' )
-        // window.holdingMeat = meat.holding
+        var meat = new FoodItem('models/Meat_Text.fbx', 'meat', fbxLoader, scene)
+        function holdingMeat(){itemHolding = meat.name;}
+        window.holdingMeat = holdingMeat
 
-        var mushroom = new FoodItem('models/Mushroom_Text.fbx', 'mushroom', fbxLoader, scene, 'mushroom-rectangle')
-        // window.holdingMushroom = mushroom.holding
+        var mushroom = new FoodItem('models/Mushroom_Text.fbx', 'mushroom', fbxLoader, scene)
+        function holdingMushroom(){itemHolding = mushroom.name;}
+        window.holdingMushroom = holdingMushroom
 
-        var topBun = new FoodItem('models/TopBun_Text.fbx', 'topBun', fbxLoader, scene, 'top-bun-rectangle')
-        // window.holdingTopBun = topBun.holding
+        var topBun = new FoodItem('models/TopBun_Text.fbx', 'topBun', fbxLoader, scene)
+        function holdingTopBun(){itemHolding = topBun.name;}
+        window.holdingTopBun = holdingTopBun
 
         window.addEventListener('resize', onWindowResize, false)
         window.addEventListener('mouseup', release)
-        document.getElementById('egg-rectangle').addEventListener('touchmove', egg.holding, false);
+        
+        document.getElementById('Rectangle682').addEventListener('touchmove', holdingEgg, false);
 
         // onmousemove = function(event){
             // mouseX = event.clientX
@@ -638,6 +640,7 @@
             }
 
             requestAnimationFrame(animate)
+            // controls.update()
             renderer.render(scene, camera)
         }
 
