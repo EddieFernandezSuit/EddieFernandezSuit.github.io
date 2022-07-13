@@ -523,8 +523,32 @@
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
         import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
         import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
-        import FoodItem from './FoodItem.js'
+        // import FoodItem from './FoodItem.js'
 
+        class FoodItem{
+            constructor(fbxFilePath, foodName, fbxLoader, scene){
+                this.name = foodName
+                this.object = null;
+
+                fbxLoader.load(fbxFilePath, (object) =>{
+                    object.scale.set(.5, .5, 0.5);
+                    object.position.y = .5
+                    object.position.z = -4
+                    object.rotation.x = -Math.PI/2
+                    scene.add(object)
+                    this.object = object
+                })
+            }
+
+            holding() {
+            }
+
+            update(mouseX, rendererWidth, itemHolding){
+                if (this.object && itemHolding == this.name){this.object.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
+            }
+        }
+
+                
         const clock = new THREE.Clock();
 
         const rendererWidth = window.innerWidth
