@@ -616,9 +616,11 @@
         window.addEventListener('resize', onWindowResize, false)
         window.addEventListener('mouseup', release)
         
-        onmousemove = function(event){
-            mouseX = event.clientX
-        }   
+        getElementById('Rectangle682').addEventListener('touchmove', holdingEgg, false);
+
+        // onmousemove = function(event){
+            // mouseX = event.clientX
+        // }   
 
         animate()
 
