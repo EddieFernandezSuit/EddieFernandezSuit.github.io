@@ -519,7 +519,8 @@
                 this.isHolding = false;
 
                 fbxLoader.load(fbxFilePath, (object) =>{
-                    object.position.z = -30
+                    // object.position.z = -30
+                    object.position.x = 100
                     object.position.y = y
                     scene.add(object)
                     this.object = object
