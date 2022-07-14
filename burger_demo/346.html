@@ -535,8 +535,8 @@
                 if (this.isHolding){this.object.position.z = 0;}
             }
 
-            update(mouseX, rendererWidth, itemHolding){
-                // if (this.object && itemHolding == this.name){this.object.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
+            update(mouseX, rendererWidth){
+                // if (this.object & == this.name){this.object.position.z = -mouseX/rendererWidth  * 7 + 3.5;}
                 // if (this.isHolding){this.object.position.z = 0;}
             }
         }
@@ -562,12 +562,11 @@
         camera.position.set(4,2,0)
         camera.lookAt(0,0,0)
 
-        var itemHolding = '';
         var mouseX;
 
         const fbxLoader = new FBXLoader()
 
-        var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',0);
+        var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',0.1);
         var bacon = new FoodItem('models/Bacon.fbx','Bacon',fbxLoader,scene, 'bacon-rectangle',.9);
         var BBQsauce = new FoodItem('models/BBQ.fbx', 'BBQsauce', fbxLoader, scene, 'BBQsauce-rectangle',0)
         var bottomBun = new FoodItem('models/BottomBun.fbx','bottomBun', fbxLoader, scene, 'bottom-bun-rectangle',0)        
@@ -578,7 +577,7 @@
         var topBun = new FoodItem('models/TopBun.fbx', 'topBun', fbxLoader, scene, 'top-bun-rectangle',.9)
 
         window.addEventListener('resize', onWindowResize, false)
-        window.addEventListener('mouseup', release)
+        // window.addEventListener('mouseup', release)
         document.getElementById('egg-rectangle').addEventListener('touchmove', egg.holding, false);
 
         // onmousemove = function(event){
@@ -595,39 +594,35 @@
 
         function animate(){
             if(egg != null){
-                egg.update(mouseX, rendererWidth, itemHolding)
+                egg.update(mouseX, rendererWidth)
             }
             if(bacon != null){
-                bacon.update(mouseX, rendererWidth, itemHolding)
+                bacon.update(mouseX, rendererWidth)
             }
             if(BBQsauce!= null){
-                BBQsauce.update(mouseX, rendererWidth, itemHolding)
+                BBQsauce.update(mouseX, rendererWidth)
             }
             if(bottomBun != null){
-                bottomBun.update(mouseX, rendererWidth, itemHolding)
+                bottomBun.update(mouseX, rendererWidth)
             }
             if(cheese != null){
-                cheese.update(mouseX, rendererWidth, itemHolding)
+                cheese.update(mouseX, rendererWidth)
             }
             if(lettuce != null){
-                lettuce.update(mouseX, rendererWidth, itemHolding)
+                lettuce.update(mouseX, rendererWidth)
             }
             if(meat != null){
-                meat.update(mouseX, rendererWidth, itemHolding)
+                meat.update(mouseX, rendererWidth)
             }
             if(mushroom != null){
-                mushroom.update(mouseX, rendererWidth, itemHolding)
+                mushroom.update(mouseX, rendererWidth)
             }
             if(topBun != null){
-                topBun.update(mouseX, rendererWidth, itemHolding)
+                topBun.update(mouseX, rendererWidth)
             }
 
             requestAnimationFrame(animate)
             renderer.render(scene, camera)
-        }
-
-        function release(){
-            itemHolding = ''
         }
 
     </script>
