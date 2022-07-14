@@ -551,11 +551,11 @@
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000B48)
 
-        var light = new THREE.PointLight()
-        light.position.set(0, 5, 0)
-        scene.add(light)
-        
-        var ambientLight = new THREE.AmbientLight( 0x808080 ); // soft white light
+        var light1 = new THREE.PointLight()
+        light1.position.set(0, 9, 0)
+        scene.add(light1)
+
+        var ambientLight = new THREE.AmbientLight( 0x404040 , 3); // soft white light
         scene.add( ambientLight );
 
         const camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.1, 1000)
@@ -568,14 +568,14 @@
         const fbxLoader = new FBXLoader()
 
         var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',0);
-        var bacon = new FoodItem('models/Bacon.fbx','Bacon',fbxLoader,scene, 'bacon-rectangle',.8);
+        var bacon = new FoodItem('models/Bacon.fbx','Bacon',fbxLoader,scene, 'bacon-rectangle',.9);
         var BBQsauce = new FoodItem('models/BBQ.fbx', 'BBQsauce', fbxLoader, scene, 'BBQsauce-rectangle',0)
         var bottomBun = new FoodItem('models/BottomBun.fbx','bottomBun', fbxLoader, scene, 'bottom-bun-rectangle',0)        
         var cheese = new FoodItem('models/Cheese.fbx', 'cheese', fbxLoader, scene, 'cheese-rectangle',.8)
-        var lettuce = new FoodItem('models/Lettuce.fbx', 'lettuce', fbxLoader, scene , 'lettuce-rectangle',0)
+        var lettuce = new FoodItem('models/Lettuce.fbx', 'lettuce', fbxLoader, scene , 'lettuce-rectangle',0.1)
         var meat = new FoodItem('models/Meat.fbx', 'meat', fbxLoader, scene, 'meat-rectangle',0 )
         var mushroom = new FoodItem('models/Mushroom.fbx', 'mushroom', fbxLoader, scene, 'mushroom-rectangle',.5)
-        var topBun = new FoodItem('models/TopBun.fbx', 'topBun', fbxLoader, scene, 'top-bun-rectangle',.8)
+        var topBun = new FoodItem('models/TopBun.fbx', 'topBun', fbxLoader, scene, 'top-bun-rectangle',.9)
 
         window.addEventListener('resize', onWindowResize, false)
         window.addEventListener('mouseup', release)
