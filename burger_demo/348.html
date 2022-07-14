@@ -92,46 +92,15 @@
 <body>
     <div id="WebGL_Output"></div>
 
-    <div id="iPhone11ProX-346">
-        <div id="instructions-text"> Instructions</div>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div>
+    <div id="instructions-text"> Instructions</div>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
 
-    <!-- <div id="cheese-image"><img src="images/cheese-wedge 2.png"></div>
-    <div id="bacon-image"><img src="images/bacon 1.png"></div>
-    <div id="mushroom-image"><img src="images/mushroom.png"></div>
-    <div id="bottom-bun-image"><img src="images/bottom-bun.png"></div>
-    <div id="top-bun-image"><img src="images/top-bun.png"></div>
-    <div id="fried-egg-image"><img src="images/fried-egg.png"></div>
-    <div id="ketchup-image"><img src="images/ketchup.png"></div>
-    <div id="lettuce-image"><img src="images/lettuce.png"></div>
-    <div id="patty-image"><img src="images/patty.png"></div> -->
     <div id="menu-image"><img src="images/menu.png"></div>
-    <!-- <div id="fried-egg-text">Fried Egg</div>
-    <div id="mushroom-text">Musrooms</div>
-    <div id="lettuce-text">Lettuce/Tomatoes</div>
-    <div id="bacon-text">Bacon</div>
-    <div id="BBQ-sauce-text">BBQ Sauce</div>
-    <div id="patty-text">Patty</div>
-    <div id="top-bun-text">Top Bun</div>
-    <div id="bottom-bun-text">Bottom Bun</div>
-    <div id="cheese-text">Cheese</div> -->
     <div id="swipe-text">SWIPE</div>
-
     <div id="Rectangle692"></div>
-    <!-- <div id="Rectangle682" onclick=holdingEgg()></div> -->
-    <!-- <div id="Rectangle682"></div> -->
-    <!-- <div id="Rectangle686" onclick=holdingMushroom()></div>
-    <div id="Rectangle681" onclick=holdingLettuce()></div>
-    <div id="Rectangle685" onclick=holdingBacon()> </div>
-    <div id="Rectangle680" onclick=holdingBBQsauce()></div>
-    <div id="Rectangle684" onclick=holdingMeat()></div>
-    <div id="Rectangle679" onclick=holdingTopBun()></div>
-    <div id="Rectangle683" onclick=holdingCheese()></div>
-    <div id="Rectangle673" onclick=holdingBottomBun()></div> --> -->
 
 
     <script type="module">
@@ -140,7 +109,6 @@
         import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
          
         const clock = new THREE.Clock();
-
         const rendererWidth = window.innerWidth
         const rendererHeight = window.innerHeight
         const renderer = new THREE.WebGLRenderer()
@@ -149,7 +117,6 @@
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000B48)
-
         const fbxLoader = new FBXLoader()
 
         fbxLoader.load('models/Burger.fbx', (object) =>{
@@ -164,13 +131,12 @@
         scene.add( ambientLight );
 
         const camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.1, 1000)
-        camera.position.set(3,1.5,0)
+        camera.position.set(4,2,0)
 
         const controls = new OrbitControls(camera, renderer.domElement)
-        controls.screenSpacePanning = true
+        // controls.screenSpacePanning = true
         controls.target.set(0, 1, 0)
 
-        
         window.addEventListener('resize', onWindowResize, false)
         
         animate()
