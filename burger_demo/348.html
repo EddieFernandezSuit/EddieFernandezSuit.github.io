@@ -121,11 +121,11 @@
         const fbxLoader = new FBXLoader()
 
         fbxLoader.load('models/Burger.fbx', (object) =>{
-            // object.traverse(n => { if ( n.isMesh ) {
-            //     n.castShadow = true;
-            //     n.receiveShadow = true;
-            //     if(n.material.map) n.material.map.anisotropy = 1;
-            // }});
+            object.traverse(n => { if ( n.isMesh ) {
+                n.castShadow = true;
+                n.receiveShadow = true;
+                if(n.material.map) n.material.map.anisotropy = 1;
+            }});
             scene.add(object)
         })
 
@@ -147,24 +147,18 @@
 
         var ambientLight = new THREE.AmbientLight( color, intensity); // soft white light
         scene.add( ambientLight );
-        // var hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 1);
+
+        // var newIntensity = 1.5
+        // var hemiLight = new THREE.HemisphereLight(0xffeeb1, 0x080820, newIntensity);
         // scene.add(hemiLight);
 
-        // var hemiLight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 1);
-        // scene.add(hemiLight);
-
-        // var light = new THREE.SpotLight(0xffa95c,2);
+        // var light = new THREE.SpotLight(0xffa95c,newIntensity);
         // light.position.set(-50,50,50);
         // light.castShadow = true;
         // light.shadow.bias = -0.0001;
         // light.shadow.mapSize.width = 1024*4;
         // light.shadow.mapSize.height = 1024*4;
         // scene.add( light );
-
-        
-
-        // var dirlight = new THREE.DirectionalLight(0xffffff, 2)
-        // scene.add(dirlight)
 
         const camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.1, 1000)
         camera.position.set(3,2,0)
