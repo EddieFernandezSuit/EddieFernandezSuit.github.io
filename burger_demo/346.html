@@ -519,9 +519,14 @@
                 this.isHolding = false;
 
                 fbxLoader.load(fbxFilePath, (object) =>{
-                    // object.position.z = -30
-                    object.position.x = 100
+                    // object.position.x = 1
                     object.position.y = y
+
+                    object.traverse(n => { if ( n.isMesh ) {
+                        n.castShadow = true;
+                        n.receiveShadow = true;
+                        if(n.material.map) n.material.map.anisotropy = 1;
+                    }});
                     scene.add(object)
                     this.object = object
                 })
@@ -533,7 +538,7 @@
 
             holding(){
                 this.isHolding = true;
-                if (this.isHolding){this.object.position.z = 0;}
+                if (this.isHolding){this.object.position.x = 0;}
             }
 
             update(mouseX, rendererWidth){
@@ -546,35 +551,54 @@
         const rendererWidth = window.innerWidth
         const rendererHeight = window.innerHeight
         const renderer = new THREE.WebGLRenderer()
+        renderer.shadowMap.enabled = true;
         renderer.setSize(rendererWidth, rendererHeight)
         document.getElementById('WebGL_Output').appendChild(renderer.domElement)
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000B48)
 
-        var light1 = new THREE.PointLight()
-        light1.position.set(0, 9, 0)
-        scene.add(light1)
+        // var light1 = new THREE.PointLight()
+        // light1.position.set(0, 9, 0)
+        // scene.add(light1)
 
-        var ambientLight = new THREE.AmbientLight( 0x404040 , 3); // soft white light
+        // var ambientLight = new THREE.AmbientLight( 0x404040 , 3); // soft white light
+        // scene.add( ambientLight );
+
+        //lighting
+        var intensity = .6
+        var color = 0xFFFFFF
+        var l1 = new THREE.DirectionalLight(color, intensity)
+        l1.position.y = -5
+        l1.position.z = 5
+        scene.add(l1)
+        var l2 = new THREE.DirectionalLight(color,intensity)
+        l2.position.y = 5
+        l2.position.x = 5
+        scene.add(l2)
+        var l3 = new THREE.DirectionalLight(color,intensity)
+        l3.position.y = 5
+        l3.position.x = -5
+        scene.add(l3)
+        var ambientLight = new THREE.AmbientLight( color, intensity); // soft white light
         scene.add( ambientLight );
 
         const camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.1, 1000)
-        camera.position.set(3,2,0)
+        camera.position.set(2.5,1.5,0)
         camera.lookAt(0,1,0)
 
         var mouseX;
 
         const fbxLoader = new FBXLoader()
 
-        var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',0.1);
+        var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',.9);
         var bacon = new FoodItem('models/Bacon.fbx','Bacon',fbxLoader,scene, 'bacon-rectangle',.9);
-        var BBQsauce = new FoodItem('models/BBQ.fbx', 'BBQsauce', fbxLoader, scene, 'BBQsauce-rectangle',0)
+        var BBQsauce = new FoodItem('models/BBQ.fbx', 'BBQsauce', fbxLoader, scene, 'BBQsauce-rectangle',.9)
         var bottomBun = new FoodItem('models/BottomBun.fbx','bottomBun', fbxLoader, scene, 'bottom-bun-rectangle',0)        
-        var cheese = new FoodItem('models/Cheese.fbx', 'cheese', fbxLoader, scene, 'cheese-rectangle',.8)
-        var lettuce = new FoodItem('models/Lettuce.fbx', 'lettuce', fbxLoader, scene , 'lettuce-rectangle',0.1)
-        var meat = new FoodItem('models/Meat.fbx', 'meat', fbxLoader, scene, 'meat-rectangle',0 )
-        var mushroom = new FoodItem('models/Mushroom.fbx', 'mushroom', fbxLoader, scene, 'mushroom-rectangle',.5)
+        var cheese = new FoodItem('models/Cheese.fbx', 'cheese', fbxLoader, scene, 'cheese-rectangle',.7)
+        var lettuce = new FoodItem('models/Lettuce.fbx', 'lettuce', fbxLoader, scene , 'lettuce-rectangle',0.7)
+        var meat = new FoodItem('models/Meat.fbx', 'meat', fbxLoader, scene, 'meat-rectangle',.5)
+        var mushroom = new FoodItem('models/Mushroom.fbx', 'mushroom', fbxLoader, scene, 'mushroom-rectangle',.9)
         var topBun = new FoodItem('models/TopBun.fbx', 'topBun', fbxLoader, scene, 'top-bun-rectangle',.9)
 
         window.addEventListener('resize', onWindowResize, false)
