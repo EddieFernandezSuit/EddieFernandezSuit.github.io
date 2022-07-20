@@ -1,0 +1,13 @@
+Burger Demo
+
+Top bar strecthes all the way across the top now instead being just a little short.
+
+Moved Every UI element up by 10px, so now there is nothing at the bottom of the screen that cannot be accessed.
+
+When viewing in the browser now hides URL
+
+The dots on the top right of the screen that represent which page the user is now colored as intended.
+
+IOS no longer has the white edges.
+
+Added Loading bars

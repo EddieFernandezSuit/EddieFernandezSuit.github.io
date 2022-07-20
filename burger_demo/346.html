@@ -4,21 +4,14 @@
 <!-- python -m http.server 3000 -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Burger</title>
     <style>
         body {
             margin: 0px;
             overflow: hidden;
         }
-
-        /* #iPhone11ProX-346{
-            position:absolute;
-            width:812px;
-            height:375px;
-            background: #000B48;
-            z-index: -1;
-        } */
         
         #cheese-image{
             position: absolute;
@@ -460,19 +453,27 @@
             z-index: -1;
         }
 
+        #progressBar {
+            position: absolute;
+            width: 200px;
+            height: 24px;
+            position: absolute;
+            left: 70%;
+            top: 25px;
+            margin-left: -250px;
+        }
+
 
     </style>
 </head>
 <body>
     <div id="WebGL_Output"></div>
 
-    <div id="iPhone11ProX-346">
-        <div id="build-text"> Build A Burger</div>
-        <span class="dot" style="background-color:#46D9ED"></span>
-        <span class="dot" style="background-color:#46D9ED"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div>
+    <div id="build-text"> Build A Burger</div>
+    <span class="dot" style="background-color:#46D9ED"></span>
+    <span class="dot" style="background-color:#46D9ED"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
 
     <div id="cheese-image"><img src="images/cheese-wedge 2.png"></div>
     <div id="bacon-image"><img src="images/bacon 1.png"></div>
@@ -497,7 +498,6 @@
 
     <div id="long-bar"></div>
     <div id="egg-rectangle"></div>
-    <!-- <div id="egg-rectangle"></div> -->
     <div id="mushroom-rectangle"></div>
     <div id="lettuce-rectangle"></div>
     <div id="bacon-rectangle"></div>
@@ -506,7 +506,7 @@
     <div id="top-bun-rectangle"></div>
     <div id="cheese-rectangle"></div>
     <div id="bottom-bun-rectangle"></div> -->
-
+    <progress value="0" max="100" id="progressBar"></progress>
 
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
@@ -527,8 +527,15 @@
                     //     n.receiveShadow = true;
                     //     if(n.material.map) n.material.map.anisotropy = 1;
                     // }});
+                    progressBar.style.display = 'none'
                     scene.add(object)
                     this.object = object
+                }, (xhr) => {
+                    if (xhr.lengthComputable) {
+                        var percentComplete = (xhr.loaded / xhr.total) * 100
+                        progressBar.value = percentComplete
+                        progressBar.style.display = 'block'
+                    }
                 })
 
                 this.holding = this.holding.bind(this)
@@ -560,13 +567,6 @@
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000B48)
-
-        // var light1 = new THREE.PointLight()
-        // light1.position.set(0, 9, 0)
-        // scene.add(light1)
-
-        // var ambientLight = new THREE.AmbientLight( 0x404040 , 3); // soft white light
-        // scene.add( ambientLight );
 
         //lighting
         var intensity = .6
