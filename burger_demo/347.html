@@ -17,7 +17,7 @@
             height: 21px;
             width: 32px;
             left: 49px;
-            top: 35px;
+            top: 25px;
             border-radius: 0px;
         }
         .dot {
@@ -25,7 +25,7 @@
             /* right: 40px; */
             left: 90%;
             /* left: 699px; */
-            top: 52px;
+            top: 42px;
             border-radius: 0px;
 
             height: 10px;
@@ -41,7 +41,7 @@
             right: 40px;
             /* left: 90%; */
             /* left: 722.5px; */
-            top: 314.5px;
+            top: 304.5px;
 
             font-family: 'Roboto';
             font-style: normal;
@@ -61,7 +61,7 @@
             height: 23.000000000000036px;
             width: 209.00000000000017px;
             left: 114px;
-            top: 34px;
+            top: 24px;
             border-radius: nullpx;
 
             font-family: 'Roboto';
@@ -77,8 +77,8 @@
             position: absolute;
             height: 5px;
             width: 100%;
-            left: -26px;
-            top: 73px;
+            /* left: -26px; */
+            top: 63px;
             border-radius: 5px;
             background: linear-gradient(139.36deg, #46EDC8 10.85%, #46D9ED 86.28%);
             border-radius: 5px;
@@ -94,7 +94,7 @@
             width: 320px;
             height: 196px;
             left: 82px;
-            top: 139px;
+            top: 129px;
 
             font-family: 'Roboto';
             font-style: normal;
@@ -112,9 +112,9 @@
 
     <div id="iPhone11ProX-346">
         <div id="Build-text"> Build A Burger</div>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+        <span class="dot" style="background-color:#46D9ED"></span>
+        <span class="dot" style="background-color:#46D9ED"></span>
+        <span class="dot" style="background-color:#46D9ED"></span>
         <span class="dot"></span>
     </div>
 
@@ -139,8 +139,10 @@
         const renderer = new THREE.WebGLRenderer()
         renderer.setSize(rendererWidth, rendererHeight)
         document.getElementById('WebGL_Output').appendChild(renderer.domElement)
+        // document.body.requestFullscreen();
+        window.scrollTo( 0, 1 );
 
-         const scene = new THREE.Scene();
+        const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000B48)
 
         // var light1 = new THREE.PointLight()
