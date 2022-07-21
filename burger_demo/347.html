@@ -104,14 +104,87 @@
             font-size: 24px;
             line-height: 28px;
         }
-        #progressBar {
+
+        /* loading screen style */
+        #loading-screen {
             position: absolute;
-            width: 200px;
-            height: 24px;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000B48;
+            opacity: 1;
+            transition: 1s opacity;
+        }
+
+        #loading-screen.fade-out {
+            opacity: 0;
+        }
+
+        #loader {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46EDC8;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+        #loader:before {
+            content: "";
             position: absolute;
-            left: 70%;
-            top: 25px;
-            margin-left: -250px;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46eddc;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+        #loader:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46D9ED;
+            -webkit-animation: spin 1.5s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+        @-webkit-keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
         }
 
     </style>
@@ -137,7 +210,10 @@
         <p>Tap on the burger and slide it around for a 360 view.</p>
         </body>
     </div>
-    <progress value="0" max="100" id="progressBar"></progress>
+
+    <section id="loading-screen">
+        <div id="loader"></div>
+    </section>
 
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
@@ -154,13 +230,6 @@
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000B48)
-
-        // var light1 = new THREE.PointLight()
-        // light1.position.set(0, 9, 0)
-        // scene.add(light1)
-
-        // var ambientLight = new THREE.AmbientLight( 0x404040 , 3); // soft white light
-        // scene.add( ambientLight );
 
         //lighting
         var intensity = .6
@@ -184,17 +253,20 @@
         camera.position.set(4,2,0)
         camera.lookAt(0,1,0)
 
-        const fbxLoader = new FBXLoader()
+        const loadingManager = new THREE.LoadingManager( () => {
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.classList.add( 'fade-out' );
+            // optional: remove loader from DOM via event listener
+            loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+        } );
 
-        fbxLoader.load('models/Burger.fbx', (object) =>{
-            scene.add(object)
-        }, (xhr) => {
-            if (xhr.lengthComputable) {
-                var percentComplete = (xhr.loaded / xhr.total) * 100
-                progressBar.value = percentComplete
-                progressBar.style.display = 'block'
-            }
-        })
+        function onTransitionEnd( event ) {
+            event.target.remove();
+        }
+
+        const fbxLoader = new FBXLoader(loadingManager)
+
+        fbxLoader.load('models/Burger.fbx', (object) =>{scene.add(object)})
 
         window.addEventListener('resize', onWindowResize, false)
  

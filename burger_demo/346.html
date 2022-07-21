@@ -453,7 +453,7 @@
             z-index: -1;
         }
 
-        #progressBar {
+        /* #progressBar {
             position: absolute;
             width: 200px;
             height: 24px;
@@ -461,6 +461,88 @@
             left: 70%;
             top: 25px;
             margin-left: -250px;
+        } */
+
+        /* loading screen style */
+        #loading-screen {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            opacity: 1;
+            transition: 1s opacity;
+        }
+
+        #loading-screen.fade-out {
+            opacity: 0;
+        }
+
+        #loader {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46EDC8;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+        #loader:before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46eddc;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+        #loader:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46D9ED;
+            -webkit-animation: spin 1.5s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+        @-webkit-keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
         }
 
 
@@ -506,7 +588,10 @@
     <div id="top-bun-rectangle"></div>
     <div id="cheese-rectangle"></div>
     <div id="bottom-bun-rectangle"></div> -->
-    <progress value="0" max="100" id="progressBar"></progress>
+    <!-- <progress value="0" max="100" id="progressBar"></progress> -->
+    <section id="loading-screen">
+        <div id="loader"></div>
+    </section>
 
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
@@ -517,9 +602,10 @@
                 this.name = foodName
                 this.object = null;
                 this.isHolding = false;
+                this.elementId = elementId
 
                 fbxLoader.load(fbxFilePath, (object) =>{
-                    object.position.x = 30
+                    object.position.x = -300
                     object.position.y = y
 
                     // object.traverse(n => { if ( n.isMesh ) {
@@ -527,15 +613,15 @@
                     //     n.receiveShadow = true;
                     //     if(n.material.map) n.material.map.anisotropy = 1;
                     // }});
-                    progressBar.style.display = 'none'
+                    // progressBar.style.display = 'none'
                     scene.add(object)
                     this.object = object
-                }, (xhr) => {
-                    if (xhr.lengthComputable) {
-                        var percentComplete = (xhr.loaded / xhr.total) * 100
-                        progressBar.value = percentComplete
-                        progressBar.style.display = 'block'
-                    }
+                // }, (xhr) => {
+                    // if (xhr.lengthComputable) {
+                        // var percentComplete = (xhr.loaded / xhr.total) * 100
+                        // progressBar.value = percentComplete
+                        // progressBar.style.display = 'block'
+                    // }
                 })
 
                 this.holding = this.holding.bind(this)
@@ -544,8 +630,23 @@
             }
 
             holding(){
-                this.isHolding = true;
-                if (this.isHolding){this.object.position.x = 0;}
+                if(ingredientOrder[0] == this.name){
+                    this.isHolding = true;
+                    if (this.isHolding){this.object.position.x = 0;}
+                    document.getElementById('egg-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('BBQsauce-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('bottom-bun-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('cheese-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('lettuce-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('meat-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('mushroom-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('top-bun-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('BBQsauce-rectangle').style.border = '1px solid #46EBCC'
+                    ingredientOrder.shift()
+                }
+                else{
+                    document.getElementById(this.elementId).style.border = '1px solid #ff0000';
+                }
             }
 
             update(mouseX, rendererWidth){
@@ -554,7 +655,6 @@
             }
         }
          
-        
         const clock = new THREE.Clock();
         const rendererWidth = window.innerWidth
         const rendererHeight = window.innerHeight
@@ -592,7 +692,18 @@
 
         var mouseX;
 
-        const fbxLoader = new FBXLoader()
+        const loadingManager = new THREE.LoadingManager( () => {
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.classList.add( 'fade-out' );
+            // optional: remove loader from DOM via event listener
+            loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+        } );
+
+        function onTransitionEnd( event ) {
+            event.target.remove();
+        }
+
+        const fbxLoader = new FBXLoader(loadingManager)
 
         var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',.9);
         var bacon = new FoodItem('models/Bacon.fbx','Bacon',fbxLoader,scene, 'bacon-rectangle',.9);
@@ -604,6 +715,7 @@
         var mushroom = new FoodItem('models/Mushroom.fbx', 'mushroom', fbxLoader, scene, 'mushroom-rectangle',.9)
         var topBun = new FoodItem('models/TopBun.fbx', 'topBun', fbxLoader, scene, 'top-bun-rectangle',.9)
 
+        var ingredientOrder = ['bottomBun','meat','cheese','egg','lettuce','BBQsauce','topBun']
         window.addEventListener('resize', onWindowResize, false)
         // window.addEventListener('mouseup', release)
         document.getElementById('egg-rectangle').addEventListener('touchmove', egg.holding, false);

@@ -88,14 +88,87 @@
             position: absolute;
             z-index: -1;
         }
-        #progressBar {
+
+        /* loading screen style */
+        #loading-screen {
             position: absolute;
-            width: 200px;
-            height: 24px;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            opacity: 1;
+            transition: 1s opacity;
+        }
+
+        #loading-screen.fade-out {
+            opacity: 0;
+        }
+
+        #loader {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46EDC8;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+        #loader:before {
+            content: "";
             position: absolute;
-            left: 70%;
-            top: 25px;
-            margin-left: -250px;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46eddc;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+        #loader:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46D9ED;
+            -webkit-animation: spin 1.5s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+        @-webkit-keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
         }
 
     </style>
@@ -112,8 +185,11 @@
     <div id="menu-image"><img src="images/menu.png"></div>
     <div id="swipe-text">SWIPE</div>
     <div id="Rectangle692"></div>
-    <progress value="0" max="100" id="progressBar"></progress>
 
+    <section id="loading-screen">
+        <div id="loader"></div>
+    </section>
+    
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
         import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
@@ -132,9 +208,21 @@
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000B48)
-        const fbxLoader = new FBXLoader()
 
-        var modelReady = false
+        const loadingManager = new THREE.LoadingManager( () => {
+	
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.classList.add( 'fade-out' );
+            // optional: remove loader from DOM via event listener
+            loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+
+        } );
+
+        function onTransitionEnd( event ) {
+            event.target.remove();
+        }
+
+        const fbxLoader = new FBXLoader(loadingManager)
 
         fbxLoader.load('models/Burger.fbx', (object) =>{
             object.traverse(n => { if ( n.isMesh ) {
@@ -143,41 +231,32 @@
                 if(n.material.map) n.material.map.anisotropy = 1;
             }});
             scene.add(object)
-            progressBar.style.display = 'none'
-            modelReady = true
-        }, (xhr) => {
-            if (xhr.lengthComputable) {
-                var percentComplete = (xhr.loaded / xhr.total) * 100
-                progressBar.value = percentComplete
-                progressBar.style.display = 'block'
-            }
         })
 
+        //lighting
         var intensity = .6
         var color = 0xFFFFFF
-
-        var l1 = new THREE.DirectionalLight(color, intensity)
-        l1.position.y = -5
-        l1.position.z = 5
-        scene.add(l1)
-        var l2 = new THREE.DirectionalLight(color,intensity)
-        l2.position.y = 5
-        l2.position.x = 5
-        scene.add(l2)
-        var l3 = new THREE.DirectionalLight(color,intensity)
-        l3.position.y = 5
-        l3.position.x = -5
-        scene.add(l3)
+        var lights = []
+        for(let i = 0; i < 3; i++){
+            lights.push(new THREE.DirectionalLight(color,intensity))
+            scene.add(lights[i])
+        }
+        lights[0].position.y = -5
+        lights[0].position.z = 5
+        lights[1].position.y = 5
+        lights[1].position.x = 5
+        lights[2].position.y = 5
+        lights[2].position.x = -5
 
         var ambientLight = new THREE.AmbientLight( color, intensity); // soft white light
         scene.add( ambientLight );
 
         const camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.1, 1000)
         camera.position.set(3,2,0)
-
         const controls = new OrbitControls(camera, renderer.domElement)
         controls.target.set(0, 1, 0)
-
+        controls.minDistance = 2
+        controls.maxDistance = 5
 
         window.addEventListener('resize', onWindowResize, false)
         
@@ -191,14 +270,9 @@
         }
 
         function animate(){
-
             requestAnimationFrame(animate)
             controls.update()
-
-            if(modelReady){
-
-                renderer.render(scene, camera)
-            }
+            renderer.render(scene, camera)
         }
 
     </script>
