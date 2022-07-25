@@ -590,9 +590,7 @@
             let delta = clock.getDelta()
             
             if (mixer) {mixer.update(delta);}
-
-            // if (modelReady) {playerMixer.update(delta)}
-
+            if (playerMixer) {playerMixer.update(delta)}
             if (alienModelReady) {alienMixer.update(delta)}
 
             controls?.update(delta);
@@ -783,8 +781,7 @@
         //updates the players position based on the players joystick movements
         function updatePlayer(){
 
-            if (modelReady != null && controls != null){
-                playerMixer.update(delta)
+            if (player != null && modelReady != null && controls != null){
 
                 const angle = controls.getAzimuthalAngle()
                 player.rotation.y = angle + Math.PI
