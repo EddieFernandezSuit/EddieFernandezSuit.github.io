@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "nipplejs": "^0.9.1",
-    "node": "^18.4.0",
-    "three": "^0.141.0"
-  }
-}
