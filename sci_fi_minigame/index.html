@@ -17,6 +17,22 @@
     <script type="text/javascript" src="./plugins/gzip/pako.js"></script>
 
     <style>
+        /* #progress {
+        position: absolute;
+          width: 200px;
+          height: 20px;
+          background: black;
+          border: 2px solid #000;
+          z-index: 100;
+        }
+        #progress #progressbar{
+            position: absolute;
+          width: 10px;
+          height: 20px;
+          background: red;
+          border: none;
+          z-index: 101;
+        } */
         body {
             margin: 0px;
             overflow: hidden;
@@ -83,7 +99,7 @@
             margin-left: 4px;
         }
         .noSelect {
-            -webkit-touch-callout: none;
+                -webkit-touch-callout: none;
             -webkit-user-select: none;
             -khtml-user-select: none;
             -moz-user-select: none;
@@ -91,6 +107,93 @@
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
+        #WebGL_Output{
+            position: absolute;
+            z-index: -10;
+        }
+
+
+        #loading-screen {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            opacity: 1;
+            transition: 1s opacity;
+        }
+
+        #loading-screen.fade-out {
+            opacity: 0;
+        }
+
+        #loader {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46EDC8;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+        #loader:before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46eddc;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+        #loader:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #46D9ED;
+            -webkit-animation: spin 1.5s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+        @-webkit-keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        
     </style>
 </head>
 
@@ -106,7 +209,13 @@
       </div>
     <div id="WebGL_Output"></div>
 
-    <progress value="0" max="100" id="progressBar"></progress>
+    <section id="loading-screen">
+        <div id="loader"></div>
+    </section>
+
+    <!-- <div id="progress">
+        <div id="progressbar"></div>
+    </div> -->
     <script id="fragment_ShaderDepth" type="x-shader/x-fragment">
         #include <packing>
         uniform sampler2D texture;
@@ -182,19 +291,13 @@
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
         import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
         import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
-        // import { GUI } from 'https://cdn.skypack.dev/dat.gui'
 
         var scene = new THREE.Scene();
         var loader = new THREE.ObjectLoader();
         var camera, renderer, controls;
-        
-        var light = new THREE.PointLight()
-            light.position.set(0, 10, -40)
-            scene.add(light)
 
-        var light = new THREE.PointLight()
-            light.position.set(0, 10, 40)
-            scene.add(light)
+        var ambientLight = new THREE.AmbientLight(0xffffff, .5)
+        scene.add(ambientLight)
 
         var rootPath = "Scenes/RobotLab";
 
@@ -245,9 +348,28 @@
         let rightAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyRightAim2Guns.FBX'
         let leftAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyLeftAim2Guns.FBX'
 
-        const fbxLoader = new FBXLoader()
+        var progress = document.getElementById('progress');
+        var progressBar = document.getElementById('progressbar');
+
+        // var manager = new THREE.LoadingManager();
+        // manager.onProgress = function (xhr) {
+        //   progressBar.style.width = (xhr.loaded/ xhr.total * 100) + '%'
+        // };
+
+        const loadingManager = new THREE.LoadingManager( () => {
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.classList.add( 'fade-out' );
+            // optional: remove loader from DOM via event listener
+            loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+        } );
+
+        function onTransitionEnd( event ) {
+            event.target.remove();
+        }
+
+        const fbxLoader = new FBXLoader(loadingManager)
         
-        fbxLoader.load('models/SK_Arack.fbx', (object) =>{
+        fbxLoader.load('models/Arak.fbx', (object) =>{
             alien = object
             object.scale.set(0.01, 0.01, 0.01);
             object.position.z = -10;
@@ -260,23 +382,23 @@
                 'models/Arack@Walk.fbx',
                 (object) => {
                     let animation = alienMixer.clipAction(object.animations[0])
-                    animation.timeScale = 1
                     alienAnimationActions.push(animation)
                     alienModelReady = true;
+                    alienAnimationActions[1].play()
                     // setAlienAction(alienAnimationActions[1])
-                },
+                }
             )
         })
 
         //load the wizard
-        fbxLoader.load('models/PhilWizard_IDLE.fbx', (object) =>{
+        fbxLoader.load('models/PhilWizard_idle_Ver5.fbx', (object) =>{
             object.scale.set(0.005, 0.005, 0.005);
             object.position.z = 10;
             object.rotation.y = Math.PI
             scene.add(object)
         })
 
-        fbxLoader.load('models/PhilWizard_idle_Ver3.fbx', (object) =>{
+        fbxLoader.load('models/PhilWizard_idle_Ver6.fbx', (object) =>{
             object.scale.set(0.005, 0.005, 0.005);
             object.position.z = 10;
             object.position.x = -1
@@ -284,16 +406,8 @@
             scene.add(object)
         })
 
-        // fbxLoader.load('models/PhiWizard_idle_Ver4.fbx', (object) =>{
-        //     object.scale.set(0.005, 0.005, 0.005);
-        //     object.position.z = 10;
-        //     object.position.x = -2;
-        //     object.rotation.y = Math.PI;
-        //     scene.add(object);
-        // })
-
         //load the player character
-        fbxLoader.load('models/SciFi_Pirate_Guns_Ver6.fbx',
+        fbxLoader.load('models/SciFi_Pirate_Guns_Ver7.fbx',
             (object) => {
                 player = object;
                 object.scale.set(0.01, 0.01, 0.01)
@@ -305,94 +419,31 @@
                 animationActions.push(animationAction)
                 activeAction = animationActions[0]
                 scene.add(object)
-                //add an animation from another file
-                fbxLoader.load(
-                    forwardAnimationPath,
+                fbxLoader.load(forwardAnimationPath,
                     (object) => {
                         let animationAction = playerMixer.clipAction(object.animations[0])
                         animationActions.push(animationAction)
-                        //add an animation from another file
-                        fbxLoader.load(
-                            rightAnimationPath,
+                        fbxLoader.load(rightAnimationPath,
                             (object) => {
                                 let animationAction = playerMixer.clipAction(object.animations[0])
                                 animationActions.push(animationAction)
-                                //add an animation from another file
                                 fbxLoader.load(
                                     backwardAnimationPath,
                                     (object) => {
                                         object.animations[0].tracks.shift()
                                         let animationAction = playerMixer.clipAction(object.animations[0])
                                         animationActions.push(animationAction)
-                                        //add an animation from another file
                                         fbxLoader.load(
                                             leftAnimationPath,
                                             (object) => {
                                                 let animationAction = playerMixer.clipAction(object.animations[0])
                                                 animationActions.push(animationAction)
-                                                progressBar.style.display = 'none'
                                                 modelReady = true                                                
-                                            },
-                                            (xhr) => {
-                                                if (xhr.lengthComputable) {
-                                                    var percentComplete = (xhr.loaded / xhr.total) * 100
-                                                    progressBar.value = percentComplete
-                                                    progressBar.style.display = 'block'
-                                                }
-                                            },
-                                            (error) => {
-                                                console.log(error)
-                                            }
-                                        )
-                                    },
-                                    (xhr) => {
-                                        if (xhr.lengthComputable) {
-                                            var percentComplete = (xhr.loaded / xhr.total) * 100
-                                            progressBar.value = percentComplete
-                                            progressBar.style.display = 'block'
-                                        }
-                                    },
-                                    (error) => {
-                                        console.log(error)
-                                    }
-                                )
-                            },
-                            (xhr) => {
-                                if (xhr.lengthComputable) {
-                                    var percentComplete = (xhr.loaded / xhr.total) * 100
-                                    progressBar.value = percentComplete
-                                    progressBar.style.display = 'block'
-                                }
-                            },
-                            (error) => {
-                                console.log(error)
-                            }
-                        )
-                    },
-                    (xhr) => {
-                        if (xhr.lengthComputable) {
-                            var percentComplete = (xhr.loaded / xhr.total) * 100
-                            progressBar.value = percentComplete
-                            progressBar.style.display = 'block'
-                        }
-                    },
-                    (error) => {
-                        console.log(error)
-                    }
-                )
-            
-            },
-            (xhr) => {
-                if (xhr.lengthComputable) {
-                    var percentComplete = (xhr.loaded / xhr.total) * 100
-                    progressBar.value = percentComplete
-                    progressBar.style.display = 'block'
-                }
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
+                                            })
+                                    })
+                            })
+                    })
+            })
 
         const setAction = (toAction) => {
             if (toAction != activeAction) {
@@ -531,21 +582,18 @@
         }
 
         function update() {
+
             bullets.forEach(bullet => {
                 bullet.update()
             });
 
             let delta = clock.getDelta()
             
-            if (mixer) {
-                mixer.update(delta);
-            }
+            if (mixer) {mixer.update(delta);}
 
-            if (playerMixer && modelReady) 
-            {playerMixer.update(delta)}
+            // if (modelReady) {playerMixer.update(delta)}
 
-            if (alienMixer && alienModelReady) 
-            {alienMixer.update(delta)}
+            if (alienModelReady) {alienMixer.update(delta)}
 
             controls?.update(delta);
 
@@ -556,39 +604,16 @@
                 renderer.render(scene, camera);
             }
 
-            //LOD更新
+            // LOD更新
             scene.traverse(function (object) {
                 if (object instanceof THREE.LOD) {
                     if (camera != null)
                         object.update(camera);
                 }
             });
-
-            // now = Date.now();
-            // delta = now - then;
-            // if (delta > interval) {
-            //     then = now - (delta % interval);
-
-                // if (camera != null)
-                //     cameraThenPos = camera.position.clone();
-
-                // if (camera != null) {
-                //     if (cameraNowPos != null || cameraThenPos != null) {
-                //         if (cameraNowPos.x != cameraThenPos.x || cameraNowPos.y != cameraThenPos.y || cameraNowPos.z != cameraThenPos.z || !loadComplete) {
-                //             if (renderer != null) {
-
-                //                 renderer.render(scene, camera);
-                //                 cameraNowPos = camera.position.clone();
-                //             }
-
-                //         }
-                //     }
-                // }
-
-                // //动画更新
-                // var delta = 0.75 * clock.getDelta()
+            // if(camera){
+            //     camera.update()
             // }
-
             requestAnimationFrame(update);
         }
 
@@ -751,17 +776,16 @@
                 }
 
                 alien.rotation.y = angle
-                // console.log(alien.rotation.y)
                 alien.position.addScaledVector(alienDirection, .005)
-
-                setAlienAction(alienAnimationActions[1])
             }
         }
         
         //updates the players position based on the players joystick movements
         function updatePlayer(){
-            // move the player
-            if (player != null && controls != null){
+
+            if (modelReady != null && controls != null){
+                playerMixer.update(delta)
+
                 const angle = controls.getAzimuthalAngle()
                 player.rotation.y = angle + Math.PI
                 
@@ -772,15 +796,9 @@
                     let directionValues = [fwdValue, rgtValue, bkdValue, lftValue]
                     let largestIndex = directionValues.indexOf(Math.max(...directionValues))
                     setAction(animationActions[largestIndex+1])
-                    console.log(animationActions)
-                    console.log(alienAnimationActions)
-                    
-
                     tempVector.set(rgtValue-lftValue, 0, bkdValue-fwdValue).applyAxisAngle(upVector, angle)
                     player.position.addScaledVector(tempVector,.02)
                     camera.position.addScaledVector(tempVector,.02)
-
-                    
                     centerControls()
                 }
             }
@@ -794,7 +812,7 @@
         //creates a projectile starting a the players location and flying in the direction the player is facing
         function shoot(){
             if(scene != null){
-                console.log('shoot')
+                // console.log('shoot')
                 var geometry = new THREE.SphereGeometry(.1,32,16);
                 var sphereMaterial = new THREE.MeshNormalMaterial(); 
                 var sphereMesh = new THREE.Mesh( geometry, sphereMaterial );
