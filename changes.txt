@@ -8,3 +8,11 @@ Added Loading bars
 
 min zoom distance and max zoom distance
 loadingScreen
+removed mushroom button and moved egg button in its place
+change 'Build A Burger' to 'Build a Burger'. (lowercase a)
+Add "Select the ingredients in the correct order to build the burger." text
+Render eggs beneath the lettuce
+Removed tomatoes from text lettuce/tomatoes
+Removed SWIPE from the bottom of the page
+'great job press to continue' button appears after completing the burger
+Move burger to the right in 347 and moved text up

@@ -20,29 +20,24 @@
             width: 32px;
             left: 49px;
             top: 25px;
-            border-radius: 0px;
+            /* border-radius: 0px; */
         }
         .dot {
             position: relative;
-            /* right: 40px; */
             left: 90%;
-            /* left: 699px; */
             top: 42px;
-            border-radius: 0px;
-
+            /* border-radius: 0px; */
             height: 10px;
             width: 10px;
             background-color: white;
             border-radius: 50%;
             display: inline-block;
         }
-        #swipe-text{
+        /* #swipe-text{
             position: absolute;
             width: 60px;
             height: 23px;
             right: 40px;
-            /* left: 90%; */
-            /* left: 722.5px; */
             top: 304.5px;
 
             font-family: 'Roboto';
@@ -56,12 +51,9 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
+        } */
         #Build-text{
             position: absolute;
-
-            height: 23.000000000000036px;
-            width: 209.00000000000017px;
             left: 114px;
             top: 24px;
             border-radius: nullpx;
@@ -79,7 +71,6 @@
             position: absolute;
             height: 5px;
             width: 100%;
-            /* left: -26px; */
             top: 63px;
             border-radius: 5px;
             background: linear-gradient(139.36deg, #46EDC8 10.85%, #46D9ED 86.28%);
@@ -91,19 +82,17 @@
             z-index: -1;
         }
 
-        #congrats{
+        /* #congrats{
             position: absolute;
-            width: 320px;
-            height: 196px;
-            left: 82px;
-            top: 129px;
+            left: 50px;
+            top: 80px;
 
             font-family: 'Roboto';
             font-style: normal;
             font-weight: 800;
             font-size: 24px;
             line-height: 28px;
-        }
+        } */
 
         /* loading screen style */
         #loading-screen {
@@ -190,10 +179,10 @@
     </style>
 </head>
 <body>
-    <div id="WebGL_Output"></div>
+    <a id="WebGL_Output" href="348.html"></a>
 
     <div id="iPhone11ProX-346">
-        <div id="Build-text"> Build A Burger</div>
+        <div id="Build-text"> Build a Burger</div>
         <span class="dot" style="background-color:#46D9ED"></span>
         <span class="dot" style="background-color:#46D9ED"></span>
         <span class="dot" style="background-color:#46D9ED"></span>
@@ -201,14 +190,13 @@
     </div>
 
     <div id="menu-image"><img src="images/menu.png"></div>
-    <div id="swipe-text">SWIPE</div>
+    <!-- <div id="swipe-text">SWIPE</div> -->
     <div id="long-bar"></div>
     <div id="congrats">
-        <p style="color: #46E3DB;"> AWESOME JOB! </p>
-        <body style="color:white;">
-        <p>You built the perfect Summer Shandy Burger. </p>
-        <p>Tap on the burger and slide it around for a 360 view.</p>
-        </body>
+        <div style="color: #46E3DB;"> AWESOME JOB! </div>
+        <!-- <body style="color:white;"> -->
+        <div style="color:white">You built the perfect Summer Shandy Burger. Tap on the burger and slide it around for a 360 view.</div>
+        <!-- </body> -->
     </div>
 
     <section id="loading-screen">
