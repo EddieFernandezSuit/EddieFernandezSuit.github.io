@@ -16,3 +16,5 @@ Removed tomatoes from text lettuce/tomatoes
 Removed SWIPE from the bottom of the page
 'great job press to continue' button appears after completing the burger
 Move burger to the right in 347 and moved text up
+
+question which loading screen background color do you like more?
