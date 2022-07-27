@@ -18,10 +18,7 @@
             height: 23px;
             width: 23px;
             right: 40px;
-            /* left: 92%; */
-            /* left: 641.5px; */
             top: 93.5px;
-            /* border-radius: 0px; */
 
         }
 
@@ -30,25 +27,19 @@
             height: 27px;
             width: 27px;
             right: 40px;
-            /* left: 92%; */
-            /* left: 641.5px; */
             top: 204.5px;
-            /* border-radius: 0px; */
         }
         #fried-egg-image{
             position: absolute;
             width: 24px;
             height: 24px;
-            right: 40px;
+            right: 50px;
             top: 263.5px;
         }
         #bottom-bun-image{
             position: absolute;
-            height: 14px;
-            width: 40px;
             left: 182.5px;
             top: 98.5px;
-            /* border-radius: 0px; */
         }
         #top-bun-image{
             position: absolute;
@@ -56,7 +47,6 @@
             width: 18.7467041015625px;
             left: 182.5px;
             top: 153.2467041015625px;
-            /* border-radius: 0px; */
         }
         /* #fried-egg-image{
             position: absolute;
@@ -68,43 +58,28 @@
         } */
         #ketchup-image{
             position: absolute;
-            width: 29px;
-            height: 29px;
             left: 190.5px;
             top: 203.5px;
         }
         #lettuce-image{
             position: absolute;
-            width: 39px;
-            height: 35px;
             left: 188.5px;
             top: 258.5px;
         }
         #patty-image{
             position: absolute;
-            height: 12px;
-            width: 34px;
             right: 40px;
-            /* left: 92%; */
-            /* left: 638.5px; */
             top: 158.5px;
-            /* border-radius: 0px; */
         }
         #menu-image{
             position: absolute;
-            height: 21px;
-            width: 32px;
             left: 49px;
             top: 25px;
-            /* border-radius: 0px; */
         }
         .dot {
             position: relative;
-            /* right: 40px; */
             left: 90%;
-            /* left: 699px; */
             top: 42px;
-            /* border-radius: 0px; */
 
             height: 10px;
             width: 10px;
@@ -231,8 +206,6 @@
             width: 85px;
             height: 16px;
             right: 125px;
-            /* left: 78%; */
-            /* left: 675.5px; */
             top: 209.5px;
 
             font-family: 'Roboto';
@@ -264,8 +237,6 @@
             width: 85px;
             height: 16px;
             right: 130px;
-            /* left: 77%; */
-            /* left: 675.5px; */
             top: 152.5px;
 
             font-family: 'Roboto';
@@ -297,8 +268,6 @@
             width: 85px;
             height: 16px;
             right: 125px;
-            /* left: 78%; */
-            /* left: 675.5px; */
             top: 95.5px;
 
             font-family: 'Roboto';
@@ -310,15 +279,21 @@
 
             color: #FFFFFF;
         }
+        #top-rectangle{
+            position: absolute;
+            width: 100%;
+            height: 45px;
+            background-color: #000B48;
+            border-radius: 10px;
+            z-index: -1;
+        }
         #long-bar{
             position: absolute;
-            height: 5px;
+            height: 20px;
             width: 100%;
-            /* left: -26px; */
-            top: 63px;
-            border-radius: 5px;
+            top: 50px;
             background: linear-gradient(139.36deg, #46EDC8 10.85%, #46D9ED 86.28%);
-            /* border-radius: 5px; */
+            z-index: -2;
         }
         /* #egg-rectangle{
             box-sizing: border-box;
@@ -351,7 +326,6 @@
             position: absolute;
             width: 207px;
             height: 42px;
-            /* left: 3%; */
             left: 26.5px;
             top: 254.5px;
 
@@ -366,8 +340,6 @@
             width: 160px;
             height: 42px;
             right: 26.5px;
-            /* left: 80%; */
-            /* left: 625.5px; */
             top: 197.5px;
 
             border-radius: 10px;
@@ -441,7 +413,7 @@
         }
         #WebGL_Output{
             position: absolute;
-            z-index: -1;
+            z-index: -3;
         }
 
         /* loading screen style */
@@ -452,7 +424,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #000000;
+            background-color: #000B48;
             opacity: 1;
             transition: 1s opacity;
         }
@@ -540,8 +512,8 @@
     <span class="dot"></span>
     <span class="dot"></span>
 
-    <div id="cheese-image"><img src="images/cheese-wedge 2.png"></div>
-    <div id="bacon-image"><img src="images/bacon 1.png"></div>
+    <div id="cheese-image"><img src="images/cheese-wedge.png"></div>
+    <div id="bacon-image"><img src="images/bacon.png"></div>
     <!-- <div id="mushroom-image"><img src="images/mushroom.png"></div> -->
     <div id="bottom-bun-image"><img src="images/bottom-bun.png"></div>
     <div id="top-bun-image"><img src="images/top-bun.png"></div>
@@ -550,6 +522,7 @@
     <div id="lettuce-image"><img src="images/lettuce.png"></div>
     <div id="patty-image"><img src="images/patty.png"></div>
     <div id="menu-image"><img src="images/menu.png"></div>
+    <!-- <div id="long-bar"><img src="images/long-bar.png"></div> -->
     <div id="fried-egg-text">Fried Egg</div>
     <!-- <div id="mushroom-text">Musrooms</div> -->
     <div id="lettuce-text">Lettuce</div>
@@ -562,6 +535,7 @@
     <!-- <div id="swipe-text">SWIPE</div> -->
 
     <div id="long-bar"></div>
+    <div id="top-rectangle"></div>
     <div id="egg-rectangle"></div>
     <!-- <div id="mushroom-rectangle"></div> -->
     <div id="lettuce-rectangle"></div>
@@ -610,22 +584,24 @@
                     document.getElementById('meat-rectangle').style.border = '1px solid #46EBCC'
                     // document.getElementById('mushroom-rectangle').style.border = '1px solid #46EBCC'
                     document.getElementById('top-bun-rectangle').style.border = '1px solid #46EBCC'
-                    document.getElementById('BBQsauce-rectangle').style.border = '1px solid #46EBCC'
+                    document.getElementById('bacon-rectangle').style.border = '1px solid #46EBCC'
                     ingredientOrder.shift()
                     if (ingredientOrder.length == 0){
                         let congrats = document.createElement("a")
                         congrats.href = '347.html'
-                        congrats.textContent = 'Awesome Job! \r\nYou built the perfect Summer Shandy Burger. \r\nPress to continue'
+                        congrats.textContent = 'Awesome Job! \r\nYou built the perfect Summer Shandy Burger \r\nPress to continue'
                         congrats.style.whiteSpace = 'pre'
                         congrats.style.position = 'absolute'
                         congrats.style.color = 'white'
-                        congrats.style.left = '30%'
+                        congrats.style.left = '35%'
                         congrats.style.top = '20%'
                         congrats.style.width = '300px'
                         congrats.style.backgroundColor = '#000B48'
                         congrats.style.borderRadius = '8px'
                         congrats.style.border = '1px solid #46D9ED'
                         congrats.style.textDecoration = 'none'
+                        congrats.style.textAlign = 'center'
+                        congrats.style.padding = '10px'
                         document.body.appendChild(congrats)
                     }
                 }
@@ -690,12 +666,12 @@
 
         const fbxLoader = new FBXLoader(loadingManager)
 
-        var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',.8);
+        var egg = new FoodItem('models/Egg.fbx','egg',fbxLoader,scene, 'egg-rectangle',.81);
         var bacon = new FoodItem('models/Bacon.fbx','Bacon',fbxLoader,scene, 'bacon-rectangle',.9);
-        var BBQsauce = new FoodItem('models/BBQ.fbx', 'BBQsauce', fbxLoader, scene, 'BBQsauce-rectangle',.95)
+        var BBQsauce = new FoodItem('models/BBQ.fbx', 'BBQsauce', fbxLoader, scene, 'BBQsauce-rectangle',.9)
         var bottomBun = new FoodItem('models/BottomBun.fbx','bottomBun', fbxLoader, scene, 'bottom-bun-rectangle',0)        
         var cheese = new FoodItem('models/Cheese.fbx', 'cheese', fbxLoader, scene, 'cheese-rectangle',.7)
-        var lettuce = new FoodItem('models/Lettuce.fbx', 'lettuce', fbxLoader, scene , 'lettuce-rectangle',0.8)
+        var lettuce = new FoodItem('models/Lettuce.fbx', 'lettuce', fbxLoader, scene , 'lettuce-rectangle',0.81)
         var meat = new FoodItem('models/Meat.fbx', 'meat', fbxLoader, scene, 'meat-rectangle',.5)
         // var mushroom = new FoodItem('models/Mushroom.fbx', 'mushroom', fbxLoader, scene, 'mushroom-rectangle',.9)
         var topBun = new FoodItem('models/TopBun.fbx', 'topBun', fbxLoader, scene, 'top-bun-rectangle',.9)
