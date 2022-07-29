@@ -31,16 +31,16 @@
 #     return count
 
 
-# def solution(l):
-#     count = 0
-#     for i, num1 in enumerate(l):
-#         for j, num2 in enumerate(l):
-#             if i < j and num1 < num2 and num2 % num1 == 0:
-#                 for k, num3 in enumerate(l):
-#                         if j < k and num3 % num2 == 0:
-#                             count += 1
-#                             # print([num1,num2,num3])
-#     return count
+def solution(l):
+    count = 0
+    for i, num1 in enumerate(l):
+        for j, num2 in enumerate(l):
+            if i < j and num1 < num2 and num2 % num1 == 0:
+                for k, num3 in enumerate(l):
+                        if j < k and num3 % num2 == 0:
+                            count += 1
+                            print([num1,num2,num3])
+    return count
 
 
 # def solution(l):
@@ -58,25 +58,27 @@
 #                 count += 1
 #     return count
 
-def solution(l):
-    count = 0
-    secondIndex = []
-    for i, num1 in enumerate(l):
-        if num1 != 0:
-            j = i + 1
-            while(j < len(l)):
-                if l[j] != 0 and l[j] % num1 == 0:
-                    secondIndex.append(j)
+# def solution(l):
+#     count = 0
+#     secondIndex = []
+#     for i, num1 in enumerate(l):
+#         if num1 != 0:
+#             j = i + 1
+#             while(j < len(l)):
+#                 if l[j] != 0 and l[j] % num1 == 0:
+#                     secondIndex.append(j)
+#                 j += 1
         
-    for j in secondIndex:
-        k = j + 1
-        while(k < len[l]):
-            if k[l] % l[j] == 0:
-                count += 1
-    return count
+#     for j in secondIndex:
+#         k = j + 1
+#         while(k < len[l]):
+#             if k[l] % l[j] == 0:
+#                 count += 1
+#             k += 1
+#     return count
 
 
-def solution(l):
+# def solution(l):
     # count = 0
     # secondIndex = []
     # for i, num1 in enumerate(l):
@@ -89,11 +91,11 @@ def solution(l):
     #         if l[j] != 0 and j < k and num3 % l[j] == 0:
     #             count += 1
 
-    hash = {}
-    for i, num in enumerate(l):
-        hash[num] = []
-    for i, num in enumerate(l):
-        hash[num].append(i)
+    # hash = {}
+    # for i, num in enumerate(l):
+    #     hash[num] = []
+    # for i, num in enumerate(l):
+    #     hash[num].append(i)
     # for key in hash:
         
         
