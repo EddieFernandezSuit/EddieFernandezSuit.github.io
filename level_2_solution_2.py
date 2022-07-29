@@ -1,3 +1,8 @@
+# pegs is a list of the horizontal posiiton of each gear peg in a line of gear pegs.
+# write a function that returns a list that contains [numerator, denominator] of the ratio of the first gears radius such that if each following
+# gear had the appropriate radius to connect to each previous gear then the first gears radius would be twice the radius of the last gear.
+# If there is no solution then return [-1,-1]
+
 def solution(pegs):
     radius1 = 0
     radius1Ratio = []
