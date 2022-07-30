@@ -5,9 +5,9 @@ When viewing in the browser now hides URL
 The dots on the top right of the screen that represent which page the user is now colored as intended.
 IOS no longer has the white edges.
 Added Loading bars
-
 min zoom distance and max zoom distance
 loadingScreen
+
 removed mushroom button and moved egg button in its place
 change 'Build A Burger' to 'Build a Burger'. (lowercase a)
 Add "Select the ingredients in the correct order to build the burger." text
@@ -16,5 +16,10 @@ Removed tomatoes from text lettuce/tomatoes
 Removed SWIPE from the bottom of the page
 'great job press to continue' button appears after completing the burger
 Move burger to the right in 347 and moved text up
-
 question which loading screen background color do you like more?
+
+
+To Change:
+Blue loading screen background
+cheese cutting through
+long top ribbon curve on ends
