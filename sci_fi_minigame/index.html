@@ -305,13 +305,8 @@
         var clock = new THREE.Clock();
         var loadComplete = false;
         var fps = 30;
-        var now;
-        var then = Date.now();
         var interval = 1000 / fps;
         var delta;
-
-        //Used to record the position of the camera in the previous frame and the current frame
-        var cameraThenPos = new THREE.Vector3(), cameraNowPos = new THREE.Vector3();
 
         //Joystick 
         let fwdValue = 0;
@@ -324,23 +319,78 @@
         
         addJoystick()
 
-        let alien;
+        class ModelObject{
+            constructor(modelFileName, position, animationFileNames){
+                this.object = null;
+                this.mixer = null;
+                this.animationActions = [];
+                this.activeAction = null;
+                this.modelReady = false;
+                this.lastAction = null;
+                this.root = 'models/'
+                this.loadAnimations = this.loadAnimations.bind(this)
+
+                fbxLoader.load(this.root + modelFileName,(object)=>{
+                    object.position.set(position[0],position[1],position[2]);
+                    object.scale.set(.01,.01,.01);
+                    scene.add(object);
+                    this.mixer = new THREE.AnimationMixer(object);
+                    let animation = this.mixer.clipAction(object.animations[0])
+                    this.animationActions.push(animation)
+                    this.activeAction = this.animationActions[0]
+                    this.object = object;
+
+                    this.loadAnimations(animationFileNames, 0)
+                })
+            }
+            loadAnimations(AFN, n){
+                if (n == AFN.length){
+                    this.modelReady = true;
+                    return 0
+                }
+                fbxLoader.load(this.root + AFN[n],(object)=>{
+                    let animation = this.mixer.clipAction((object.animations[0]))
+                    this.animationActions.push(animation)
+                    this.animationActions[1].play()
+
+                    // if(n < animationFileNames.length){
+                    this.loadAnimations(AFN, n + 1)
+                    // }
+                })
+            }
+
+            update(){
+
+            }
+            setAction(toAction){
+                if (toAction != this.activeAction) {
+                    this.lastAction = this.activeAction
+                    this.activeAction = toAction
+                    this.lastAction.fadeOut(.3)
+                    this.activeAction.reset()
+                    this.activeAction.fadeIn(.3)
+                    this.activeAction.play()
+                }
+            }
+        }
+
+        // let alien;
         let alienAngle;
         let alienDirection;
-        let alienMixer;
-        let player;
-        var playerMixer;
+        // let alienMixer;
+        // let player;
+        // var playerMixer;
         let bullets = []
 
-        let alienModelReady = false;
-        let alienAnimationActions = []
-        let alienActiveAction;
-        let alienLastAction;
+        // let alienModelReady = false;
+        // let alienAnimationActions = []
+        // let alienActiveAction;
+        // let alienLastAction;
 
-        let modelReady = false
-        let animationActions = []
-        let activeAction
-        let lastAction
+        // let modelReady = false
+        // let animationActions = []
+        // let activeAction
+        // let lastAction
 
         //player animation paths
         let forwardAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyForwardAim2Guns.FBX'
@@ -350,11 +400,6 @@
 
         var progress = document.getElementById('progress');
         var progressBar = document.getElementById('progressbar');
-
-        // var manager = new THREE.LoadingManager();
-        // manager.onProgress = function (xhr) {
-        //   progressBar.style.width = (xhr.loaded/ xhr.total * 100) + '%'
-        // };
 
         const loadingManager = new THREE.LoadingManager( () => {
             const loadingScreen = document.getElementById( 'loading-screen' );
@@ -369,34 +414,29 @@
 
         const fbxLoader = new FBXLoader(loadingManager)
         
-        fbxLoader.load('models/Arak.fbx', (object) =>{
-            alien = object
-            object.scale.set(0.01, 0.01, 0.01);
-            object.position.z = -10;
-            alienMixer = new THREE.AnimationMixer(object)
-            let animation = alienMixer.clipAction(object.animations[0])
-            alienAnimationActions.push(animation)
-            alienActiveAction = alienAnimationActions[0]
-            scene.add(object)
-            fbxLoader.load(
-                'models/Arack@Walk.fbx',
-                (object) => {
-                    let animation = alienMixer.clipAction(object.animations[0])
-                    alienAnimationActions.push(animation)
-                    alienModelReady = true;
-                    alienAnimationActions[1].play()
-                    // setAlienAction(alienAnimationActions[1])
-                }
-            )
-        })
+        let alien = new ModelObject('Arak.fbx', [0,0,-10], ['Arack@Walk.fbx'])
+        let player = new ModelObject('SciFi_Pirate_Guns_Ver7.fbx', [0,0,5], ['SciFiPirateLieutenantHumanoid@FlyForwardAim2Guns.FBX','SciFiPirateLieutenantHumanoid@FlyRightAim2Guns.FBX','SciFiPirateLieutenantHumanoid@FlyBackwardsAim2Guns.FBX','SciFiPirateLieutenantHumanoid@FlyLeftAim2Guns.FBX'])
 
-        //load the wizard
-        fbxLoader.load('models/PhilWizard_idle_Ver5.fbx', (object) =>{
-            object.scale.set(0.005, 0.005, 0.005);
-            object.position.z = 10;
-            object.rotation.y = Math.PI
-            scene.add(object)
-        })
+        // fbxLoader.load('models/Arak.fbx', (object) =>{
+        //     alien = object
+        //     object.scale.set(0.01, 0.01, 0.01);
+        //     object.position.z = -10;
+        //     alienMixer = new THREE.AnimationMixer(object)
+        //     let animation = alienMixer.clipAction(object.animations[0])
+        //     alienAnimationActions.push(animation)
+        //     alienActiveAction = alienAnimationActions[0]
+        //     scene.add(object)
+        //     fbxLoader.load(
+        //         'models/Arack@Walk.fbx',
+        //         (object) => {
+        //             let animation = alienMixer.clipAction(object.animations[0])
+        //             alienAnimationActions.push(animation)
+        //             alienModelReady = true;
+        //             alienAnimationActions[1].play()
+        //             // setAlienAction(alienAnimationActions[1])
+        //         }
+        //     )
+        // })
 
         fbxLoader.load('models/PhilWizard_idle_Ver6.fbx', (object) =>{
             object.scale.set(0.005, 0.005, 0.005);
@@ -406,65 +446,64 @@
             scene.add(object)
         })
 
-        //load the player character
-        fbxLoader.load('models/SciFi_Pirate_Guns_Ver7.fbx',
-            (object) => {
-                player = object;
-                object.scale.set(0.01, 0.01, 0.01)
-                object.position.z = 5
-                centerControls()
-                controls.enableZoom = false
-                playerMixer = new THREE.AnimationMixer(object)
-                let animationAction = playerMixer.clipAction(object.animations[0])
-                animationActions.push(animationAction)
-                activeAction = animationActions[0]
-                scene.add(object)
-                fbxLoader.load(forwardAnimationPath,
-                    (object) => {
-                        let animationAction = playerMixer.clipAction(object.animations[0])
-                        animationActions.push(animationAction)
-                        fbxLoader.load(rightAnimationPath,
-                            (object) => {
-                                let animationAction = playerMixer.clipAction(object.animations[0])
-                                animationActions.push(animationAction)
-                                fbxLoader.load(
-                                    backwardAnimationPath,
-                                    (object) => {
-                                        object.animations[0].tracks.shift()
-                                        let animationAction = playerMixer.clipAction(object.animations[0])
-                                        animationActions.push(animationAction)
-                                        fbxLoader.load(
-                                            leftAnimationPath,
-                                            (object) => {
-                                                let animationAction = playerMixer.clipAction(object.animations[0])
-                                                animationActions.push(animationAction)
-                                                modelReady = true                                                
-                                            })
-                                    })
-                            })
-                    })
-            })
+        // //load the player character
+        // fbxLoader.load('models/SciFi_Pirate_Guns_Ver7.fbx',
+        //     (object) => {
+        //         // player = object;
+        //         object.scale.set(0.01, 0.01, 0.01)
+        //         object.position.z = 5
+        //         centerControls()
+        //         playerMixer = new THREE.AnimationMixer(object)
+        //         let animationAction = playerMixer.clipAction(object.animations[0])
+        //         animationActions.push(animationAction)
+        //         activeAction = animationActions[0]
+        //         scene.add(object)
+        //         fbxLoader.load(forwardAnimationPath,
+        //             (object) => {
+        //                 let animationAction = playerMixer.clipAction(object.animations[0])
+        //                 animationActions.push(animationAction)
+        //                 fbxLoader.load(rightAnimationPath,
+        //                     (object) => {
+        //                         let animationAction = playerMixer.clipAction(object.animations[0])
+        //                         animationActions.push(animationAction)
+        //                         fbxLoader.load(
+        //                             backwardAnimationPath,
+        //                             (object) => {
+        //                                 object.animations[0].tracks.shift()
+        //                                 let animationAction = playerMixer.clipAction(object.animations[0])
+        //                                 animationActions.push(animationAction)
+        //                                 fbxLoader.load(
+        //                                     leftAnimationPath,
+        //                                     (object) => {
+        //                                         let animationAction = playerMixer.clipAction(object.animations[0])
+        //                                         animationActions.push(animationAction)
+        //                                         modelReady = true                                                
+        //                                     })
+        //                             })
+        //                     })
+        //             })
+        //     })
 
-        const setAction = (toAction) => {
-            if (toAction != activeAction) {
-                lastAction = activeAction
-                activeAction = toAction
-                lastAction.fadeOut(.3)
-                activeAction.reset()
-                activeAction.fadeIn(.3)
-                activeAction.play()
-            }
-        }
-        const setAlienAction = (toAction) => {
-            if (toAction != alienActiveAction) {
-                alienLastAction = alienActiveAction
-                alienActiveAction = toAction
-                alienLastAction.fadeOut(.5)
-                alienActiveAction.reset()
-                alienActiveAction.fadeIn(.5)
-                alienActiveAction.play()
-            }
-        }
+        // const setAction = (toAction) => {
+        //     if (toAction != activeAction) {
+        //         lastAction = activeAction
+        //         activeAction = toAction
+        //         lastAction.fadeOut(.3)
+        //         activeAction.reset()
+        //         activeAction.fadeIn(.3)
+        //         activeAction.play()
+        //     }
+        // }
+        // const setAlienAction = (toAction) => {
+        //     if (toAction != alienActiveAction) {
+        //         alienLastAction = alienActiveAction
+        //         alienActiveAction = toAction
+        //         alienLastAction.fadeOut(.5)
+        //         alienActiveAction.reset()
+        //         alienActiveAction.fadeIn(.5)
+        //         alienActiveAction.play()
+        //     }
+        // }
 
         window.shoot = shoot
         window.onload = start;
@@ -587,11 +626,13 @@
                 bullet.update()
             });
 
-            let delta = clock.getDelta()
+            delta = clock.getDelta()
             
             if (mixer) {mixer.update(delta);}
-            if (playerMixer) {playerMixer.update(delta)}
-            if (alienModelReady) {alienMixer.update(delta)}
+            // if (playerMixer) {playerMixer.update(delta)}
+            if (player && player.mixer){player.mixer.update(delta)}
+            // if (alienModelReady) {alienMixer.update(delta)}
+            if(alien && alien.mixer){alien.mixer.update(delta)}
 
             controls?.update(delta);
 
@@ -765,45 +806,44 @@
         
         //updates the alien's position to chase the player
         function updateAlien(){
-            if(alien != null && player != null){
-                alienDirection = new THREE.Vector3(-alien.position.x + player.position.x,0, -alien.position.z + player.position.z)
-                alienDirection.normalize();
-                let angle = Math.atan(alienDirection.x/alienDirection.z)
+            if(alien.object != null && player != null){
+                alienDirection = new THREE.Vector3(-alien.object.position.x + player.object.position.x, 0, -alien.object.position.z + player.object.position.z).normalize()
+                alienAngle = Math.atan(alienDirection.x/alienDirection.z)
                 if(alienDirection.z < 0){
-                    angle += Math.PI
+                    alienAngle += Math.PI
                 }
 
-                alien.rotation.y = angle
-                alien.position.addScaledVector(alienDirection, .005)
+                alien.object.rotation.y = alienAngle
+                alien.object.position.addScaledVector(alienDirection, .005)
             }
         }
         
         //updates the players position based on the players joystick movements
         function updatePlayer(){
-
-            if (player != null && modelReady != null && controls != null){
+            if (player.modelReady && controls){
+                centerControls()
 
                 const angle = controls.getAzimuthalAngle()
-                player.rotation.y = angle + Math.PI
-                
+                player.object.rotation.y = angle + Math.PI
                 if(fwdValue == 0 && bkdValue == 0 && lftValue == 0 && rgtValue == 0){
-                    setAction(animationActions[0])
+                    player.setAction(player.animationActions[0])
                 }
                 else{
                     let directionValues = [fwdValue, rgtValue, bkdValue, lftValue]
                     let largestIndex = directionValues.indexOf(Math.max(...directionValues))
-                    setAction(animationActions[largestIndex+1])
+                    player.setAction(player.animationActions[largestIndex+1])
                     tempVector.set(rgtValue-lftValue, 0, bkdValue-fwdValue).applyAxisAngle(upVector, angle)
-                    player.position.addScaledVector(tempVector,.02)
+                    player.object.position.addScaledVector(tempVector,.02)
                     camera.position.addScaledVector(tempVector,.02)
-                    centerControls()
+                    // centerControls()
                 }
             }
         };
 
         //centers the camera on a point slightly above the character
         function centerControls(){
-            controls.target = new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z)
+            controls.target = new THREE.Vector3(player.object.position.x, player.object.position.y + 2, player.object.position.z)
+            controls.enableZoom = false
         }
 
         //creates a projectile starting a the players location and flying in the direction the player is facing
@@ -814,13 +854,14 @@
                 var sphereMaterial = new THREE.MeshNormalMaterial(); 
                 var sphereMesh = new THREE.Mesh( geometry, sphereMaterial );
                 scene.add( sphereMesh );
-                sphereMesh.position.set(player.position.x, player.position.y+1, player.position.z)
+                sphereMesh.position.set(player.object.position.x, player.object.position.y+1, player.object.position.z)
 
-                var directionVector = new THREE.Vector3(-camera.position.x + player.position.x, 0, -camera.position.z + player.position.z)
+                var directionVector = new THREE.Vector3(-camera.position.x + player.object.position.x, 0, -camera.position.z + player.object.position.z)
                 class Bullet{
                     constructor(directionVector, cubeMesh){
                         this.directionVector = directionVector
                         this.cubeMesh = cubeMesh
+                        this.cubeMesh.color = 'FFFFFF'
                     }
 
                     update(){

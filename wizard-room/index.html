@@ -124,6 +124,8 @@
 
         const controls = new OrbitControls(camera, renderer.domElement)
         controls.target.set(0, 0, 0)
+        controls.minDistance = 5
+        controls.maxDistance = 20
 
         var ambientLight = new THREE.AmbientLight(0xffffff, 2)
         ambientLight.position.y = 5
@@ -143,16 +145,19 @@
         }
 
         const fbxLoader = new FBXLoader(loadingManager)
-        const fileNames = ['AssetsCent_v2.fbx','AssetsDer_v2.fbx','AssetsIzq_v2.fbx','CofreMetal_v2.fbx','Lamparas_v2.fbx','Librero_v2.fbx','MesotaDer_v2.fbx','MesotaIzq_v2.fbx','Pared_V3.fbx','Piso_v2.fbx','Puerta_v2.fbx','PhilWizard_Idle_Ver6.fbx']
-        
+
+        const fileNames = ['AssetsCent_v2.fbx','AssetsDer_v2.fbx','AssetsIzq_v2.fbx','CofreMetal_v2.fbx','Lamparas_V3.fbx','Librero_v2.fbx','MesotaDer_v2.fbx','MesotaIzq_v2.fbx','Pared_V3.fbx','Piso_v2.fbx','Puerta_v2.fbx','PhilWizard_Idle_Ver6.fbx']
+        // const fileNames = ['Pared_V3.fbx']
         for(let i = 0; i < fileNames.length; i++){
             let filePath = 'models/' + fileNames[i]
             fbxLoader.load(filePath, (object) =>{
-                object.scale.set(0.01, 0.01, 0.01);
+                object.scale.set(.01, .01, .01);
+                if (fileNames[i] == 'PhilWizard_Idle_Ver6.fbx'){
+                    object.position.y = .8
+                }
                 scene.add(object)
                 console.log('Loaded ' + fileNames[i])
             })
-            console.log('Loaded ' + fileNames[i])
         }
 
         window.addEventListener("resize", onResize, false);
