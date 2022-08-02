@@ -287,7 +287,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.1/nipplejs.js"></script>
     <script type="module">
-
         import * as THREE from 'https://cdn.skypack.dev/three@0.130.0/build/three.module.js';
         import { OrbitControls } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/controls/OrbitControls.js';
         import { FBXLoader } from 'https://cdn.skypack.dev/three@0.130.0/examples/jsm/loaders/FBXLoader.js'
@@ -303,7 +302,7 @@
 
         var mixer;
         var clock = new THREE.Clock();
-        var loadComplete = false;
+        // var loadComplete = false;
         var fps = 30;
         var interval = 1000 / fps;
         var delta;
@@ -352,10 +351,7 @@
                     let animation = this.mixer.clipAction((object.animations[0]))
                     this.animationActions.push(animation)
                     this.animationActions[1].play()
-
-                    // if(n < animationFileNames.length){
                     this.loadAnimations(AFN, n + 1)
-                    // }
                 })
             }
 
@@ -371,32 +367,32 @@
                     this.activeAction.fadeIn(.3)
                     this.activeAction.play()
                 }
-            }
+            }            
         }
 
-        // let alien;
+         /**
+         * Calculates collision detection parameters.
+         */
+         function calculateCollisionPoints( mesh, scale, type = 'collision' ) { 
+          // Compute the bounding box after scale, translation, etc.
+          var bbox = new THREE.Box3().setFromObject(this.object);
+ 
+          var bounds = {
+            type: type,
+            xMin: bbox.min.x,
+            xMax: bbox.max.x,
+            yMin: bbox.min.y,
+            yMax: bbox.max.y,
+            zMin: bbox.min.z,
+            zMax: bbox.max.z,
+          };
+ 
+          collisions.push( bounds );
+        }
+
         let alienAngle;
         let alienDirection;
-        // let alienMixer;
-        // let player;
-        // var playerMixer;
         let bullets = []
-
-        // let alienModelReady = false;
-        // let alienAnimationActions = []
-        // let alienActiveAction;
-        // let alienLastAction;
-
-        // let modelReady = false
-        // let animationActions = []
-        // let activeAction
-        // let lastAction
-
-        //player animation paths
-        let forwardAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyForwardAim2Guns.FBX'
-        let backwardAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyBackwardsAim2Guns.FBX'
-        let rightAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyRightAim2Guns.FBX'
-        let leftAnimationPath = 'models/SciFiPirateLieutenantHumanoid@FlyLeftAim2Guns.FBX'
 
         var progress = document.getElementById('progress');
         var progressBar = document.getElementById('progressbar');
@@ -416,7 +412,7 @@
         
         let alien = new ModelObject('Arak.fbx', [0,0,-10], ['Arack@Walk.fbx'])
         let player = new ModelObject('SciFi_Pirate_Guns_Ver7.fbx', [0,0,5], ['SciFiPirateLieutenantHumanoid@FlyForwardAim2Guns.FBX','SciFiPirateLieutenantHumanoid@FlyRightAim2Guns.FBX','SciFiPirateLieutenantHumanoid@FlyBackwardsAim2Guns.FBX','SciFiPirateLieutenantHumanoid@FlyLeftAim2Guns.FBX'])
-
+        // let wizard = new ModelObject('PhilWizard_Idle_Ver6.fbx', [0,0,-10], [])
         // fbxLoader.load('models/Arak.fbx', (object) =>{
         //     alien = object
         //     object.scale.set(0.01, 0.01, 0.01);
@@ -438,13 +434,13 @@
         //     )
         // })
 
-        fbxLoader.load('models/PhilWizard_idle_Ver6.fbx', (object) =>{
-            object.scale.set(0.005, 0.005, 0.005);
-            object.position.z = 10;
-            object.position.x = -1
-            object.rotation.y = Math.PI
-            scene.add(object)
-        })
+        // fbxLoader.load('models/PhilWizard_idle_Ver6.fbx', (object) =>{
+        //     object.scale.set(0.005, 0.005, 0.005);
+        //     object.position.z = 10;
+        //     object.position.x = -1
+        //     object.rotation.y = Math.PI
+        //     scene.add(object)
+        // })
 
         // //load the player character
         // fbxLoader.load('models/SciFi_Pirate_Guns_Ver7.fbx',
@@ -614,7 +610,7 @@
                         //所有资料加载完毕，执行回调函数
                         //加载完成后强行渲染一次
                         renderer.render(scene, camera);
-                        loadComplete = true;
+                        // loadComplete = true;
                     }
                 }
             });
