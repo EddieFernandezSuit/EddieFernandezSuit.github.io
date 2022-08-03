@@ -15,3 +15,4 @@ When Arack dies a new Arack spawns in
 
 Wizard Room:
 Changed from wizard's legs clipping through the platform to now properly standing ontop of it.
+Min and max zoom in and zoom out
