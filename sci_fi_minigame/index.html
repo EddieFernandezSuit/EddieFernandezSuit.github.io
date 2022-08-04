@@ -753,7 +753,9 @@
                         // alien.animationActions[2].clampWhenFinished = true;
                         // alien.animationActions[2].enable = true;
                         alien.setAction(alien.animationActions[2])
+                        alien.speed = 0
                         setTimeout(()=>{
+                            alien.speed = .005
                             playerHealth -= 1;
                             let healthDots = document.getElementById('dots');
                             healthDots.removeChild(healthDots.firstElementChild);
