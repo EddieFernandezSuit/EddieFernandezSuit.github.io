@@ -1,25 +1,18 @@
-Burger Demo
-Top bar strecthes all the way across the top now instead being just a little short.
-Moved Every UI element up by 10px, so now there is nothing at the bottom of the screen that cannot be accessed.
-When viewing in the browser now hides URL
-The dots on the top right of the screen that represent which page the user is now colored as intended.
-IOS no longer has the white edges.
-Added Loading bars
-min zoom distance and max zoom distance
-loadingScreen
+Changed
+Burger Demo:
+Roboto Font
 
-removed mushroom button and moved egg button in its place
-change 'Build A Burger' to 'Build a Burger'. (lowercase a)
-Add "Select the ingredients in the correct order to build the burger." text
-Render eggs beneath the lettuce
-Removed tomatoes from text lettuce/tomatoes
-Removed SWIPE from the bottom of the page
-'great job press to continue' button appears after completing the burger
-Move burger to the right in 347 and moved text up
-question which loading screen background color do you like more?
+Scifi Shooter:
+Added Arack Attack animation
+Added Arack Death animation
+Added Player Health UI
+Arack and player collision Detection
+Players now take damage when colliding with Arack
+Player dies when health bar drops to 0
+Bullet and Arack collision Detection
+Arack now dies when colliding with Bullet
+When Arack dies a new Arack spawns in
 
-
-To Change:
-Blue loading screen background
-cheese cutting through
-long top ribbon curve on ends
+Wizard Room:
+Changed from wizard's legs clipping through the platform to now properly standing ontop of it.
+Min and max zoom in and zoom out
