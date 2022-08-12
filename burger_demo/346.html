@@ -378,7 +378,7 @@
                         let congrats = document.createElement("a")
                         congrats.className = 'ingredients-text'
                         congrats.href = '347.html'
-                        congrats.textContent = 'Awesome Job! \r\nYou built the perfect Summer Shandy Burger. \r\nPress to continue.'
+                        congrats.textContent = 'Awesome Job! \r\nYou built the perfect Summer Shandy Burger. \r\n\nTAP TO CONTINUE.'
                         congrats.style.whiteSpace = 'pre'
                         congrats.style.position = 'absolute'
                         congrats.style.color = 'white'
@@ -413,7 +413,7 @@
         renderer.shadowMap.enabled = true;
         renderer.setSize(rendererWidth, rendererHeight)
         document.getElementById('WebGL_Output').appendChild(renderer.domElement)
-        document.body.requestFullscreen();
+        // document.body.requestFullscreen();
         // window.scrollTo( 0, 1 );
         
         const scene = new THREE.Scene();
