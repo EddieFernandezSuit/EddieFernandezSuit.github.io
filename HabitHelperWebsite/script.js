@@ -48,6 +48,8 @@ const initializeTimer = () => {
         let allTasksComplete = currentTask.index + 1 >= tasks.length;
 
         if(allTasksComplete){
+            const totalSum = Object.values(taskTimeData).reduce((sum, value) => sum + Number(value), 0).toFixed(2);
+            taskTimeData['total'] = totalSum;
             timeData.push(taskTimeData);
             localStorage.setItem('timeData', JSON.stringify(timeData));
             displayDictionary(taskTimeData);
@@ -118,7 +120,6 @@ const initializeTimer = () => {
 
     const pastTime = {date: new Date()};
     const taskTimeData = {};
-
     const currentTask = {index: 0}
     const startButton = document.getElementById("startButton");
     const taskElement = document.getElementById("currentTask");
