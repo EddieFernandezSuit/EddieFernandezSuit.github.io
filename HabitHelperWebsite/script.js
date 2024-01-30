@@ -19,42 +19,41 @@ const timer = (timeSeconds, timerCompleteAction) => {
 }
 
 const initializeTimer = () => {
-    // const tasks = [
-    //     {'name': 'Weight', 'time': 0},
-    //     {'name': 'Brush & Floss', 'time': 0},
-    //     {'name': 'Exercise', 'time': 0},
-    //     {'name': 'Stretch 1', 'time': 60},
-    //     {'name': 'Stretch 2', 'time': 60},
-    //     {'name': 'Stretch 3', 'time': 60},
-    //     {'name': 'Stretch 4', 'time': 60},
-    //     {'name': 'Stretch 5', 'time': 60},
-    //     {'name': 'Read', 'time': 60 * 2},
-    //     {'name': 'Write', 'time': 60 * 1},
-    //     {'name': 'Meditate', 'time': 60 * 5},
-    //     {'name': 'Outside', 'time': 0},
-    //     // {'name': 'Apply', 'time': 60 * 5},
-    //     {'name': 'Clean', 'time': 60 * 0},
-    //     {'name': 'Optimize', 'time': 60 * 10},
-    //     {'name': 'Eat', 'time': 60 * 13},
-    // ]
-
     const tasks = [
-        {'name': 'Weight', 'time': 1},
+        {'name': 'Weight', 'time': 0},
         {'name': 'Brush & Floss', 'time': 0},
         {'name': 'Exercise', 'time': 0},
-        {'name': 'Stretch 1', 'time': 0},
-        {'name': 'Stretch 2', 'time': 0},
-        {'name': 'Stretch 3', 'time': 0},
-        {'name': 'Stretch 4', 'time': 0},
-        {'name': 'Stretch 5', 'time': 0},
-        {'name': 'Read', 'time': 0 * 2},
-        {'name': 'Write', 'time': 0 * 1},
-        {'name': 'Meditate', 'time': 0 * 5},
+        {'name': 'Stretch 1', 'time': 60},
+        {'name': 'Stretch 2', 'time': 60},
+        {'name': 'Stretch 3', 'time': 60},
+        {'name': 'Stretch 4', 'time': 60},
+        {'name': 'Stretch 5', 'time': 60},
+        {'name': 'Read', 'time': 60 * 2},
+        {'name': 'Write', 'time': 60 * 1},
+        {'name': 'Meditate', 'time': 60 * 5},
         {'name': 'Outside', 'time': 0},
-        {'name': 'Clean', 'time': 0 * 0},
-        {'name': 'Optimize', 'time': 0 * 10},
-        {'name': 'Eat', 'time': 0 * 13},
+        {'name': 'Clean', 'time': 60 * 0},
+        {'name': 'Optimize', 'time': 60 * 10},
+        {'name': 'Eat', 'time': 60 * 13},
     ]
+
+    // const tasks = [
+    //     {'name': 'Weight', 'time': 1},
+    //     {'name': 'Brush & Floss', 'time': 0},
+    //     {'name': 'Exercise', 'time': 0},
+    //     {'name': 'Stretch 1', 'time': 0},
+    //     {'name': 'Stretch 2', 'time': 0},
+    //     {'name': 'Stretch 3', 'time': 0},
+    //     {'name': 'Stretch 4', 'time': 0},
+    //     {'name': 'Stretch 5', 'time': 0},
+    //     {'name': 'Read', 'time': 0 * 2},
+    //     {'name': 'Write', 'time': 0 * 1},
+    //     {'name': 'Meditate', 'time': 0 * 5},
+    //     {'name': 'Outside', 'time': 0},
+    //     {'name': 'Clean', 'time': 0 * 0},
+    //     {'name': 'Optimize', 'time': 0 * 10},
+    //     {'name': 'Eat', 'time': 0 * 13},
+    // ]
 
     const pastTime = {date: new Date()};
     const taskTimeData = {};
