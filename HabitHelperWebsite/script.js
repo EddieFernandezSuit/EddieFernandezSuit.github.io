@@ -18,7 +18,68 @@ const timer = (timeSeconds, timerCompleteAction) => {
     }, 1000);
 }
 
+function displayDictionary(dictionary) {
+    const container = document.getElementById('dictionaryContainer');
+    const list = document.createElement('ul');
+
+    // Iterate over the dictionary and create list items
+    for (const key in dictionary) {
+      if (dictionary.hasOwnProperty(key)) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${key}: ${dictionary[key]}`;
+        list.appendChild(listItem);
+      }
+    }
+
+    // Append the list to the container
+    container.appendChild(list);
+}
+
 const initializeTimer = () => {
+    const timerCompleteAction = (timer) => {
+        const audio = new Audio('beep.mp3')
+        audio.play()
+        setTimerCount(timer, 0);
+        clearInterval(timer.interval);
+        updateNextTask(currentTask, tasks);
+    }
+
+    const updateNextTask = (currentTask, tasks) => {
+        let allTasksComplete = currentTask.index + 1 >= tasks.length;
+
+        if(allTasksComplete){
+            timeData.push(taskTimeData);
+            localStorage.setItem('timeData', JSON.stringify(timeData));
+            displayDictionary(taskTimeData);
+            return;
+        }
+        currentTask.index += 1
+        const taskElement = document.getElementById("currentTask");
+        taskElement.textContent = tasks[currentTask.index]['name']
+        if(tasks[currentTask.index].time > 0){
+            timer(tasks[currentTask.index].time, timerCompleteAction)
+        }
+    }
+
+    const getMinutesElapsed = (pastTime) => {
+        let minutes = ((new Date() - pastTime.date) / 1000) / 60;
+        pastTime.date = new Date();
+        return minutes.toFixed(2);
+    }
+
+    const onClickStartButton = () => {
+        taskTimeData[tasks[currentTask.index].name] = getMinutesElapsed(pastTime);
+
+
+        if(tasks[currentTask.index]['time'] === 0)
+        {
+            updateNextTask(currentTask, tasks);
+        }
+        else 
+        {
+            timer(tasks[currentTask.index]['time'], timerCompleteAction)
+        }
+    }
     const tasks = [
         {'name': 'Weight', 'time': 0},
         {'name': 'Brush & Floss', 'time': 0},
@@ -72,51 +133,6 @@ const initializeTimer = () => {
         timeData = []
     }
 
-    console.log(timeData);
-
-    const timerCompleteAction = (timer) => {
-        const audio = new Audio('beep.mp3')
-        audio.play()
-        setTimerCount(timer, 0);
-        clearInterval(timer.interval);
-        updateNextTask(currentTask, tasks);
-    }
-
-    const updateNextTask = (currentTask, tasks) => {
-        if(currentTask.index + 1 >= tasks.length){
-            timeData.push(taskTimeData);
-            localStorage.setItem('timeData', JSON.stringify(timeData));
-            return;
-        }
-        currentTask.index += 1
-        const taskElement = document.getElementById("currentTask");
-        taskElement.textContent = tasks[currentTask.index]['name']
-        if(tasks[currentTask.index].time > 0){
-            timer(tasks[currentTask.index].time, timerCompleteAction)
-        }
-    }
-
-    const getMinutesElapsed = (pastTime) => {
-        let minutes = ((new Date() - pastTime.date) / 1000) / 60;
-        pastTime.date = new Date();
-        return minutes.toFixed(2);
-    }
-
-    const onClickStartButton = () => {
-        taskTimeData[tasks[currentTask.index].name] = getMinutesElapsed(pastTime);
-
-
-        if(tasks[currentTask.index]['time'] === 0)
-        {
-            updateNextTask(currentTask, tasks);
-        }
-        else 
-        {
-            timer(tasks[currentTask.index]['time'], timerCompleteAction)
-        }
-    }
-
-    // Event listener for the button click
     startButton.addEventListener("click", onClickStartButton);
 };
 
