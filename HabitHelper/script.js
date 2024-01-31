@@ -83,7 +83,7 @@ const initializeTimer = () => {
         }
     }
     const tasks = [
-        {'name': 'Weight', 'time': 0},
+        {'name': 'Weight', 'time': 1},
         {'name': 'Brush & Floss', 'time': 0},
         {'name': 'Exercise', 'time': 0},
         {'name': 'Stretch 1', 'time': 60},
@@ -122,6 +122,7 @@ const initializeTimer = () => {
     const taskTimeData = {};
     const currentTask = {index: 0}
     const startButton = document.getElementById("startButton");
+    const testButton = document.getElementById("a");
     const taskElement = document.getElementById("currentTask");
     taskElement.textContent = tasks[0]['name']
 
@@ -135,6 +136,7 @@ const initializeTimer = () => {
     }
 
     startButton.addEventListener("click", onClickStartButton);
+    testButton.addEventListener("click", () => {const audio = new Audio('beep.mp3');audio.play();});
 };
 
 document.addEventListener("DOMContentLoaded", initializeTimer);
