@@ -1,12 +1,12 @@
 
 
-const setTimerCount = (timer, newCount) =>{
+function setTimerCount(timer, newCount){
     timer.count = newCount
     const timerCounterElement = document.getElementById("timerCounter");
     timerCounterElement.textContent = timer.count
 }
 
-const timer = (timeSeconds, timerCompleteAction) => {
+function timer(timeSeconds, timerCompleteAction) {
     const timer = {
         count: 0,
         interval: null,
@@ -47,6 +47,7 @@ const initializeTimer = () => {
     }
 
     const updateNextTask = (currentTask, tasks) => {
+        taskTimeData[tasks[currentTask.index].name] = calculateMinutesElapsed(pastTime);
         let allTasksComplete = currentTask.index + 1 >= tasks.length;
 
         if(allTasksComplete){
@@ -65,27 +66,15 @@ const initializeTimer = () => {
         }
     }
 
-    const getMinutesElapsed = (pastTime) => {
+    const calculateMinutesElapsed = (pastTime) => {
         let minutes = ((new Date() - pastTime.date) / 1000) / 60;
         pastTime.date = new Date();
         return minutes.toFixed(2);
     }
 
-    const onClickStartButton = () => {
-        taskTimeData[tasks[currentTask.index].name] = getMinutesElapsed(pastTime);
-
-
-        if(tasks[currentTask.index]['time'] === 0)
-        {
-            updateNextTask(currentTask, tasks);
-        }
-        else 
-        {
-            timer(tasks[currentTask.index]['time'], timerCompleteAction)
-        }
-    }
     const tasks = [
-        {'name': 'Weight', 'time': 1},
+        {'name': 'Wake Up', 'time': 0},
+        {'name': 'Weight', 'time': 0},
         {'name': 'Brush & Floss', 'time': 0},
         {'name': 'Exercise', 'time': 0},
         {'name': 'Stretch 1', 'time': 60},
@@ -103,10 +92,11 @@ const initializeTimer = () => {
     ]
 
     // const tasks = [
-    //     {'name': 'Weight', 'time': 1},
+    //     {'name': 'Wake Up', 'time': 0},
+    //     {'name': 'Weight', 'time': 10},
     //     {'name': 'Brush & Floss', 'time': 0},
-    //     {'name': 'Exercise', 'time': 0},
-    //     {'name': 'Stretch 1', 'time': 0},
+    //     {'name': 'Exercise', 'time': 10},
+    //     {'name': 'Stretch 1', 'time': 10},
     //     {'name': 'Stretch 2', 'time': 0},
     //     {'name': 'Stretch 3', 'time': 0},
     //     {'name': 'Stretch 4', 'time': 0},
@@ -128,16 +118,15 @@ const initializeTimer = () => {
     const taskElement = document.getElementById("currentTask");
     taskElement.textContent = tasks[0]['name']
 
-    // localStorage.setItem('timeData', [])
-    let td = localStorage.getItem('timeData');
+    let timeDataRaw = localStorage.getItem('timeData');
     let timeData;
-    if(td){
-        timeData = JSON.parse(td);
+    if(timeDataRaw){
+        timeData = JSON.parse(timeDataRaw);
     }else{
         timeData = []
     }
 
-    startButton.addEventListener("click", onClickStartButton);
+    startButton.addEventListener("click", () => updateNextTask(currentTask, tasks));
     testButton.addEventListener("click", () => {const audio = new Audio('beep.mp3');audio.play();});
 };
 
