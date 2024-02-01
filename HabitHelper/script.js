@@ -1,3 +1,5 @@
+
+
 const setTimerCount = (timer, newCount) =>{
     timer.count = newCount
     const timerCounterElement = document.getElementById("timerCounter");
