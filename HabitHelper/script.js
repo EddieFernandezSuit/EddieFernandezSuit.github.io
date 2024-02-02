@@ -27,7 +27,7 @@ const GIST_ID = '75701f3ca46165618b6c1689214c8e75'; // Replace with your Gist ID
 const GIST_API_URL = `https://api.github.com/gists/${GIST_ID}`;
 
 const convertToCSV = (data) => {
-    header = Object.keys(data[0]);
+    const header = Object.keys(data[0]);
     const rows = data.map(obj => {
         const values = header.map(key => obj[key] || ''); // Use empty string if property is not present
         return values.join(',');
@@ -42,7 +42,7 @@ const saveToGist = (data, fileName) => {
     fetch(GIST_API_URL, {
         method: 'PATCH',
         headers: {
-            'Authorization': 'Bearer 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', // Replace with your GitHub token
+            'Authorization': 'Bearer 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', // Replace with your GitHub token
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -92,7 +92,8 @@ function getCurrentDate() {
 }
 
 function playSound(){
-    const audio = new Audio('beep.mp3');
+    const soundFile = 'nice.mp3'
+    const audio = new Audio('nice.mp3');
     audio.play();
 }
 
@@ -130,7 +131,6 @@ const initializeTimer = async () => {
         }
 
         taskTime[tasks[currentTask.index].name] = calculateMinutesElapsed(pastTime);
-        console.log(taskTime)
         currentTask.index += 1;
         let allTasksComplete = currentTask.index >= tasks.length;
         if(allTasksComplete){
@@ -152,43 +152,43 @@ const initializeTimer = async () => {
     }
 
 
-    // const tasks = [
-    //     {'name': 'Wake Up', 'time': 0},
-    //     {'name': 'Weight', 'time': 0},
-    //     {'name': 'Brush & Floss', 'time': 0},
-    //     {'name': 'Exercise', 'time': 0},
-    //     {'name': 'Stretch 1', 'time': 60},
-    //     {'name': 'Stretch 2', 'time': 60},
-    //     {'name': 'Stretch 3', 'time': 60},
-    //     {'name': 'Stretch 4', 'time': 60},
-    //     {'name': 'Stretch 5', 'time': 60},
-    //     {'name': 'Read', 'time': 60 * 2},
-    //     {'name': 'Write', 'time': 60 * 1},
-    //     {'name': 'Meditate', 'time': 60 * 5},
-    //     {'name': 'Outside', 'time': 0},
-    //     {'name': 'Clean', 'time': 60 * 0},
-    //     {'name': 'Optimize', 'time': 60 * 10},
-    //     {'name': 'Eat', 'time': 60 * 13},
-    // ]
-
     const tasks = [
         {'name': 'Wake Up', 'time': 0},
         {'name': 'Weight', 'time': 0},
         {'name': 'Brush & Floss', 'time': 0},
         {'name': 'Exercise', 'time': 0},
-        {'name': 'Stretch 1', 'time': 0},
-        {'name': 'Stretch 2', 'time': 0},
-        {'name': 'Stretch 3', 'time': 0},
-        {'name': 'Stretch 4', 'time': 0},
-        {'name': 'Stretch 5', 'time': 0},
-        {'name': 'Read', 'time': 1 * 2},
-        {'name': 'Write', 'time': 0 * 1},
-        {'name': 'Meditate', 'time': 0 * 5},
+        {'name': 'Stretch 1', 'time': 60},
+        {'name': 'Stretch 2', 'time': 60},
+        {'name': 'Stretch 3', 'time': 60},
+        {'name': 'Stretch 4', 'time': 60},
+        {'name': 'Stretch 5', 'time': 60},
+        {'name': 'Read', 'time': 60 * 2},
+        {'name': 'Write', 'time': 60 * 1},
+        {'name': 'Meditate', 'time': 60 * 5},
         {'name': 'Outside', 'time': 0},
-        {'name': 'Clean', 'time': 0 * 0},
-        {'name': 'Optimize', 'time': 0 * 10},
-        {'name': 'Eat', 'time': 0 * 13},
+        {'name': 'Clean', 'time': 60 * 0},
+        {'name': 'Optimize', 'time': 60 * 10},
+        {'name': 'Eat', 'time': 60 * 13},
     ]
+
+    // const tasks = [
+    //     {'name': 'Wake Up', 'time': 0},
+    //     {'name': 'Weight', 'time': 0},
+    //     {'name': 'Brush & Floss', 'time': 0},
+    //     {'name': 'Exercise', 'time': 0},
+    //     {'name': 'Stretch 1', 'time': 0},
+    //     {'name': 'Stretch 2', 'time': 0},
+    //     {'name': 'Stretch 3', 'time': 0},
+    //     {'name': 'Stretch 4', 'time': 0},
+    //     {'name': 'Stretch 5', 'time': 0},
+    //     {'name': 'Read', 'time': 1 * 2},
+    //     {'name': 'Write', 'time': 0 * 1},
+    //     {'name': 'Meditate', 'time': 0 * 5},
+    //     {'name': 'Outside', 'time': 0},
+    //     {'name': 'Clean', 'time': 0 * 0},
+    //     {'name': 'Optimize', 'time': 0 * 10},
+    //     {'name': 'Eat', 'time': 0 * 13},
+    // ]
 
     const pastTime = {date: new Date()};
     const taskTime = {Date: getCurrentDate()};
