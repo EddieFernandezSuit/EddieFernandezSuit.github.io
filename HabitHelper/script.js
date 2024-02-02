@@ -26,7 +26,8 @@ function calculateMinutesElapsed(pastTime){
 const GIST_ID = '75701f3ca46165618b6c1689214c8e75'; // Replace with your Gist ID
 const GIST_API_URL = `https://api.github.com/gists/${GIST_ID}`;
 
-const convertToCSV = (data, header) => {
+const convertToCSV = (data) => {
+    header = Object.keys(data[0]);
     const rows = data.map(obj => {
         const values = header.map(key => obj[key] || ''); // Use empty string if property is not present
         return values.join(',');
@@ -36,12 +37,12 @@ const convertToCSV = (data, header) => {
 };
 
 const saveToGist = (data, fileName) => {
-    const csvContent = convertToCSV(data,Object.keys(data[0]));
+    const csvContent = convertToCSV(data);
 
     fetch(GIST_API_URL, {
         method: 'PATCH',
         headers: {
-            'Authorization': 'Bearer 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', // Replace with your GitHub token
+            'Authorization': 'Bearer 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', // Replace with your GitHub token
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
