@@ -102,9 +102,14 @@ function updateTimeElement(timer){
     timerCounterElement.textContent = timer.count;
 }
 
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+}
+
 const initializeTimer = async () => {
     const startNextTask = () => {
-        playSound();
+        // playSound();
         if (tasks[currentTask.index].time > 0) {
             if (tasks[currentTask.index].name === 'Read') {
                 // Display input boxes for book information
@@ -144,6 +149,7 @@ const initializeTimer = async () => {
             displayDictionary(taskTime);
             return;
         }
+        speak(tasks[currentTask.index].name)
         const taskElement = document.getElementById("currentTask");
         taskElement.textContent = tasks[currentTask.index]['name']
         if(tasks[currentTask.index].time > 0){
