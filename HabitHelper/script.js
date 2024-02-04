@@ -109,7 +109,6 @@ function speak(text) {
 
 const initializeTimer = async () => {
     const startNextTask = () => {
-        // playSound();
         if (tasks[currentTask.index].time > 0) {
             if (tasks[currentTask.index].name === 'Read') {
                 // Display input boxes for book information
