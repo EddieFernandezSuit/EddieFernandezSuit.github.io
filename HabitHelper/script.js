@@ -109,29 +109,26 @@ function speak(text) {
 
 const initializeTimer = async () => {
     const startNextTask = () => {
-        if (tasks[currentTask.index].time > 0) {
-            if (tasks[currentTask.index].name === 'Read') {
-                // Display input boxes for book information
-                const bookInfoElement = document.getElementById('bookInfo');
-                bookInfoElement.style.display = 'block';
+        if (tasks[currentTask.index].name === 'Read') {
+            // Display input boxes for book information
+            const bookInfoElement = document.getElementById('bookInfo');
+            bookInfoElement.style.display = 'block';
 
-                const submitBookInfoButton = document.getElementById('submitBookInfo');
-                submitBookInfoButton.addEventListener('click', () => {
-                    const bookName = document.getElementById('bookName').value;
-                    const currentPage = document.getElementById('currentPage').value;
-                    bookData.push({
-                        Date: getCurrentDate(),
-                        Name: bookName,
-                        Page: currentPage,
-                    });
-                    saveToGist(bookData, 'bookData.csv');
-
-                    bookInfoElement.style.display = 'none';
-                    new Timer(tasks[currentTask.index].time, updateTimeElement, startNextTask);
+            const submitBookInfoButton = document.getElementById('submitBookInfo');
+            submitBookInfoButton.addEventListener('click', () => {
+                const bookName = document.getElementById('bookName').value;
+                const currentPage = document.getElementById('currentPage').value;
+                bookData.push({
+                    Date: getCurrentDate(),
+                    Name: bookName,
+                    Page: currentPage,
                 });
-            } else {
+                saveToGist(bookData, 'bookData.csv');
+
+                bookInfoElement.style.display = 'none';
                 new Timer(tasks[currentTask.index].time, updateTimeElement, startNextTask);
-            }
+            });
+            return;
         }
 
         taskTime[tasks[currentTask.index].name] = calculateMinutesElapsed(pastTime);
