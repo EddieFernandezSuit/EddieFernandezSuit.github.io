@@ -6,8 +6,8 @@ export class Timer{
             onTimerUpdate(this);
             this.count += 1;
             if(this.count >= timeSeconds){
-                onTimerComplete(this);
                 clearInterval(this.interval);
+                onTimerComplete(this);
             }
         }, 1000);
     }
