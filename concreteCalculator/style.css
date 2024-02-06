@@ -1,0 +1,79 @@
+body {
+    display: flex;
+    flex-direction: column; /* Arrange items vertically */
+    align-items: center;
+    justify-content: center; /* Center vertically if extra space */
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;  /* Light background */
+}
+
+.calculator-container { /* New container for better organization */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 400px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    background-color: white;
+}
+
+h1, h2 {
+    color: #333; /* Darker heading color */
+    text-align: center;
+}
+
+#wall-container {
+    margin-bottom: 30px;
+}
+
+#wall-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#wall-container input[type="number"] {
+    width: 100px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none; /* Remove default border */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4CAF50; /* Green Button */
+    color: white;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#wall-container {
+    margin-bottom: 30px;
+    border: none; /* Remove border from wall containers */
+}
+
+#wall-container label {
+    display: inline-block; /* Change labels to inline */
+    width: 80px;           /* Add width for spacing */
+    margin-bottom: 0;      /* Remove unnecessary bottom margin */
+    margin-right: 10px;    /* Add right margin for spacing */
+}
+
+#wall-container input[type="number"] {
+    width: 100px;
+    margin-bottom: 0; /* Remove unnecessary bottom margin */
+}

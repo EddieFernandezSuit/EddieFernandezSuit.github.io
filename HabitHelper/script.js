@@ -113,7 +113,6 @@ const initializeTimer = async () => {
             // Display input boxes for book information
             const bookInfoElement = document.getElementById('bookInfo');
             bookInfoElement.style.display = 'block';
-
             const submitBookInfoButton = document.getElementById('submitBookInfo');
             submitBookInfoButton.addEventListener('click', () => {
                 const bookName = document.getElementById('bookName').value;
