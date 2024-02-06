@@ -3,8 +3,8 @@ export class Timer{
         this.count = 0;
         this.interval = null;
         this.interval = setInterval(()=>{
-            onTimerUpdate(this);
-            this.count += 1;
+            this.count += 1
+            onTimerUpdate()
             if(this.count >= timeSeconds){
                 clearInterval(this.interval);
                 onTimerComplete(this);

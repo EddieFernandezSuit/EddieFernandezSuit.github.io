@@ -1,4 +1,7 @@
 import { Timer } from './timer.js';
+// import dotenv from 'dotenv';
+// dotenv.config();
+
 
 function displayDictionary(dictionary) {
     const container = document.getElementById('dictionaryContainer');
@@ -42,7 +45,8 @@ const saveToGist = (data, fileName) => {
     fetch(GIST_API_URL, {
         method: 'PATCH',
         headers: {
-            'Authorization': 'Bearer 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', // Replace with your GitHub token
+            'Authorization': 'Bearer ' + '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'
+            , // Replace with your GitHub token
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -107,29 +111,9 @@ function speak(text) {
     window.speechSynthesis.speak(utterance);
 }
 
+
 const initializeTimer = async () => {
-    const startNextTask = () => {
-        if (tasks[currentTask.index].name === 'Read') {
-            // Display input boxes for book information
-            const bookInfoElement = document.getElementById('bookInfo');
-            bookInfoElement.style.display = 'block';
-            const submitBookInfoButton = document.getElementById('submitBookInfo');
-            submitBookInfoButton.addEventListener('click', () => {
-                const bookName = document.getElementById('bookName').value;
-                const currentPage = document.getElementById('currentPage').value;
-                bookData.push({
-                    Date: getCurrentDate(),
-                    Name: bookName,
-                    Page: currentPage,
-                });
-                saveToGist(bookData, 'bookData.csv');
-
-                bookInfoElement.style.display = 'none';
-                new Timer(tasks[currentTask.index].time, updateTimeElement, startNextTask);
-            });
-            return;
-        }
-
+    const nextTask = () => {
         taskTime[tasks[currentTask.index].name] = calculateMinutesElapsed(pastTime);
         currentTask.index += 1;
         let allTasksComplete = currentTask.index >= tasks.length;
@@ -150,6 +134,33 @@ const initializeTimer = async () => {
         if(tasks[currentTask.index].time > 0){
             new Timer(tasks[currentTask.index].time, updateTimeElement, startNextTask)
         }
+    }
+
+
+    const startNextTask = () => {
+        updateTimeElement({count: 0})
+        if (tasks[currentTask.index].name === 'Read') {
+            speak('Read Complete')
+            // Display input boxes for book information
+            const bookInfoElement = document.getElementById('bookInfo');
+            bookInfoElement.style.display = 'block';
+            const submitBookInfoButton = document.getElementById('submitBookInfo');
+            submitBookInfoButton.addEventListener('click', () => {
+                const bookName = document.getElementById('bookName').value;
+                const currentPage = document.getElementById('currentPage').value;
+                bookData.push({
+                    Date: getCurrentDate(),
+                    Name: bookName,
+                    Page: currentPage,
+                });
+                saveToGist(bookData, 'bookData.csv');
+
+                bookInfoElement.style.display = 'none';
+                nextTask();
+            });
+            return;
+        }
+        nextTask();
     }
 
 
@@ -181,9 +192,9 @@ const initializeTimer = async () => {
     //     {'name': 'Stretch 2', 'time': 0},
     //     {'name': 'Stretch 3', 'time': 0},
     //     {'name': 'Stretch 4', 'time': 0},
-    //     {'name': 'Stretch 5', 'time': 0},
-    //     {'name': 'Read', 'time': 1 * 2},
-    //     {'name': 'Write', 'time': 0 * 1},
+    //     {'name': 'Stretch 5', 'time': 10},
+    //     {'name': 'Read', 'time': 1 * 3},
+    //     {'name': 'Write', 'time': 10 * 1},
     //     {'name': 'Meditate', 'time': 0 * 5},
     //     {'name': 'Outside', 'time': 0},
     //     {'name': 'Clean', 'time': 0 * 0},
