@@ -41,11 +41,12 @@ const convertToCSV = (data) => {
 
 const saveToGist = (data, fileName) => {
     const csvContent = convertToCSV(data);
+    const KEY = process.env.KEY;
 
     fetch(GIST_API_URL, {
         method: 'PATCH',
         headers: {
-            'Authorization': 'Bearer ' + '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'
+            'Authorization': 'Bearer ' + KEY
             , // Replace with your GitHub token
             'Content-Type': 'application/json',
         },
