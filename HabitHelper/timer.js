@@ -4,7 +4,7 @@ export class Timer{
         this.interval = null;
         this.interval = setInterval(()=>{
             this.count += 1
-            onTimerUpdate()
+            onTimerUpdate(this)
             if(this.count >= timeSeconds){
                 clearInterval(this.interval);
                 onTimerComplete(this);
