@@ -22,44 +22,47 @@ addWallButton.addEventListener('click', () => {
     wallContainer.appendChild(newWall);
 });
 
-// calculateButton.addEventListener('click', () => {
-//     let totalVolume = 0;
-
-//     for (let i = 1; i <= wallCount; i++) {
-//         const length = parseFloat(document.getElementById(`length${i}`).value);
-//         const width = parseFloat(document.getElementById(`width${i}`).value);
-//         const height = parseFloat(document.getElementById(`height${i}`).value);
-
-//         const prevIndex = (i === 1) ? wallCount : i - 1;
-//         const prevWidth = parseFloat(document.getElementById(`width${prevIndex}`).value);
-
-//         totalVolume += (length - prevWidth) * width * height;
-//     }
-
-//     resultDiv.textContent = `Total Volume: ${totalVolume.toFixed(2)} cubic units`;
-// });
-
 calculateButton.addEventListener('click', () => {
-    const walls = []; // Array to store wall data
+    let totalVolume = 0;
 
     for (let i = 1; i <= wallCount; i++) {
         const length = parseFloat(document.getElementById(`length${i}`).value);
         const width = parseFloat(document.getElementById(`width${i}`).value);
         const height = parseFloat(document.getElementById(`height${i}`).value);
 
-        walls.push({ length: length, width: width, height: height });
+        const prevIndex = (i === 1) ? wallCount : i - 1;
+        const prevWidth = parseFloat(document.getElementById(`width${prevIndex}`).value);
+
+        totalVolume += (length - prevWidth) * width * height;
     }
 
-    const totalVolume = calculateVolume(walls);
-    resultDiv.textContent = `Total Volume: ${totalVolume.toFixed(2)} cubic units`;
+    totalVolumeYards = totalVolume * 1/3 * 1/3 * 1/3;
+
+    resultDiv.textContent = `Total Volume Feet: ${totalVolume.toFixed(2)} cubic Feet. Total Volume Yards: ${totalVolumeYards.toFixed(2)}`;
 });
 
-function calculateVolume(walls) {
-    let totalVolume = 0;
-    for (let i = 0; i < walls.length; i++) {
-        const prevWallIndex = (i - 1 + walls.length) % walls.length; // Wrap around for the last wall
-        totalVolume += (walls[i].length - walls[prevWallIndex].width) * 
-                       walls[i].width * walls[i].height;
-    }
-    return totalVolume;
-}
+// calculateButton.addEventListener('click', () => {
+//     const walls = []; // Array to store wall data
+
+//     for (let i = 1; i <= wallCount; i++) {
+//         const length = parseFloat(document.getElementById(`length${i}`).value);
+//         const width = parseFloat(document.getElementById(`width${i}`).value);
+//         const height = parseFloat(document.getElementById(`height${i}`).value);
+
+//         walls.push({ length: length, width: width, height: height });
+//     }
+
+//     // const totalVolume = calculateVolume(walls);
+//     const totalVolume = calculateVolume(walls)
+//     resultDiv.textContent = `Total Volume: ${totalVolume.toFixed(2)} cubic feet. ${totalVolume / 3 /3 /3 .toFixed(2)} cubic feet`;
+// });
+
+// function calculateVolume(walls) {
+//     let totalVolume = 0;
+//     for (let i = 0; i < walls.length; i++) {
+//         const prevWallIndex = (i - 1 + walls.length) % walls.length; // Wrap around for the last wall
+//         totalVolume += (walls[i].length - walls[prevWallIndex].width) * 
+//                        walls[i].width * walls[i].height;
+//     }
+//     return totalVolume;
+// }
