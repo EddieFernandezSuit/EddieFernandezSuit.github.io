@@ -1,6 +1,6 @@
 This repository features several distinct projects. All of which I have built from the ground up
 
-Sci-Fi Minigame
+#Sci-Fi Minigame
 A simple 3d 3rd person shooter video game demo using THREE.js
 
 Burger Demo
