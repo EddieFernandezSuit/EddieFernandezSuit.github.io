@@ -38,7 +38,7 @@ calculateButton.addEventListener('click', () => {
 
     totalVolumeYards = totalVolume * 1/3 * 1/3 * 1/3;
 
-    resultDiv.textContent = `Total Volume Feet: ${totalVolume.toFixed(2)} cubic Feet. Total Volume Yards: ${totalVolumeYards.toFixed(2)}`;
+    resultDiv.textContent = `Total Volume Feet: ${totalVolume.toFixed(2)} cubic Feet. Total Volume Yards: ${totalVolumeYards.toFixed(2)} cubic Yards`;
 });
 
 // calculateButton.addEventListener('click', () => {
