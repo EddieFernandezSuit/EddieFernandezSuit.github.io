@@ -39,7 +39,6 @@ const convertToCSV = (data) => {
 
 const saveToGist = (data, fileName) => {
     const csvContent = convertToCSV(data);
-    // const KEY = "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";
 
     fetch(GIST_API_URL, {
         method: 'PATCH',
