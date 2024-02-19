@@ -182,7 +182,7 @@ const start = async () => {
     const tasks = [
         {'name': 'Weight', 'time': 0},
         {'name': 'Brush & Floss', 'time': 0},
-        {'name': 'Exercise', 'time': 0},
+        {'name': 'Exercise', 'time': 60 * 5},
         {'name': 'Stretch 1', 'time': 60},
         {'name': 'Stretch 2', 'time': 60},
         {'name': 'Stretch 3', 'time': 60},
