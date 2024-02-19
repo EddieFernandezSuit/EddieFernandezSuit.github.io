@@ -1,6 +1,5 @@
-
-
 import { Timer } from './timer.js';
+import { KEY } from './secret.js';
 
 function displayDictionary(dictionary) {
     const container = document.getElementById('dictionaryContainer');
@@ -40,7 +39,7 @@ const convertToCSV = (data) => {
 
 const saveToGist = (data, fileName) => {
     const csvContent = convertToCSV(data);
-    const KEY = "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";
+    // const KEY = "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";
 
     fetch(GIST_API_URL, {
         method: 'PATCH',
