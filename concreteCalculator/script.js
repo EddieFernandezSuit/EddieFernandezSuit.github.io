@@ -3,66 +3,53 @@ let wallCount = 1;
 const wallContainer = document.getElementById('wall-container');
 const addWallButton = document.getElementById('add-wall');
 const calculateButton = document.getElementById('calculate');
-const resultDiv = document.getElementById('result');
+const resultFeetDiv = document.getElementById('resultYards');
+const resultYardsDiv = document.getElementById('resultFeet');
+
+function wallContainerHtml(dimension, wallCount){
+    // return `<label for="${dimension}${wallCount}"> ${dimension}:</label>
+    return `<input type="number" placeholder="${dimension} feet" id="${dimension}feet${wallCount}">
+    <input type="number" placeholder="${dimension} inches" id="${dimension}inches${wallCount}">`;
+}
+
+function getDimension(dimension, i){
+    let feet = parseFloat(document.getElementById(`${dimension}feet${i}`).value);
+    let inches = parseFloat(document.getElementById(`${dimension}inches${i}`).value);
+    feet = isNaN(feet) ? 0 : feet;
+    inches = isNaN(inches) ? 0 : inches;
+    return [feet, inches];
+}
+
+function inchesToFeet(inches){
+    const feet = inches / 12;
+    return feet;
+}
+
+function feet(feet, inches){
+    return feet + inchesToFeet(inches)
+}
 
 addWallButton.addEventListener('click', () => {
     wallCount++;
     const newWall = document.createElement('div');
-    newWall.innerHTML = `
-        <h2>Wall ${wallCount}</h2>
-        <label for="length${wallCount}">Length:</label>
-        <input type="number" id="length${wallCount}">
-
-        <label for="width${wallCount}">Width:</label>
-        <input type="number" id="width${wallCount}">
-
-        <label for="height${wallCount}">Height:</label>
-        <input type="number" id="height${wallCount}">
-    `;
+    const dimensions = ['length', 'width', 'height']
+    newWall.innerHTML = `Wall ${wallCount} ` +  dimensions.map(dimension => wallContainerHtml(dimension, wallCount)).join(' ');
     wallContainer.appendChild(newWall);
 });
 
 calculateButton.addEventListener('click', () => {
-    let totalVolume = 0;
-
+    let totalVolumeFeet = 0;
+    let totalVolumeYards = 0;
     for (let i = 1; i <= wallCount; i++) {
-        const length = parseFloat(document.getElementById(`length${i}`).value);
-        const width = parseFloat(document.getElementById(`width${i}`).value);
-        const height = parseFloat(document.getElementById(`height${i}`).value);
-
+        let lengthFeet, lengthInches, widthFeet, widthInches, heightFeet, heightInches, prevWidthFeet, prevWidthInches;
+        [lengthFeet, lengthInches] = getDimension('length', i);
+        [widthFeet, widthInches] = getDimension('width', i);
+        [heightFeet, heightInches] = getDimension('height', i);
         const prevIndex = (i === 1) ? wallCount : i - 1;
-        const prevWidth = parseFloat(document.getElementById(`width${prevIndex}`).value);
-
-        totalVolume += (length - prevWidth) * width * height;
+        [prevWidthFeet, prevWidthInches] = getDimension('width', prevIndex);
+        totalVolumeFeet += (feet(lengthFeet, lengthInches) - feet(prevWidthFeet, prevWidthInches)) * feet(widthFeet, widthInches) * feet(heightFeet, heightInches);
     }
-
-    totalVolumeYards = totalVolume * 1/3 * 1/3 * 1/3;
-
-    resultDiv.textContent = `Total Volume Feet: ${totalVolume.toFixed(2)} cubic Feet. Total Volume Yards: ${totalVolumeYards.toFixed(2)} cubic Yards`;
+    totalVolumeYards = totalVolumeFeet * 1/3 * 1/3 * 1/3;
+    resultYardsDiv.textContent = `${totalVolumeYards.toFixed(2)} cubic Yards`;
+    resultFeetDiv.textContent = `${totalVolumeFeet.toFixed(2)} cubic Feet`;
 });
-
-// calculateButton.addEventListener('click', () => {
-//     const walls = []; // Array to store wall data
-
-//     for (let i = 1; i <= wallCount; i++) {
-//         const length = parseFloat(document.getElementById(`length${i}`).value);
-//         const width = parseFloat(document.getElementById(`width${i}`).value);
-//         const height = parseFloat(document.getElementById(`height${i}`).value);
-
-//         walls.push({ length: length, width: width, height: height });
-//     }
-
-//     // const totalVolume = calculateVolume(walls);
-//     const totalVolume = calculateVolume(walls)
-//     resultDiv.textContent = `Total Volume: ${totalVolume.toFixed(2)} cubic feet. ${totalVolume / 3 /3 /3 .toFixed(2)} cubic feet`;
-// });
-
-// function calculateVolume(walls) {
-//     let totalVolume = 0;
-//     for (let i = 0; i < walls.length; i++) {
-//         const prevWallIndex = (i - 1 + walls.length) % walls.length; // Wrap around for the last wall
-//         totalVolume += (walls[i].length - walls[prevWallIndex].width) * 
-//                        walls[i].width * walls[i].height;
-//     }
-//     return totalVolume;
-// }

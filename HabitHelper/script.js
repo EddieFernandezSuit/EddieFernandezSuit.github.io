@@ -160,25 +160,8 @@ const start = async () => {
         nextTask();
     }
 
-    // const tasks = [
-    //     {'name': 'Wake Up', 'time': 0},
-    //     {'name': 'Weight', 'time': 0},
-    //     {'name': 'Brush & Floss', 'time': 0},
-    //     {'name': 'Exercise', 'time': 0},
-    //     {'name': 'Stretch 1', 'time': 0},
-    //     {'name': 'Stretch 2', 'time': 0},
-    //     {'name': 'Stretch 3', 'time': 0},
-    //     {'name': 'Stretch 4', 'time': 0},
-    //     {'name': 'Stretch 5', 'time': 10},
-    //     {'name': 'Read', 'time': 1 * 3},
-    //     {'name': 'Write', 'time': 10 * 1},
-    //     {'name': 'Meditate', 'time': 0 * 5},
-    //     {'name': 'Optimize', 'time': 0 * 10},
-    //     {'name': 'Eat', 'time': 0 * 13},
-    // ]
-
     const tasks = [
-        {'name': 'Weight', 'time': 0},
+        // {'name': 'Weight', 'time': 0},
         {'name': 'Brush & Floss', 'time': 0},
         {'name': 'Exercise', 'time': 60 * 5},
         {'name': 'Stretch 1', 'time': 60},
@@ -186,11 +169,11 @@ const start = async () => {
         {'name': 'Stretch 3', 'time': 60},
         {'name': 'Stretch 4', 'time': 60},
         {'name': 'Stretch 5', 'time': 60},
-        {'name': 'Read', 'time': 10},
-        {'name': 'Write', 'time': 60 * 1},
-        {'name': 'Meditate', 'time': 60 * 4},
-        {'name': 'Optimize', 'time': 60 * 10},
-        {'name': 'Eat', 'time': 60 * 13},
+        {'name': 'Read', 'time': 60 * 5},
+        // {'name': 'Write', 'time': 60 * 1},
+        // {'name': 'Meditate', 'time': 60 * 4},
+        // {'name': 'Optimize', 'time': 60 * 10},
+        // {'name': 'Eat', 'time': 60 * 13},
     ]
 
     const pastTime = {date: new Date()};

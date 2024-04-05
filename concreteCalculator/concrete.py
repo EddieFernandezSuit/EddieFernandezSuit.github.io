@@ -11,7 +11,6 @@ def add_new_wall(walls):
         'height': float(input('Height: ')),
     }
     walls.append(wall)
-
     
 def calculate_volume_all_walls():
     walls = []
@@ -33,4 +32,15 @@ def calculate_volume_all_walls():
     print('Feet: ' + str(volume))
     print('Yards: ' + str(volume * 1/3 * 1/3 * 1/3))
 
-calculate_volume_all_walls()
+# calculate_volume_all_walls()
+
+import webbrowser
+import subprocess
+
+def start_server():
+    url = "http://localhost:8000/CONCRETECALCULATOR/app.html"
+    directory = "C:\\Users\\ferna\\Downloads\\GIthub\\EddieFernandezSuit.github.io"
+    webbrowser.open(url)
+    p = subprocess.Popen(["python3", "-m", "http.server"], cwd=directory)
+
+start_server()

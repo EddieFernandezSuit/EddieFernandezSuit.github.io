@@ -23,25 +23,10 @@ h1, h2 {
     text-align: center;
 }
 
-#wall-container {
-    margin-bottom: 30px;
-}
-
-#wall-container label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-#wall-container input[type="number"] {
-    width: 100px;
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
 button {
-    padding: 10px 20px;
+    margin: 10px;
+    width: 100px;
+    height: 50px;
     font-size: 16px;
     border: none; /* Remove default border */
     border-radius: 5px;
@@ -63,17 +48,16 @@ button:hover {
 
 #wall-container {
     margin-bottom: 30px;
-    border: none; /* Remove border from wall containers */
+    border: none;
 }
 
 #wall-container label {
-    display: inline-block; /* Change labels to inline */
-    width: 80px;           /* Add width for spacing */
-    margin-bottom: 0;      /* Remove unnecessary bottom margin */
-    margin-right: 10px;    /* Add right margin for spacing */
+    display: inline-block; 
+    margin-bottom: 5px;
+    margin-right: 10px;
 }
 
 #wall-container input[type="number"] {
     width: 100px;
-    margin-bottom: 0; /* Remove unnecessary bottom margin */
+    margin-bottom: 20px;
 }
