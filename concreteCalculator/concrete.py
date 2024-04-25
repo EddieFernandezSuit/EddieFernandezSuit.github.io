@@ -1,3 +1,6 @@
+import webbrowser
+import subprocess
+
 def calculate_volume(walls):
     total_cubic_yards = 0
     for i in range(len(walls)):
@@ -34,9 +37,6 @@ def calculate_volume_all_walls():
 
 # calculate_volume_all_walls()
 
-import webbrowser
-import subprocess
-
 def start_server():
     url = "http://localhost:8000/CONCRETECALCULATOR/app.html"
     directory = "C:\\Users\\ferna\\Downloads\\GIthub\\EddieFernandezSuit.github.io"
@@ -44,3 +44,4 @@ def start_server():
     p = subprocess.Popen(["python3", "-m", "http.server"], cwd=directory)
 
 start_server()
+
