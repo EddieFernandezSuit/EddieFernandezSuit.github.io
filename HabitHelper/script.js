@@ -1,11 +1,27 @@
 import { Timer } from './timer.js';
 import { KEY } from './secret.js';
+// import {parse } from './csv-parse'
+// const { parse } = require(['csv-parse']);
+// const parse = csvParse.parse;
+// const { parse } = csvParse;
+
+// python -m http.server
+
+const GIST_ID = '75701f3ca46165618b6c1689214c8e75';
+const GIST_API_URL = `https://api.github.com/gists/${GIST_ID}`;
+
+function getElement(id){
+    return document.getElementById(id);
+}
+
+function getElements(...ids) {
+    return ids.map(getElement).filter(element => element)
+}
 
 function displayDictionary(dictionary) {
-    const container = document.getElementById('dictionaryContainer');
+    const [container] = getElements('dictionaryContainer')
     const list = document.createElement('ul');
 
-    // Iterate over the dictionary and create list items
     for (const key in dictionary) {
       if (dictionary.hasOwnProperty(key)) {
         const listItem = document.createElement('li');
@@ -14,37 +30,38 @@ function displayDictionary(dictionary) {
       }
     }
 
-    // Append the list to the container
     container.appendChild(list);
 }
 
 function calculateMinutesElapsed(pastTime){
-    let minutes = ((new Date() - pastTime.date) / 1000) / 60;
+    let minutes = Math.round(((new Date() - pastTime.date) / 1000) / 60).toString();
     pastTime.date = new Date();
-    return Math.round(minutes).toString();
+    return minutes
 }
 
-const GIST_ID = '75701f3ca46165618b6c1689214c8e75'; // Replace with your Gist ID
-const GIST_API_URL = `https://api.github.com/gists/${GIST_ID}`;
+const ObjectToCSV = (data) => {
+    if (!data.length) return '';
 
-const convertToCSV = (data) => {
     const header = Object.keys(data[0]);
-    const rows = data.map(obj => {
-        const values = header.map(key => obj[key] || ''); // Use empty string if property is not present
-        return values.join(',');
-    });
-
-    return `${header.join(',')}\n${rows.join('\n')}`;
+    return `${header.join(',')}\n${data.map(obj => header.map(key => obj[key] || '').join(',')).join('\n')}`;
 };
 
+function csvToObject(csvString) {
+    const [header, ...rows] = csvString.trim().split('\n');
+    const headers = header.split(',');
+    return rows.map(row => {
+        const values = row.split(',');
+        return Object.fromEntries(headers.map((key, index) => [key, values[index]]));
+    });
+}
+
 const saveToGist = (data, fileName) => {
-    const csvContent = convertToCSV(data);
+    const csvContent = ObjectToCSV(data);
 
     fetch(GIST_API_URL, {
         method: 'PATCH',
         headers: {
-            'Authorization': 'Bearer ' + KEY
-            , // Replace with your GitHub token
+            'Authorization': 'Bearer ' + KEY,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -57,28 +74,27 @@ const saveToGist = (data, fileName) => {
     });
 };
 
+// const getGist = async (gistFileName) => {
+//     let data = [];
+//     try {
+//         const response = await fetch(GIST_API_URL).then(response => response.response.json());
+//         data = csvToObject(gistData.files[gistFileName].content);
+//     } catch (error) {
+//         console.error('Error loading data from Gist:', error);
+//     }
+//     return data;
+// };
+
 const getGist = async (gistFileName) => {
+    let data = [];
     try {
         const response = await fetch(GIST_API_URL);
         const gistData = await response.json();
-        const csvContent = gistData.files[gistFileName].content;
-        
-        // Convert CSV to array of objects
-        const rows = csvContent.trim().split('\n');
-        const header = rows[0].split(',');
-        const data = rows.slice(1).map(row => {
-            const values = row.split(',');
-            return header.reduce((obj, key, index) => {
-                obj[key] = values[index];
-                return obj;
-            }, {});
-        });
-
-        return data;
+        data = csvToObject(gistData.files[gistFileName].content);
     } catch (error) {
         console.error('Error loading data from Gist:', error);
-        return [];
     }
+    return data;
 };
 
 function getCurrentDate() {
@@ -86,112 +102,84 @@ function getCurrentDate() {
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}`;
-
-    return formattedDate;
+    return `${year}-${month}-${day}`;
 }
 
-function playSound(){
-    const soundFile = 'nice.mp3'
-    const audio = new Audio('nice.mp3');
-    audio.play();
-}
-
-function updateTimeElement(timer){
-    const timerCounterElement = document.getElementById("timerCounter");
-    timerCounterElement.textContent = timer.count;
-}
 
 function speak(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }
-
 
 const start = async () => {
     const nextTask = () => {
-        taskTime[tasks[currentTask.index].name] = calculateMinutesElapsed(pastTime);
-        currentTask.index += 1;
-        let allTasksComplete = currentTask.index >= tasks.length;
-        if(allTasksComplete){
-            const totalSum = Math.round(Object.entries(taskTime)
-                .filter(([key, value]) => key !== 'Date')
-                .reduce((sum, [key, value]) => sum + Number(value), 0));
-
-            taskTime['Total'] = totalSum;
-            taskData.push(taskTime);
-            saveToGist(taskData, 'taskTime.csv')
-            displayDictionary(taskTime);
-            return;
-        }
-        speak(tasks[currentTask.index].name)
-        const taskElement = document.getElementById("currentTask");
-        taskElement.textContent = tasks[currentTask.index]['name']
-        if(tasks[currentTask.index].time > 0){
-            new Timer(tasks[currentTask.index].time, updateTimeElement, startNextTask)
-        }
-    }
-
-
-    const startNextTask = () => {
-        updateTimeElement({count: 0})
-        if (tasks[currentTask.index].name === 'Read') {
+        if (currentTask.name === 'Read' && !formDisplay) {
             speak('Read Complete')
-            // Display input boxes for book information
-            const bookInfoElement = document.getElementById('bookInfo');
+            const [bookInfoElement, submitBookInfoButton, bookNameElement, currentPageElement] = getElements('bookInfo', 'submitBookInfo', 'bookName', 'currentPage');
             bookInfoElement.style.display = 'block';
-            const submitBookInfoButton = document.getElementById('submitBookInfo');
             submitBookInfoButton.addEventListener('click', () => {
-                const bookName = document.getElementById('bookName').value;
-                const currentPage = document.getElementById('currentPage').value;
-                bookData.push({
-                    Date: getCurrentDate(),
-                    Name: bookName,
-                    Page: currentPage,
-                });
-                saveToGist(bookData, 'bookData.csv');
-
+                [newData.Name, newData.Page] = [bookNameElement, currentPageElement].map(e => e.value);
                 bookInfoElement.style.display = 'none';
+                formDisplay = true;
                 nextTask();
             });
             return;
         }
-        nextTask();
+
+        newData[currentTask.name] = calculateMinutesElapsed(pastTime);
+
+        currentTaskIndex += 1;
+
+        let allTasksComplete = currentTaskIndex >= tasks.length;
+        if(allTasksComplete){
+            const totalSum = Math.round(Object.entries(newData).filter(([key, value]) => key !== 'Date' && key != 'Name' && key != 'Page').reduce((sum, [key, value]) => sum + Number(value), 0));
+            newData.Total = totalSum;
+            combinedData.push(newData)
+            saveToGist(combinedData, 'combinedData.csv')
+            displayDictionary(newData);
+            return;
+        }
+
+        currentTask = tasks[currentTaskIndex];
+        speak(currentTask.name)
+        taskElement.textContent = currentTask['name']
+        const isCurrentTaskTimer = currentTask.time > 0
+        if(isCurrentTaskTimer){
+            new Timer(tasks[currentTaskIndex].time, (timer) => {getElement("timerCounter").textContent = timer.count;}, nextTask);
+        }
     }
 
+    let formDisplay = false;
+
+    const SECONDS_TO_MINUTES = 1
+
     const tasks = [
-        // {'name': 'Weight', 'time': 0},
         {'name': 'Brush & Floss', 'time': 0},
-        {'name': 'Exercise', 'time': 60 * 5},
-        {'name': 'Stretch 1', 'time': 60},
-        {'name': 'Stretch 2', 'time': 60},
-        {'name': 'Stretch 3', 'time': 60},
-        {'name': 'Stretch 4', 'time': 60},
-        {'name': 'Stretch 5', 'time': 60},
-        {'name': 'Read', 'time': 60 * 5},
-        // {'name': 'Write', 'time': 60 * 1},
+        {'name': 'Exercise', 'time': SECONDS_TO_MINUTES * 5},
+        {'name': 'Stretch 1', 'time': SECONDS_TO_MINUTES},
+        {'name': 'Stretch 2', 'time': SECONDS_TO_MINUTES},
+        {'name': 'Stretch 3', 'time': SECONDS_TO_MINUTES},
+        {'name': 'Stretch 4', 'time': SECONDS_TO_MINUTES},
+        {'name': 'Stretch 5', 'time': SECONDS_TO_MINUTES},
+        {'name': 'Read', 'time': SECONDS_TO_MINUTES * 5},
         // {'name': 'Meditate', 'time': 60 * 4},
         // {'name': 'Optimize', 'time': 60 * 10},
         // {'name': 'Eat', 'time': 60 * 13},
     ]
 
+    const [startButton, taskElement, bookNameAndPageNumber] = getElements("startButton", "currentTask", "bookNameAndPageNumber");
     const pastTime = {date: new Date()};
-    const taskTime = {Date: getCurrentDate()};
-    const currentTask = {index: 0}
-    const startButton = document.getElementById("startButton");
-    const taskElement = document.getElementById("currentTask");
-    const bookNameAndPageNumber = document.getElementById("bookNameAndPageNumber");
-    
-    let taskData = await getGist('taskTime.csv');
-    let bookData = await getGist('bookData.csv');
+    let newData = {Date: getCurrentDate()};
 
-    taskElement.textContent = tasks[0]['name'];
+    let currentTaskIndex = 0;
+    let currentTask = tasks[currentTaskIndex];
+    let combinedData = await getGist('combinedData.csv')
 
-    let lastReadInfo = bookData[bookData.length - 1];
+    taskElement.textContent = currentTask['name'];
+    let lastReadInfo = combinedData[combinedData.length - 1];
+    console.log(lastReadInfo)
     bookNameAndPageNumber.textContent = "Reading: " + lastReadInfo["Name"] + ", On Page: " + lastReadInfo["Page"];
 
-    startButton.addEventListener("click", () => startNextTask());
+    startButton.addEventListener("click", () => nextTask());
 };
 
 document.addEventListener("DOMContentLoaded", start);
