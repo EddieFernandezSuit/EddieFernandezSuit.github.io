@@ -1,5 +1,7 @@
 import { Timer } from './timer.js';
-import { KEY } from './secret.js';
+// import { KEY as process.env.GIST_KEY } from './secret.js';
+
+
 // import {parse } from './csv-parse'
 // const { parse } = require(['csv-parse']);
 // const parse = csvParse.parse;
@@ -61,7 +63,7 @@ const saveToGist = (data, fileName) => {
     fetch(GIST_API_URL, {
         method: 'PATCH',
         headers: {
-            'Authorization': 'Bearer ' + KEY,
+            'Authorization': 'Bearer ' + process.env.GIST_KEY,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
