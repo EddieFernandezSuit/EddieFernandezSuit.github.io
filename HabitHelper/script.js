@@ -1,11 +1,4 @@
 import { Timer } from './timer.js';
-// import { KEY as process.env.GIST_KEY } from './secret.js';
-
-
-// import {parse } from './csv-parse'
-// const { parse } = require(['csv-parse']);
-// const parse = csvParse.parse;
-// const { parse } = csvParse;
 
 // python -m http.server
 
