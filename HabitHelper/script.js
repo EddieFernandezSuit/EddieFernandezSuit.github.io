@@ -69,17 +69,6 @@ const saveToGist = (data, fileName) => {
     });
 };
 
-// const getGist = async (gistFileName) => {
-//     let data = [];
-//     try {
-//         const response = await fetch(GIST_API_URL).then(response => response.response.json());
-//         data = csvToObject(gistData.files[gistFileName].content);
-//     } catch (error) {
-//         console.error('Error loading data from Gist:', error);
-//     }
-//     return data;
-// };
-
 const getGist = async (gistFileName) => {
     let data = [];
     try {
