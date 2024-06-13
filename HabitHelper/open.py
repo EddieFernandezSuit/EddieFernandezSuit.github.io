@@ -9,4 +9,4 @@ def start_server():
     webbrowser.open(url)
     p = subprocess.Popen(["python3", "-m", "http.server"], cwd=directory)
 
-start_server
+start_server()

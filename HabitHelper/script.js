@@ -1,9 +1,10 @@
 import { Timer } from './timer.js';
+import { Gist } from './gist.js'
 
 // python -m http.server
 
 const GIST_ID = '75701f3ca46165618b6c1689214c8e75';
-const GIST_API_URL = `https://api.github.com/gists/${GIST_ID}`;
+const GIST_FILE_NAME = 'combinedData.csv'
 
 function getElement(id){
     return document.getElementById(id);
@@ -34,53 +35,6 @@ function calculateMinutesElapsed(pastTime){
     return minutes
 }
 
-const ObjectToCSV = (data) => {
-    if (!data.length) return '';
-
-    const header = Object.keys(data[0]);
-    return `${header.join(',')}\n${data.map(obj => header.map(key => obj[key] || '').join(',')).join('\n')}`;
-};
-
-function csvToObject(csvString) {
-    const [header, ...rows] = csvString.trim().split('\n');
-    const headers = header.split(',');
-    return rows.map(row => {
-        const values = row.split(',');
-        return Object.fromEntries(headers.map((key, index) => [key, values[index]]));
-    });
-}
-
-const saveToGist = (data, fileName) => {
-    const csvContent = ObjectToCSV(data);
-
-    fetch(GIST_API_URL, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': 'Bearer ' + process.env.GIST_KEY,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            files: {
-                [fileName]: {
-                    content: csvContent,
-                },
-            },
-        }),
-    });
-};
-
-const getGist = async (gistFileName) => {
-    let data = [];
-    try {
-        const response = await fetch(GIST_API_URL);
-        const gistData = await response.json();
-        data = csvToObject(gistData.files[gistFileName].content);
-    } catch (error) {
-        console.error('Error loading data from Gist:', error);
-    }
-    return data;
-};
-
 function getCurrentDate() {
     const now = new Date();
     const year = now.getFullYear();
@@ -110,53 +64,52 @@ const start = async () => {
         }
 
         newData[currentTask.name] = calculateMinutesElapsed(pastTime);
-
         currentTaskIndex += 1;
 
-        let allTasksComplete = currentTaskIndex >= tasks.length;
+        let allTasksComplete = currentTaskIndex >= Object.keys(tasks).length;
         if(allTasksComplete){
             const totalSum = Math.round(Object.entries(newData).filter(([key, value]) => key !== 'Date' && key != 'Name' && key != 'Page').reduce((sum, [key, value]) => sum + Number(value), 0));
             newData.Total = totalSum;
             combinedData.push(newData)
-            saveToGist(combinedData, 'combinedData.csv')
+            gist.save(combinedData, GIST_FILE_NAME)
             displayDictionary(newData);
             return;
         }
 
-        currentTask = tasks[currentTaskIndex];
-        speak(currentTask.name)
-        taskElement.textContent = currentTask['name']
-        const isCurrentTaskTimer = currentTask.time > 0
+        currentTask = Object.keys(tasks)[currentTaskIndex];
+        speak(currentTask)
+        taskElement.textContent = currentTask
+        const isCurrentTaskTimer = tasks[currentTask] > 0
         if(isCurrentTaskTimer){
-            new Timer(tasks[currentTaskIndex].time, (timer) => {getElement("timerCounter").textContent = timer.count;}, nextTask);
+            new Timer(tasks[currentTask], (timer) => {getElement("timerCounter").textContent = timer.count;}, nextTask);
         }
     }
 
     let formDisplay = false;
 
-    const SECONDS_TO_MINUTES = 1
+    const SECONDS_TO_MINUTES = 60
 
-    const tasks = [
-        {'name': 'Brush & Floss', 'time': 0},
-        {'name': 'Exercise', 'time': SECONDS_TO_MINUTES * 5},
-        {'name': 'Stretch 1', 'time': SECONDS_TO_MINUTES},
-        {'name': 'Stretch 2', 'time': SECONDS_TO_MINUTES},
-        {'name': 'Stretch 3', 'time': SECONDS_TO_MINUTES},
-        {'name': 'Stretch 4', 'time': SECONDS_TO_MINUTES},
-        {'name': 'Stretch 5', 'time': SECONDS_TO_MINUTES},
-        {'name': 'Read', 'time': SECONDS_TO_MINUTES * 5},
-        // {'name': 'Meditate', 'time': 60 * 4},
-        // {'name': 'Optimize', 'time': 60 * 10},
-        // {'name': 'Eat', 'time': 60 * 13},
-    ]
+    const tasks = {
+        'Teeth & Weight': 0,
+        'Exercise 1': 0,
+        'Stretch 1': SECONDS_TO_MINUTES,
+        'Exercise 2': 0,
+        'Stretch 2': SECONDS_TO_MINUTES,
+        'Stretch 3': SECONDS_TO_MINUTES,
+        'Exercise 3': 0,
+        'Stretch 4': SECONDS_TO_MINUTES,
+        'Stretch 5': SECONDS_TO_MINUTES,
+        'Read': SECONDS_TO_MINUTES * 2,
+    }
 
     const [startButton, taskElement, bookNameAndPageNumber] = getElements("startButton", "currentTask", "bookNameAndPageNumber");
     const pastTime = {date: new Date()};
     let newData = {Date: getCurrentDate()};
 
     let currentTaskIndex = 0;
-    let currentTask = tasks[currentTaskIndex];
-    let combinedData = await getGist('combinedData.csv')
+    let currentTask = Object.keys(tasks)[currentTaskIndex];
+    const gist =  new Gist(GIST_ID)
+    let combinedData = await gist.get(GIST_FILE_NAME)
 
     taskElement.textContent = currentTask['name'];
     let lastReadInfo = combinedData[combinedData.length - 1];
