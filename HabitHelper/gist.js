@@ -1,7 +1,8 @@
 export class Gist {
     constructor(gistId) {
         this.gistId = gistId;
-        this.gistApiKey = process.env.GIST_KEY;
+        // this.gistApiKey = process.env.GIST_KEY;
+        // this.gistApiKey = '';
         this.gistApiUrl = `https://api.github.com/gists/${this.gistId}`;
     }
 
@@ -22,7 +23,7 @@ export class Gist {
             await fetch(this.gistApiUrl, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': 'Bearer ' + this.gistApiKey,
+                    'Authorization': 'Bearer ' + process.env.GIST_KEY,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
