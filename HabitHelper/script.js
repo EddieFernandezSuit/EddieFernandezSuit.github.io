@@ -50,7 +50,7 @@ function speak(text) {
 
 const start = async () => {
     const nextTask = () => {
-        if (currentTask.name === 'Read' && !formDisplay) {
+        if (currentTask === 'Read' && !formDisplay) {
             speak('Read Complete')
             const [bookInfoElement, submitBookInfoButton, bookNameElement, currentPageElement] = getElements('bookInfo', 'submitBookInfo', 'bookName', 'currentPage');
             bookInfoElement.style.display = 'block';
@@ -63,7 +63,7 @@ const start = async () => {
             return;
         }
 
-        newData[currentTask.name] = calculateMinutesElapsed(pastTime);
+        newData[currentTask] = calculateMinutesElapsed(pastTime);
         currentTaskIndex += 1;
 
         let allTasksComplete = currentTaskIndex >= Object.keys(tasks).length;
@@ -80,12 +80,19 @@ const start = async () => {
         speak(currentTask)
         taskElement.textContent = currentTask
         const isCurrentTaskTimer = tasks[currentTask] > 0
+
+        
+        if(currentTimer){
+            currentTimer.stop()
+        }
+        
         if(isCurrentTaskTimer){
-            new Timer(tasks[currentTask], (timer) => {getElement("timerCounter").textContent = timer.count;}, nextTask);
+            currentTimer = new Timer(tasks[currentTask], (timer) => {getElement("timerCounter").textContent = timer.count;}, nextTask);
         }
     }
 
     let formDisplay = false;
+    let currentTimer = null;
 
     const SECONDS_TO_MINUTES = 60
 
