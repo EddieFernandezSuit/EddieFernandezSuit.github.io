@@ -15,5 +15,6 @@ export class Timer{
 
     stop() {
         clearInterval(this.interval);
+        this.count = 0;
     }
 }

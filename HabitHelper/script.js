@@ -48,6 +48,14 @@ function speak(text) {
     window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }
 
+function getExerciseCategory() {
+    const exerciseCategories = ['Core', 'Biceps', 'Triceps', 'Chest', 'Shoulders', 'Back', 'Legs', 'Cardio', 'Chest'];
+    const today = new Date();
+    const day = today.getDate();
+    const categoryIndex = (day - 1) % exerciseCategories.length;
+    return exerciseCategories[categoryIndex];
+}
+
 const start = async () => {
     const nextTask = () => {
         if (currentTask === 'Read' && !formDisplay) {
@@ -117,6 +125,10 @@ const start = async () => {
     let currentTask = Object.keys(tasks)[currentTaskIndex];
     const gist =  new Gist(GIST_ID)
     let combinedData = await gist.get(GIST_FILE_NAME)
+    const exerciseCategory = getExerciseCategory(combinedData);
+    newData['Exercise Category'] = exerciseCategory;
+    const exerciseCategoryElement = getElement('exerciseCategory');
+    exerciseCategoryElement.textContent = "Exercise Category: " + exerciseCategory;
 
     taskElement.textContent = currentTask['name'];
     let lastReadInfo = combinedData[combinedData.length - 1];
