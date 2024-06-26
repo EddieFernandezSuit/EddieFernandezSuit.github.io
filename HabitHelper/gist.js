@@ -21,7 +21,7 @@ export class Gist {
             await fetch(this.gistApiUrl, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': 'Bearer ' + GIST_KEY,
+                    'Authorization': 'Bearer ' + process.env.GIST_KEY,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
