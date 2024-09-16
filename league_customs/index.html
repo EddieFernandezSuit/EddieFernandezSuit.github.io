@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <style>
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .gallery img {
+      width: 200px;
+      height: 200px;
+      margin: 10px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <h1>Image Gallery</h1>
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    // Fetch the list of image files from the server
+    fetch('http://172.232.190.89:3000/img')
+      .then(response => response.json())
+      .then(images => {
+        const galleryDiv = document.getElementById('gallery');
+
+        // Loop through each image and create an img element
+        images.forEach(image => {
+          const imgElement = document.createElement('img');
+          imgElement.src = `/img/${image}`; // Set the image source
+          galleryDiv.appendChild(imgElement); // Add the image to the gallery
+        });
+      })
+      .catch(error => console.error('Error loading images:', error));
+  </script>
+</body>
+</html>
