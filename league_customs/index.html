@@ -6,39 +6,86 @@
     <title>Image Gallery</title>
     <style>
         img {
-            max-width: 200px;
-            margin: 10px;
+	    width: 4%;
+	    height: auto;
+            margin: 1px;
             vertical-align: middle;
         }
     </style>
 </head>
 <body>
-    <h1>Image Gallery</h1>
-    <div id="image-gallery"></div>
+    <div class="section">
+        <h2>Available</h2>
+        <div id="imageGallery" class="gallery"></div>
+    </div>
+
+    <div class="section">
+        <h2>Played</h2>
+        <div id="playedGallery" class="gallery"></div>
+    </div>
 
     <script>
-        // URL to the JSON file with image filenames
-        const jsonUrl = 'https://eddiefernandezsuit.github.io/league_customs/img/images.json';
+	
+    const ws = new WebSocket('ws://172.232.190.89:3000');
 
-        // URL to the image directory
-        const imgDir = 'https://eddiefernandezsuit.github.io/league_customs/img/';
+    ws.onopen = () => {
+        console.log('WebSocket connection established');
+    };
 
-        // Fetch the JSON file
-        fetch(jsonUrl)
-            .then(response => response.json())
-            .then(images => {
-                const gallery = document.getElementById('image-gallery');
+	ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
 
-                images.forEach(image => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = imgDir + image;
-                    imgElement.alt = image;
-                    gallery.appendChild(imgElement);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading images:', error);
-            });
+        if (data.type === 'initial') {
+            // Initialize galleries
+            updateGallery(data.galleries.imageGallery, 'imageGallery');
+            updateGallery(data.galleries.playedGallery, 'playedGallery');
+        } else if (data.type === 'moveImage') {
+            moveImage(data.image, data.from, data.to);
+            updateGallery(data.galleries.imageGallery, 'imageGallery');
+            updateGallery(data.galleries.playedGallery, 'playedGallery');
+        }
+    };
+
+    // URL to the JSON file with image filenames
+    const jsonUrl = 'https://eddiefernandezsuit.github.io/league_customs/img/images.json';
+
+    // URL to the image directory
+    const imgDir = 'https://eddiefernandezsuit.github.io/league_customs/img/';
+
+    function updateGallery(images, galleryId) {
+        const gallery = document.getElementById(galleryId);
+        gallery.innerHTML = ''; // Clear the gallery
+        images.forEach(image => addImageToGallery(image, galleryId));
+    }
+
+	function addImageToGallery(image, galleryId) {
+        const gallery = document.getElementById(galleryId);
+        const imgElement = document.createElement('img');
+        imgElement.src = `https://eddiefernandezsuit.github.io/league_customs/img/${image}`;
+        imgElement.alt = image;
+        imgElement.addEventListener('click', () => moveImage(image, galleryId, galleryId === 'imageGallery' ? 'playedGallery' : 'imageGallery'));
+        gallery.appendChild(imgElement);
+    }
+
+    function moveImage(image, fromGalleryId, toGalleryId) {
+        const fromGallery = document.getElementById(fromGalleryId);
+        const toGallery = document.getElementById(toGalleryId);
+        const imgElement = document.querySelector(`#${fromGalleryId} img[src*="${image}"]`);
+
+        if (imgElement) {
+            toGallery.appendChild(imgElement);
+            imgElement.removeEventListener('click', () => moveImage(image, fromGalleryId, toGalleryId));
+            imgElement.addEventListener('click', () => moveImage(image, toGalleryId, fromGalleryId));
+
+            // Notify the server of the move
+            ws.send(JSON.stringify({
+                type: 'moveImage',
+                image: image,
+                from: fromGalleryId,
+                to: toGalleryId
+            }));
+        }
+    }
     </script>
 </body>
 </html>
