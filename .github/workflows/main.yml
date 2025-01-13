@@ -19,8 +19,8 @@ jobs:
       with:
         node-version: '16.x' # Customize this to your desired Node.js version
  
-    - name:  Install dependencies
-      run: npm ci
+    # - name:  Install dependencies
+      # run: npm ci
   
     - name: Set environment variables
       run: |
