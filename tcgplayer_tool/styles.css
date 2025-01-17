@@ -16,7 +16,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 90%;
-    max-width: 600px;
+    max-width: 1000px;
     box-sizing: border-box; /* Ensure padding doesn't overflow */
   }
   
@@ -105,3 +105,20 @@ body {
     font-size: 14px;
   }
   
+  /* .privacy-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f8ff;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+  }
+  
+  .privacy-info h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+   */
+  .privacy-info p {
+    /* margin: 10px 0; */
+    line-height: 1.6;
+  }
