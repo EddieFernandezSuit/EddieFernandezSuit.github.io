@@ -102,16 +102,14 @@ const start = async () => {
     let formDisplay = false;
     let currentTimer = null;
 
-    const SECONDS_TO_MINUTES = 60
+    const SECONDS_TO_MINUTES = 60;
+    const MANUAL = 0
 
     const tasks = {
-        'Teeth & Weight': 0,
-        'Exercise 1': 0,
+        'Weight & Teeth': MANUAL,
         'Stretch 1': SECONDS_TO_MINUTES,
-        'Exercise 2': 0,
         'Stretch 2': SECONDS_TO_MINUTES,
         'Stretch 3': SECONDS_TO_MINUTES,
-        'Exercise 3': 0,
         'Stretch 4': SECONDS_TO_MINUTES,
         'Stretch 5': SECONDS_TO_MINUTES,
         'Read': SECONDS_TO_MINUTES * 2,
