@@ -122,9 +122,9 @@ const start = async () => {
         'mom check calendar': ALL_TIMES,
         'schedule': ALL_TIMES,
     }
+    const gist =  new Gist()
 
     const TASK_FILENAME = 'tasks.json';
-    const gist =  new Gist()
     gist.save(tasks, TASK_FILENAME);
 
     const [startButton, taskElement, bookNameAndPageNumber] = getElements("startButton", "currentTask", "bookNameAndPageNumber");
