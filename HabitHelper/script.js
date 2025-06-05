@@ -124,6 +124,7 @@ const start = async () => {
     }
 
     const TASK_FILENAME = 'tasks.json';
+    const gist =  new Gist()
     gist.save(tasks, TASK_FILENAME);
 
     const [startButton, taskElement, bookNameAndPageNumber] = getElements("startButton", "currentTask", "bookNameAndPageNumber");
@@ -133,7 +134,6 @@ const start = async () => {
     let currentTaskIndex = 0;
     let currentTask = Object.keys(tasks)[currentTaskIndex];
 
-    const gist =  new Gist()
     let combinedData = await gist.get(GIST_FILE_NAME)
     console.log(combinedData)
 
