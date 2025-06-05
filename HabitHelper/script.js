@@ -102,7 +102,7 @@ const start = async () => {
     let currentTimer = null;
 
     const SECONDS_TO_MINUTES = 60;
-    const ALL_TIMES = 30;
+    const ALL_TIMES = 28;
     const MANUAL = 0;
 
     const tasks = {
@@ -123,6 +123,9 @@ const start = async () => {
         'schedule': ALL_TIMES,
     }
 
+    const TASK_FILENAME = 'tasks.json';
+    gist.save(tasks, TASK_FILENAME);
+
     const [startButton, taskElement, bookNameAndPageNumber] = getElements("startButton", "currentTask", "bookNameAndPageNumber");
     const pastTime = {date: new Date()};
     let newData = {Date: getCurrentDate()};
@@ -130,8 +133,7 @@ const start = async () => {
     let currentTaskIndex = 0;
     let currentTask = Object.keys(tasks)[currentTaskIndex];
 
-    const GIST_ID = '75701f3ca46165618b6c1689214c8e75';
-    const gist =  new Gist(GIST_ID)
+    const gist =  new Gist()
     let combinedData = await gist.get(GIST_FILE_NAME)
     console.log(combinedData)
 
