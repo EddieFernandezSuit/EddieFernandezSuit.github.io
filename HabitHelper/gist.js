@@ -1,6 +1,6 @@
 export class Gist {
-    constructor(gistId) {
-        this.gistId = gistId;
+    constructor() {
+        this.gistId = '75701f3ca46165618b6c1689214c8e75';
         this.gistApiUrl = `https://api.github.com/gists/${this.gistId}`;
     }
 

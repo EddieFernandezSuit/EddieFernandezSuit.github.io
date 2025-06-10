@@ -3,7 +3,6 @@ import { Gist } from './gist.js'
 
 // python -m http.server
 
-const GIST_ID = '75701f3ca46165618b6c1689214c8e75';
 const GIST_FILE_NAME = 'combinedData.csv'
 
 function getElement(id){
@@ -102,20 +101,31 @@ const start = async () => {
     let formDisplay = false;
     let currentTimer = null;
 
-    const SECONDS_TO_MINUTES = 60
+    const SECONDS_TO_MINUTES = 60;
+    const ALL_TIMES = 28;
+    const MANUAL = 0;
 
     const tasks = {
-        'Teeth & Weight': 0,
-        'Exercise 1': 0,
-        'Stretch 1': SECONDS_TO_MINUTES,
-        'Exercise 2': 0,
-        'Stretch 2': SECONDS_TO_MINUTES,
-        'Stretch 3': SECONDS_TO_MINUTES,
-        'Exercise 3': 0,
-        'Stretch 4': SECONDS_TO_MINUTES,
-        'Stretch 5': SECONDS_TO_MINUTES,
-        'Read': SECONDS_TO_MINUTES * 2,
+        'Weight & Teeth': MANUAL,
+        'Stretch 1': ALL_TIMES,
+        'Stretch 2': ALL_TIMES,
+        'Stretch 3': ALL_TIMES,
+        'Stretch 5': ALL_TIMES,
+        'Stretch 6': ALL_TIMES,
+        'Stretch 7': ALL_TIMES,
+        'meditate': ALL_TIMES,
+        'Read': ALL_TIMES,
+        'walk': ALL_TIMES,
+        'exercise': ALL_TIMES,
+        'clean': ALL_TIMES,
+        'fernandez cards': ALL_TIMES,
+        'mom check calendar': ALL_TIMES,
+        'schedule': ALL_TIMES,
     }
+    const gist =  new Gist()
+
+    const TASK_FILENAME = 'tasks.json';
+    gist.save(tasks, TASK_FILENAME);
 
     const [startButton, taskElement, bookNameAndPageNumber] = getElements("startButton", "currentTask", "bookNameAndPageNumber");
     const pastTime = {date: new Date()};
@@ -123,8 +133,10 @@ const start = async () => {
 
     let currentTaskIndex = 0;
     let currentTask = Object.keys(tasks)[currentTaskIndex];
-    const gist =  new Gist(GIST_ID)
+
     let combinedData = await gist.get(GIST_FILE_NAME)
+    console.log(combinedData)
+
     const exerciseCategory = getExerciseCategory(combinedData);
     newData['Exercise Category'] = exerciseCategory;
     const exerciseCategoryElement = getElement('exerciseCategory');
