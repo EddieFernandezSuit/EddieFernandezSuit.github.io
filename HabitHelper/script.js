@@ -102,24 +102,28 @@ const start = async () => {
     let currentTimer = null;
 
     const SECONDS_TO_MINUTES = 60;
-    const ALL_TIMES = 28;
+    const STRETCH_TIME = 30
+    const ALL_TIMES = 98;
     const MANUAL = 0;
 
     const tasks = {
-        'Weight & Teeth': MANUAL,
-        'Stretch 1': ALL_TIMES,
-        'Stretch 2': ALL_TIMES,
-        'Stretch 3': ALL_TIMES,
-        'Stretch 5': ALL_TIMES,
-        'Stretch 6': ALL_TIMES,
-        'Stretch 7': ALL_TIMES,
-        'meditate': ALL_TIMES,
-        'Read': ALL_TIMES,
+        'Weight': MANUAL,
+        'Teeth': MANUAL,
+        'Read': MANUAL,
+        'Stretch 1': STRETCH_TIME,
+        'Stretch 2': STRETCH_TIME,
+        'Stretch 3': STRETCH_TIME,
+        'Stretch 4': STRETCH_TIME,
+        'Stretch 5': STRETCH_TIME,
+        'Stretch 6': STRETCH_TIME,
+        'Stretch 7': STRETCH_TIME,
+        'workout': ALL_TIMES,
         'walk': ALL_TIMES,
-        'exercise': ALL_TIMES,
         'clean': ALL_TIMES,
+        'meditate': ALL_TIMES,
         'fernandez cards': ALL_TIMES,
-        'mom check calendar': ALL_TIMES,
+        'apply': MANUAL,
+        'take creatine': MANUAL,
         'schedule': ALL_TIMES,
     }
     const gist =  new Gist()
