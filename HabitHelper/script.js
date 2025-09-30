@@ -91,6 +91,7 @@ const start = async () => {
         if(snapshot.exists()){
             allTimes = snapshot.val;
         }
+    })
             
             
     set(habitHelperRef, allTimes + 2)
