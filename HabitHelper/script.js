@@ -142,7 +142,7 @@ const start = async () => {
 
     const SECONDS_TO_MINUTES = 60;
     const STRETCH_TIME = 30
-    const ALL_TIMES = 164;
+    // const ALL_TIMES = 164;
     const ALL_TIMES = allTimes;
     const MANUAL = 0;
 
