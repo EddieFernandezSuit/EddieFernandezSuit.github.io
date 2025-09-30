@@ -1,6 +1,36 @@
 import { Timer } from './timer.js';
 import { Gist } from './gist.js'
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+import { getDatabase, ref, onValue, set, get} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBflwlpD1pOMz-3k3CuTpa61L_VN7z4Qwc",
+  authDomain: "habit-helper-c652e.firebaseapp.com",
+  databaseURL: "https://habit-helper-c652e-default-rtdb.firebaseio.com",
+  projectId: "habit-helper-c652e",
+  storageBucket: "habit-helper-c652e.firebasestorage.app",
+  messagingSenderId: "623644274775",
+  appId: "1:623644274775:web:d3b6d39a01634dc3c3f312",
+  measurementId: "G-5P2V9K229Q"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const analytics = getAnalytics(app);
+
+const habitHelperRef = ref(db, "habit helper");
+
 // python -m http.server
 
 const GIST_FILE_NAME = 'combinedData.csv'
@@ -56,6 +86,15 @@ function getExerciseCategory() {
 }
 
 const start = async () => {
+    let allTimes = 0
+    get(habitHelperRef).then((snapshot)=>{
+        if(snapshot.exists()){
+            allTimes = snapshot.val;
+        }
+            
+            
+    set(habitHelperRef, allTimes + 2)
+    
     const nextTask = () => {
         if (currentTask === 'Read' && !formDisplay) {
             speak('Read Complete')
@@ -104,6 +143,7 @@ const start = async () => {
     const SECONDS_TO_MINUTES = 60;
     const STRETCH_TIME = 30
     const ALL_TIMES = 164;
+    const ALL_TIMES = allTimes;
     const MANUAL = 0;
 
     const tasks = {
