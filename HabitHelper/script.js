@@ -86,7 +86,7 @@ function getExerciseCategory() {
 }
 
 const start = async () => {
-    let allTimes = 0
+    let allTimes = 10
     get(habitHelperRef).then((snapshot)=>{
         if(snapshot.exists()){
             allTimes = snapshot.val;
@@ -117,7 +117,7 @@ const start = async () => {
             const totalSum = Math.round(Object.entries(newData).filter(([key, value]) => key !== 'Date' && key != 'Name' && key != 'Page').reduce((sum, [key, value]) => sum + Number(value), 0));
             newData.Total = totalSum;
             combinedData.push(newData)
-            gist.save(combinedData, GIST_FILE_NAME)
+            // gist.save(combinedData, GIST_FILE_NAME)
             displayDictionary(newData);
             return;
         }
@@ -165,10 +165,10 @@ const start = async () => {
         'take creatine': MANUAL,
         'schedule': ALL_TIMES,
     }
-    const gist =  new Gist()
+    // const gist =  new Gist()
 
     const TASK_FILENAME = 'tasks.json';
-    gist.save(tasks, TASK_FILENAME);
+    // gist.save(tasks, TASK_FILENAME);
 
     const [startButton, taskElement, bookNameAndPageNumber] = getElements("startButton", "currentTask", "bookNameAndPageNumber");
     const pastTime = {date: new Date()};
@@ -177,8 +177,8 @@ const start = async () => {
     let currentTaskIndex = 0;
     let currentTask = Object.keys(tasks)[currentTaskIndex];
 
-    let combinedData = await gist.get(GIST_FILE_NAME)
-    console.log(combinedData)
+    // let combinedData = await gist.get(GIST_FILE_NAME)
+    // console.log(combinedData)
 
     const exerciseCategory = getExerciseCategory(combinedData);
     newData['Exercise Category'] = exerciseCategory;
