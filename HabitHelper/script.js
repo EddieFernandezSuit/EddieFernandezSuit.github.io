@@ -114,7 +114,7 @@ const start = async () => {
         if(allTasksComplete){
             const totalSum = Math.round(Object.entries(newData).filter(([key, value]) => key !== 'Date' && key != 'Name' && key != 'Page').reduce((sum, [key, value]) => sum + Number(value), 0));
             newData.Total = totalSum;
-            combinedData.push(newData)
+            // combinedData.push(newData)
             // gist.save(combinedData, GIST_FILE_NAME)
             displayDictionary(newData);
             return;
@@ -175,16 +175,16 @@ const start = async () => {
     let currentTaskIndex = 0;
     let currentTask = Object.keys(tasks)[currentTaskIndex];
 
-    let combinedData = await gist.get(GIST_FILE_NAME)
-    console.log(combinedData)
+    // let combinedData = await gist.get(GIST_FILE_NAME)
+    // console.log(combinedData)
 
-    const exerciseCategory = getExerciseCategory(combinedData);
+    // const exerciseCategory = getExerciseCategory(combinedData);
     newData['Exercise Category'] = exerciseCategory;
     const exerciseCategoryElement = getElement('exerciseCategory');
     exerciseCategoryElement.textContent = "Exercise Category: " + exerciseCategory;
 
     taskElement.textContent = currentTask['name'];
-    let lastReadInfo = combinedData[combinedData.length - 1];
+    // let lastReadInfo = combinedData[combinedData.length - 1];
     console.log(lastReadInfo)
     bookNameAndPageNumber.textContent = "Reading: " + lastReadInfo["Name"] + ", On Page: " + lastReadInfo["Page"];
 
