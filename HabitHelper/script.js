@@ -185,7 +185,7 @@ const start = async () => {
 
     taskElement.textContent = currentTask['name'];
     // let lastReadInfo = combinedData[combinedData.length - 1];
-    console.log(lastReadInfo)
+    // console.log(lastReadInfo)
     bookNameAndPageNumber.textContent = "Reading: " + lastReadInfo["Name"] + ", On Page: " + lastReadInfo["Page"];
 
     startButton.addEventListener("click", () => nextTask());
