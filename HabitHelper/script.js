@@ -175,8 +175,8 @@ const start = async () => {
     let currentTaskIndex = 0;
     let currentTask = Object.keys(tasks)[currentTaskIndex];
 
-    // let combinedData = await gist.get(GIST_FILE_NAME)
-    // console.log(combinedData)
+    let combinedData = await gist.get(GIST_FILE_NAME)
+    console.log(combinedData)
 
     const exerciseCategory = getExerciseCategory(combinedData);
     newData['Exercise Category'] = exerciseCategory;
