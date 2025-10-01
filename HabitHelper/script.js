@@ -25,8 +25,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app
-
+const db = getDatabase(app);
 const habitHelperRef = ref(db, "habit helper");
 
 // python -m http.server
