@@ -92,6 +92,7 @@ const start = async () => {
             
             
     set(habitHelperRef, allTimes + 2)
+    console.log(allTimes)
     
     const nextTask = () => {
         if (currentTask === 'Read' && !formDisplay) {
