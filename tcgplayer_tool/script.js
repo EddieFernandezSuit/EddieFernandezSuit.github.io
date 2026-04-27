@@ -36,20 +36,25 @@ document.getElementById('form').addEventListener('submit', async (event) => {
         console.log(row)
         const { FirstName, LastName, Address1, Address2, City, State, PostalCode } = row;
         const page = pdfDoc.addPage([pageWidth, pageHeight]);
+        
+        const returnAddressX = 20;
+        const returnAddressY = 45;
+        const AddressYDist = 15;
+        const recipientAddressX = 200;
+        const recipientAddressY = 160;
+
+        page.drawText(`${returnAddress.returnName}`, { x: returnAddressX, y: pageHeight - returnAddressY, size: fontSize });
+        page.drawText(`${returnAddress.returnStreet}`, { x: returnAddressX, y: pageHeight - (returnAddressY + AddressYDist), size: fontSize });
+        page.drawText(`${returnAddress.returnCity}, ${returnAddress.returnStateZip}`, { x: returnAddressX, y: pageHeight - (returnAddressY + AddressYDist * 2), size: fontSize });
     
-        // Add return address
-        page.drawText(`${returnAddress.returnName}`, { x: 20, y: pageHeight - 30, size: fontSize });
-        page.drawText(`${returnAddress.returnStreet}`, { x: 20, y: pageHeight - 45, size: fontSize });
-        page.drawText(`${returnAddress.returnCity}, ${returnAddress.returnStateZip}`, { x: 20, y: pageHeight - 60, size: fontSize });
-    
-        // Add recipient address
-        page.drawText(`${FirstName} ${LastName}`, { x: 200, y: pageHeight - 100, size: fontSize });
-        page.drawText(`${Address1}`, { x: 200, y: pageHeight - 115, size: fontSize });
+        
+        page.drawText(`${FirstName} ${LastName}`, { x: recipientAddressX, y: pageHeight - recipientAddressY, size: fontSize });
+        page.drawText(`${Address1}`, { x: recipientAddressX, y: pageHeight - (recipientAddressY + AddressYDist), size: fontSize });
         if (Address2) {
-            page.drawText(`${Address2}`, { x: 200, y: pageHeight - 130, size: fontSize });
-            page.drawText(`${City}, ${State} ${PostalCode}`, { x: 200, y: pageHeight - 145, size: fontSize });
+            page.drawText(`${Address2}`, { x: recipientAddressX, y: pageHeight - (recipientAddressY + AddressYDist * 2), size: fontSize });
+            page.drawText(`${City}, ${State} ${PostalCode}`, { x: recipientAddressX, y: pageHeight - (recipientAddressY + AddressYDist * 3), size: fontSize });
         }else{
-            page.drawText(`${City}, ${State} ${PostalCode}`, { x: 200, y: pageHeight - 130, size: fontSize });
+            page.drawText(`${City}, ${State} ${PostalCode}`, { x: recipientAddressX, y: pageHeight - (recipientAddressY + AddressYDist * 2), size: fontSize });
         }
       }
     });
