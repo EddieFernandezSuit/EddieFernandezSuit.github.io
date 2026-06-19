@@ -70,6 +70,22 @@ function getCurrentDate() {
 }
 
 
+// --- localStorage helpers ---
+const STORAGE_KEY = 'habitHelper_bookInfo';
+
+function saveBookInfo(name, page) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, page }));
+}
+
+function loadBookInfo() {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+// ----------------------------
+
 function speak(text) {
     window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }
@@ -101,6 +117,8 @@ const start = async () => {
             bookInfoElement.style.display = 'block';
             submitBookInfoButton.addEventListener('click', () => {
                 [newData.Name, newData.Page] = [bookNameElement, currentPageElement].map(e => e.value);
+                saveBookInfo(newData.Name, newData.Page);
+                bookNameAndPageNumber.textContent = "Reading: " + newData.Name + ", On Page: " + newData.Page;
                 bookInfoElement.style.display = 'none';
                 formDisplay = true;
                 nextTask();
@@ -179,15 +197,26 @@ const start = async () => {
     // let combinedData = await gist.get(GIST_FILE_NAME)
     // console.log(combinedData)
 
-    // const exerciseCategory = getExerciseCategory(combinedData);
+    const exerciseCategory = getExerciseCategory();
     newData['Exercise Category'] = exerciseCategory;
     const exerciseCategoryElement = getElement('exerciseCategory');
     exerciseCategoryElement.textContent = "Exercise Category: " + exerciseCategory;
 
-    taskElement.textContent = currentTask['name'];
-    // let lastReadInfo = combinedData[combinedData.length - 1];
-    // console.log(lastReadInfo)
-    // bookNameAndPageNumber.textContent = "Reading: " + lastReadInfo["Name"] + ", On Page: " + lastReadInfo["Page"];
+    // Load saved book info and display it on page load
+    const savedBook = loadBookInfo();
+    if (savedBook.name) {
+        bookNameAndPageNumber.textContent = "Reading: " + savedBook.name + ", On Page: " + savedBook.page;
+    } else {
+        bookNameAndPageNumber.textContent = "No book info saved yet.";
+    }
+
+    // Pre-fill the book form with last saved values
+    const bookNameEl = getElement('bookName');
+    const currentPageEl = getElement('currentPage');
+    if (bookNameEl && savedBook.name) bookNameEl.value = savedBook.name;
+    if (currentPageEl && savedBook.page) currentPageEl.value = savedBook.page;
+
+    taskElement.textContent = currentTask;
 
     startButton.addEventListener("click", () => nextTask());
 };
